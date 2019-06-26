@@ -645,8 +645,8 @@
           <br />
           <br />
           <button type="button" class="buttonblue" id="updateTumbler" style="display:none;">Update Tumbler</button>
-
           <button type="button" class="buttonblue" id="print">Download Hi-Res</button>
+          <button type="button" class="buttonblue" id="downloadFourSides">Download 4 Sides</button>
         </div>
       </div>
 
@@ -2901,7 +2901,6 @@
               $('#outerSS:visible').hide("#outerSS");
               $('#select-outer:visible').hide("#select-outer");
               $('#select-inner:hidden').show("#select-inner");
-
             } else if (tumbler == "16TALL" || tumbler == "8STO") {
               $(".decoWrap:visible").hide(".decoWrap");
               $(".decoEmblem:hidden").show(".decoEmblem");
@@ -2934,7 +2933,6 @@
               $('#outerSS:visible').hide("#outerSS");
               $('#select-outer:visible').hide("#select-outer");
               $('#select-inner:hidden').show("#select-inner");
-
             } else if (tumbler == "30SS" || tumbler == "20SS") {
               $("input[name='lidRadio'][value='&']").prop('checked', true);
               $(".decoWrap:visible").hide(".decoWrap");
@@ -2968,8 +2966,6 @@
               $('#outerSS:hidden').show("#outerSS");
               $('#select-outer:hidden').show("#select-outer");
               $('#select-inner:visible').hide("#select-inner");
-
-
             } else if (tumbler == "17SS") {
               $("input[name='lidRadio'][value='&']").prop('checked', true);
               $(".decoWrap:visible").hide(".decoWrap");
@@ -3003,8 +2999,6 @@
               $('#outerSS:hidden').show("#outerSS");
               $('#select-outer:hidden').show("#select-outer");
               $('#select-inner:visible').hide("#select-inner");
-
-
             } else if (tumbler == "24SS") {
               $("input[name='lidRadio'][value='&']").prop('checked', true);
               $(".decoWrap:visible").hide(".decoWrap");
@@ -3227,8 +3221,184 @@
         function HideLoader() {
           $("#loader").hide();
         }
+      </script>
+      <script type="module">
+        import { ConvertFrom_StringUsingRegexCaptureGroup, Add_MemberScriptProperty } from 'https://unpkg.com/@tervis/tervisutilityjs/TervisUtilityJS.js?module'
+        import { Get_TervisAdobeScene7HeroVignetteContentsURL } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.2/TervisAdobeScene7JS.js?module'
+        import { Get_ColorCodeToMarketingNameIndex } from 'https://unpkg.com/@tervis/terviscustomyzerjs@^0.1.1/TervisCustomyzerJS.js?module'
 
+        function Get_URLSFourSides () {
+          var $URLs = []
+          var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
+          var $SizeAndFormType = Get_SizeAndFormTypeFromString({$String: $RadioButtonValue})
+          var $ImagePerspectiveValue = Get_TumblerImagePerspectiveValue({...$SizeAndFormType})
+          var $RotateValues = []
+          var $StepAmount = $ImagePerspectiveValue.StepAmountToRotateBy90Degrees
 
+          $RotateValues.push($ImagePerspectiveValue.VignettePositionValueForImageOfFront)
+          $RotateValues.push($ImagePerspectiveValue.VignettePositionValueForImageOfLeft)
+          $RotateValues.push($ImagePerspectiveValue.VignettePositionValueForImageOfBack)
+          $RotateValues.push($ImagePerspectiveValue.VignettePositionValueForImageOfRight)
 
+          document.querySelector("#poshold").value = 0
+          document.querySelector("#poshold").dispatchEvent(new InputEvent("input"))
+          var $URLWithMangledPosition = document.querySelector("#vignetteUrl").value
+          var $URLWithMangledPosition = document.querySelector("#tumblerimagelink").value
+          
+
+          for (var $RotateValue of $RotateValues) {
+            var $URLWithCorrectPosition = $URLWithMangledPosition.replace(/(?<=&pos=)-?\d+(?=,0)/, $RotateValue)
+            var $URLWithCorectDomain = $URLWithCorrectPosition.replace(/^http:\/\/s7d4.scene7.com/, "//imagegenerator.tervis.com")
+            // var $URL = `${$URLWithCorectDomain}&fmt=png-alpha`
+            var $URL = $URLWithCorectDomain
+            $URLs.push($URL)
+          }
+          
+          return ($URLs)
+        }
+        
+        function Get_SizeAndFormTypeFromString({
+          $String
+        }) {
+          var $Results = ConvertFrom_StringUsingRegexCaptureGroup({
+            $Regex: /(?<$Size>\d*)(?<$FormType>\w*)/u,
+            $String
+          })
+
+          if ($Results) {
+            return $Results
+          }
+        }
+
+        var ImagePerspectiveValuesBySizeAndFormType = [
+          {
+            SizeAndFormTypes: [
+              { Size: 2, FormType: "SHO" },
+              { Size: 6, FormType: "SIP" },
+              { Size: 10, FormType: "WAV" },
+              { Size: 12, FormType: "DWT" },
+              { Size: 16, FormType: "DWT" },
+              { Size: 16, FormType: "MUG" },
+              { Size: 16, FormType: "TALL" },
+              { Size: 24, FormType: "DWT" },
+              { Size: 24, FormType: "WB" },
+              { Size: 87, FormType: "ICE" }
+            ],
+            StepAmountToRotateBy90Degrees: 8,
+          },
+          {
+            SizeAndFormTypes: [
+              { Size: 16, FormType: "BEER" }
+            ],
+            StepAmountToRotateBy90Degrees: 16,
+          },
+          {
+            SizeAndFormTypes: [
+              { Size: 9, FormType: "SWG" },
+              { Size: 9, FormType: "WINE" },
+            ],
+            StepAmountToRotateBy90Degrees: 16,
+          },
+          {
+            SizeAndFormTypes: [
+              { Size: 24, FormType: "WB" }
+            ],
+            StepAmountToRotateBy90Degrees: 8,
+          },
+          {
+            SizeAndFormTypes: [
+              { Size: 12, FormType: "SS" }
+            ],
+            StepAmountToRotateBy90Degrees: 21,
+          },
+          {
+            SizeAndFormTypes: [
+              { Size: 17, FormType: "SS" }
+            ],
+            StepAmountToRotateBy90Degrees: 15.784,
+          },
+          {
+            SizeAndFormTypes: [
+              { Size: 20, FormType: "SS" }
+            ],
+            StepAmountToRotateBy90Degrees: 9.3,
+          },
+          {
+            SizeAndFormTypes: [
+              { Size: 24, FormType: "SS" }
+            ],
+            StepAmountToRotateBy90Degrees: 18,
+          },
+          {
+            SizeAndFormTypes: [
+              { Size: 30, FormType: "SS" }
+            ],
+            StepAmountToRotateBy90Degrees: 9,
+          }
+        ]
+
+        Add_MemberScriptProperty({$InputObject: ImagePerspectiveValuesBySizeAndFormType, $Name: "VignettePositionValueForImageOfFront", $Value: function () {
+          return 0
+        }})
+
+        Add_MemberScriptProperty({$InputObject: ImagePerspectiveValuesBySizeAndFormType, $Name: "VignettePositionValueForImageOfLeft", $Value: function () {
+          return -this.StepAmountToRotateBy90Degrees
+        }})
+
+        Add_MemberScriptProperty({$InputObject: ImagePerspectiveValuesBySizeAndFormType, $Name: "VignettePositionValueForImageOfRight", $Value: function () {
+          return this.StepAmountToRotateBy90Degrees
+        }})
+
+        Add_MemberScriptProperty({$InputObject: ImagePerspectiveValuesBySizeAndFormType, $Name: "VignettePositionValueForImageOfBack", $Value: function () {
+          return -this.StepAmountToRotateBy90Degrees * 2
+        }})
+
+        function Get_TumblerImagePerspectiveValue({
+          $Size,
+          $FormType
+        }) {
+          $Size = Number($Size)
+          return ImagePerspectiveValuesBySizeAndFormType.filter(
+            ImagePerspectiveValues => {
+              return ImagePerspectiveValues.SizeAndFormTypes.some(
+                SizeAndFormType => {
+                  return SizeAndFormType.Size === $Size && SizeAndFormType.FormType === $FormType
+                }
+              )
+            }
+          )[0]
+        }
+
+        document.querySelector('#downloadFourSides').addEventListener('click', Invoke_DownloadFourSides)
+
+        async function downloadAll(urls) {
+          for (var i = 0; i < urls.length; i++) {
+            var link = document.createElement('a');
+            link.style.display = 'none';
+            link.setAttribute('download', `${i+1}.png`);
+            // link.setAttribute('target', '_blank');
+            link.setAttribute('href', urls[i]);
+            link.setAttribute('class', "FourImageDownload");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
+          // await sleep(10000)
+          //test too see if we can do everything in the loop above and not have a separate step for clicking and removing
+          // for (let link of document.querySelectorAll("a[class='FourImageDownload']")) {
+          //   link.click();
+          //   document.body.removeChild(link);
+          // }
+        }
+
+        function sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function Invoke_DownloadFourSides () {
+          var $URLs = Get_URLSFourSides()
+          await downloadAll($URLs)
+        }
+        window.Invoke_DownloadFourSides = Invoke_DownloadFourSides
       </script>
     </div>
