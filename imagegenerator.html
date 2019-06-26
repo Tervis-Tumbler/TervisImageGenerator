@@ -3083,7 +3083,6 @@
           console.log("UploadPhotoFromDevice");
           var el = document.getElementById("txtUploadFile");
 
-          console.log(el);
           if (el) {
             el.click();
             el.addEventListener('change', AddImageFromDevice, false);
@@ -3242,14 +3241,11 @@
 
           document.querySelector("#poshold").value = 0
           document.querySelector("#poshold").dispatchEvent(new InputEvent("input"))
-          var $URLWithMangledPosition = document.querySelector("#vignetteUrl").value
-          var $URLWithMangledPosition = document.querySelector("#tumblerimagelink").value
-          
+          var $URLWithMangledPosition = document.querySelector("#tumblerimagelink").href
 
           for (var $RotateValue of $RotateValues) {
             var $URLWithCorrectPosition = $URLWithMangledPosition.replace(/(?<=&pos=)-?\d+(?=,0)/, $RotateValue)
             var $URLWithCorectDomain = $URLWithCorrectPosition.replace(/^http:\/\/s7d4.scene7.com/, "//imagegenerator.tervis.com")
-            // var $URL = `${$URLWithCorectDomain}&fmt=png-alpha`
             var $URL = $URLWithCorectDomain
             $URLs.push($URL)
           }
