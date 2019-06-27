@@ -2098,7 +2098,15 @@
           });
         });
       </script>
-      <script>
+      <script type="module">
+        import { 
+          Get_TervisAdobeScene7VignetteWrapPrintSingleURL,
+          Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL 
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.7/TervisAdobeScene7JS.js?module'
+
+        import { Get_SizeAndFormTypeFromString } from 'https://unpkg.com/@tervis/terviscustomyzerjs@^0.1.2/TervisCustomyzerJS.js?module'
+        
+        // console.log(Get_TervisAdobeScene7VignetteWrapPrintSingleURL ({$Size: 16, $FormType: "DWT", $WrapImageRelativeURL: "tervisRender/ugc/845161827.tif?$UGC-ALPHA$", $AsScene7RelativeURL: true}))
         $(window).on("load", function () {
 
           if ($.cookie("codetype") == "choose" || $.cookie("codetype") == null) {
@@ -2295,114 +2303,48 @@
               var slider = $("#slider").val();
             };
 
-            // EMBLEM ANCHOR
-            if (decorationtype == "-EMB") {
-              var anchor = "&anchorN=0,-.5";
-            } else {
-              anchor = "";
-            }
+            // // EMBLEM ANCHOR
+            // if (decorationtype == "-EMB") {
+            //   var anchor = "&anchorN=0,-.5";
+            // } else {
+            //   anchor = "";
+            // }
+
+            var res2 = ""
+            var print = "-DECO3"
+            var templateexist = "$img-"
+            var BkgdPos = "&"
 
             if (codetype == "ugcCode") {
-              res = "&res=300"
-              res2 = ""
-              print = "-DECO3"
-              templateexist = "$img-"
-              BkgdPos = "&"
+              var res = "&res=300"
             } else {
-              res = ""
-              res2 = ""
-              print = "-DECO3"
-              templateexist = "$img-"
-              BkgdPos = "&"
+              var res = ""
             }
 
             // IMAGE SOURCE
+            var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
+            var $SizeAndFormType = Get_SizeAndFormTypeFromString({ $String: $RadioButtonValue })
 
             if (codetype == "ugcCode" && decorationtype == "-WRA") {
-              codetypeURL = `
-                is{
-                  tervis/${tumbler}${decorationtype}${print}?
-                  layer=1
-                  &src=(
-                    http://s7d4.scene7.com/is/image/tervis?
-                    src=ir{
-                      tervisRender/${tumbler}-WRA-PRINT-SINGLE?
-                      obj=DECO
-                      &decal
-                      &src=(
-                        ${itemcode}?
-                        ${preset2}
-                      )
-                      &res=300
-                      &show
-                      &obj=DECO
-                      &req=object
-                    }
-                    &scl=1
-                    &fmt=png-alpha
-                  )
-                  &layer=2
-                  &src=(
-                    http://s7d4.scene7.com/is/image/tervis?
-                    src=ir{
-                      tervisRender/${tumbler}-WRA-PRINT-SINGLE?
-                      obj=DECO
-                      &decal
-                      &src=(
-                        ${itemcode}?
-                        ${preset2}
-                      )
-                      &res=300
-                      &show
-                      &obj=DECO
-                      &req=object
-                    }
-                    &scl=1
-                    &fmt=png-alpha
-                  )
-                  &layer=3
-                  &src=(
-                    http://s7d4.scene7.com/is/image/tervis?
-                    src=ir{
-                      tervisRender/${tumbler}-WRA-PRINT-SINGLE?
-                      obj=DECO
-                      &decal
-                      &src=(
-                        ${itemcode}?
-                        ${preset2}
-                      )
-                      &res=300
-                      &show
-                      &obj=DECO
-                      &req=object
-                    }
-                    &scl=1
-                    &fmt=png-alpha
-                  )
-                  ${anchor}
-                  &show
-                  &obj=DECO
-                  &req=object
-                }
-                `.replace(/\s/g, "")
+              var codetypeURL = Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL({...$SizeAndFormType, $AsScene7RelativeURL: true, $WrapImageURL: `${itemcode}?${preset2}` })
               $('#wraptypediv:hidden').show("#wraptypediv");
             } else if (codetype == "ugcCode" && decorationtype == "-EMB") {
-              codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?$img-src=(${itemcode}?${preset2})&show&obj=DECO&req=object}`;
+              var codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?$img-src=(${itemcode}?${preset2})&show&obj=DECO&req=object}`.replace(/\s/g, "");
               $('#wraptypediv:hidden').show("#wraptypediv");
 
             } else if (codetype == "ugcCode" && decorationtype == "-DPT") {
-              codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?$img-src=(${itemcode}?${preset2})&show&obj=DECO&req=object}`;
+              var codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?$img-src=(${itemcode}?${preset2})&show&obj=DECO&req=object}`.replace(/\s/g, "");
               $('#wraptypediv:hidden').show("#wraptypediv");
 
             } else if (codetype == "ugcCode" && decorationtype == "customyzer") {
-              codetypeURL = `is{tervis/${tumbler}-WRA${print}?$img-src=(${itemcode}?${preset2})&show&obj=DECO&req=object}`;
+              var codetypeURL = `is{tervis/${tumbler}-WRA${print}?$img-src=(${itemcode}?${preset2})&show&obj=DECO&req=object}`.replace(/\s/g, "");
               $('#wraptypediv:hidden').show("#wraptypediv");
 
             } else if (codetype == "ugcCode") {
-              codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?$img-src=(${itemcode}?fmt=png-alpha)${res}&show&obj=DECO&req=object}`;
+              var codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?$img-src=(${itemcode}?fmt=png-alpha)${res}&show&obj=DECO&req=object}`;
               $('#wraptypediv:hidden').show("#wraptypediv");
             } else if (codetype == "rmCode" || codetype == "choose") {
-              codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?&${templateexist}src=${itemcode}${res}}`;
+              var codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?&${templateexist}src=${itemcode}${res}}`;
               $('#wraptypediv:visible').hide("#wraptypediv");
             }
 
@@ -2410,11 +2352,65 @@
 
 
             if (codetype == "ugcCode" && iteration == "&") {
-              var finalURL = `//imagegenerator.tervis.com/is/image/tervis/${imageName}?src=ir{tervisRender/${tumbler}${decorationtype}-PRINT-SINGLE?obj=DECO&decal&src=(${itemcode}?scl=1&fmt=png-alpha)&show&res=300&obj=DECO&req=object}&scl=1&fmt=png-alpha`;
+              var finalURL = `
+                //imagegenerator.tervis.com/is/image/tervis/${imageName}?
+                src=ir{
+                  tervisRender/${tumbler}${decorationtype}-PRINT-SINGLE?
+                  obj=DECO
+                  &decal
+                  &src=(
+                    ${itemcode}?
+                    scl=1
+                    &fmt=png-alpha
+                  )
+                  &show
+                  &res=300
+                  &obj=DECO
+                  &req=object
+                }
+                &scl=1
+                &fmt=png-alpha
+              `.replace(/\s/g, "")
             } else if (iteration == "&") {
-              var finalURL = `//imagegenerator.tervis.com/is/image/tervis/${imageName}?src=ir{tervisRender/${tumbler}${decorationtype}-PRINT-SINGLE?obj=DECO&decal&src=${itemcode}&show&obj=DECO&req=object}&scl=1&fmt=png-alpha`;
+              var finalURL = `
+                //imagegenerator.tervis.com/is/image/tervis/${imageName}?
+                src=ir{
+                  tervisRender/${tumbler}${decorationtype}-PRINT-SINGLE?
+                  obj=DECO
+                  &decal
+                  &src=${itemcode}
+                  &show
+                  &obj=DECO
+                  &req=object
+                }
+                &scl=1
+                &fmt=png-alpha
+              `.replace(/\s/g, "")
             } else {
-              var finalURL = `//imagegenerator.tervis.com/is/image/tervis/${imageName}?layer=0&src=ir{tervisRender/${tumbler}${iteration}?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/${outerform}/${outercolor}&show&obj=MAIN/INNER/${innerform}/${innercolor}&show&obj=MAIN/DECO&decal&src=${codetypeURL}${res2}&pos=${slider},0&show${lidColor}${handle}&obj=MAIN&req=object}${preset}`;
+              var finalURL = `
+                //imagegenerator.tervis.com/is/image/tervis/${imageName}?
+                layer=0
+                &src=ir{
+                  tervisRender/${tumbler}${iteration}?
+                  &obj=MAIN/GLARE
+                  &show
+                  &obj=MAIN/OUTER/${outerform}/${outercolor}
+                  &show
+                  &obj=MAIN/INNER/${innerform}/${innercolor}
+                  &show
+                  &obj=MAIN/DECO
+                  &decal
+                  &src=${codetypeURL}
+                  ${res2}
+                  &pos=${slider},0
+                  &show
+                  ${lidColor}
+                  ${handle}
+                  &obj=MAIN
+                  &req=object
+                }
+                ${preset}
+              `.replace(/\s/g, "")
             };
             // SHOW DECORATION AS MAIN IMAGE
             if (codetype == "ugcCode" && iteration == "RM") {
@@ -3298,9 +3294,9 @@
         }
       </script>
       <script type="module">
-        import { ConvertFrom_StringUsingRegexCaptureGroup, Add_MemberScriptProperty } from 'https://unpkg.com/@tervis/tervisutilityjs/TervisUtilityJS.js?module'
+        import { Add_MemberScriptProperty } from 'https://unpkg.com/@tervis/tervisutilityjs/TervisUtilityJS.js?module'
         import { Get_TervisAdobeScene7HeroVignetteContentsURL } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.2/TervisAdobeScene7JS.js?module'
-        import { Get_ColorCodeToMarketingNameIndex } from 'https://unpkg.com/@tervis/terviscustomyzerjs@^0.1.1/TervisCustomyzerJS.js?module'
+        import { Get_ColorCodeToMarketingNameIndex, Get_SizeAndFormTypeFromString } from 'https://unpkg.com/@tervis/terviscustomyzerjs@^0.1.2/TervisCustomyzerJS.js?module'
 
         function Get_URLSFourSides() {
           var $URLs = []
@@ -3327,19 +3323,6 @@
           }
 
           return ($URLs)
-        }
-
-        function Get_SizeAndFormTypeFromString({
-          $String
-        }) {
-          var $Results = ConvertFrom_StringUsingRegexCaptureGroup({
-            $Regex: /(?<$Size>\d*)(?<$FormType>\w*)/u,
-            $String
-          })
-
-          if ($Results) {
-            return $Results
-          }
         }
 
         var ImagePerspectiveValuesBySizeAndFormType = [
