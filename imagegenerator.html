@@ -2319,7 +2319,72 @@
             // IMAGE SOURCE
 
             if (codetype == "ugcCode" && decorationtype == "-WRA") {
-              codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?layer=1&src=(http://s7d4.scene7.com/is/image/tervis?src=ir{tervisRender/${tumbler}-WRA-PRINT-SINGLE?obj=DECO&decal&src=(${itemcode}?${preset2})&res=300&show&obj=DECO&req=object}&scl=1&fmt=png-alpha)&layer=2&src=(http://s7d4.scene7.com/is/image/tervis?src=ir{tervisRender/${tumbler}-WRA-PRINT-SINGLE?obj=DECO&decal&src=(${itemcode}?${preset2})&res=300&show&obj=DECO&req=object}&scl=1&fmt=png-alpha)&layer=3&src=(http://s7d4.scene7.com/is/image/tervis?src=ir{tervisRender/${tumbler}-WRA-PRINT-SINGLE?obj=DECO&decal&src=(${itemcode}?${preset2})&res=300&show&obj=DECO&req=object}&scl=1&fmt=png-alpha)${anchor}&show&obj=DECO&req=object}`;
+              codetypeURL = `
+                is{
+                  tervis/${tumbler}${decorationtype}${print}?
+                  layer=1
+                  &src=(
+                    http://s7d4.scene7.com/is/image/tervis?
+                    src=ir{
+                      tervisRender/${tumbler}-WRA-PRINT-SINGLE?
+                      obj=DECO
+                      &decal
+                      &src=(
+                        ${itemcode}?
+                        ${preset2}
+                      )
+                      &res=300
+                      &show
+                      &obj=DECO
+                      &req=object
+                    }
+                    &scl=1
+                    &fmt=png-alpha
+                  )
+                  &layer=2
+                  &src=(
+                    http://s7d4.scene7.com/is/image/tervis?
+                    src=ir{
+                      tervisRender/${tumbler}-WRA-PRINT-SINGLE?
+                      obj=DECO
+                      &decal
+                      &src=(
+                        ${itemcode}?
+                        ${preset2}
+                      )
+                      &res=300
+                      &show
+                      &obj=DECO
+                      &req=object
+                    }
+                    &scl=1
+                    &fmt=png-alpha
+                  )
+                  &layer=3
+                  &src=(
+                    http://s7d4.scene7.com/is/image/tervis?
+                    src=ir{
+                      tervisRender/${tumbler}-WRA-PRINT-SINGLE?
+                      obj=DECO
+                      &decal
+                      &src=(
+                        ${itemcode}?
+                        ${preset2}
+                      )
+                      &res=300
+                      &show
+                      &obj=DECO
+                      &req=object
+                    }
+                    &scl=1
+                    &fmt=png-alpha
+                  )
+                  ${anchor}
+                  &show
+                  &obj=DECO
+                  &req=object
+                }
+                `.replace(/\s/g, "")
               $('#wraptypediv:hidden').show("#wraptypediv");
             } else if (codetype == "ugcCode" && decorationtype == "-EMB") {
               codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?$img-src=(${itemcode}?${preset2})&show&obj=DECO&req=object}`;
