@@ -2297,33 +2297,41 @@
             }
 
             if (codetype == "ugcCode") {
-              res = "&res=300", res2 = "", print = "-DECO3", templateexist = "$img-", BkgdPos = "&";
+              res = "&res=300"
+              res2 = ""
+              print = "-DECO3"
+              templateexist = "$img-"
+              BkgdPos = "&"
             } else {
-              res = "", res2 = "", print = "-DECO3", templateexist = "$img-", BkgdPos = "&";
+              res = ""
+              res2 = ""
+              print = "-DECO3"
+              templateexist = "$img-"
+              BkgdPos = "&"
             }
 
             // IMAGE SOURCE
 
             if (codetype == "ugcCode" && decorationtype == "-WRA") {
-              codetypeURL = "is{tervis/" + tumbler + decorationtype + print + "?layer=1&src=(http://s7d4.scene7.com/is/image/tervis?src=ir{tervisRender/" + tumbler + "-WRA-PRINT-SINGLE?obj=DECO&decal&src=(" + itemcode + "?" + preset2 + ")&res=300&show&obj=DECO&req=object}&scl=1&fmt=png-alpha)&layer=2&src=(http://s7d4.scene7.com/is/image/tervis?src=ir{tervisRender/" + tumbler + "-WRA-PRINT-SINGLE?obj=DECO&decal&src=(" + itemcode + "?" + preset2 + ")&res=300&show&obj=DECO&req=object}&scl=1&fmt=png-alpha)&layer=3&src=(http://s7d4.scene7.com/is/image/tervis?src=ir{tervisRender/" + tumbler + "-WRA-PRINT-SINGLE?obj=DECO&decal&src=(" + itemcode + "?" + preset2 + ")&res=300&show&obj=DECO&req=object}&scl=1&fmt=png-alpha)" + anchor + "&show&obj=DECO&req=object}";
+              codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?layer=1&src=(http://s7d4.scene7.com/is/image/tervis?src=ir{tervisRender/${tumbler}-WRA-PRINT-SINGLE?obj=DECO&decal&src=(${itemcode}?${preset2})&res=300&show&obj=DECO&req=object}&scl=1&fmt=png-alpha)&layer=2&src=(http://s7d4.scene7.com/is/image/tervis?src=ir{tervisRender/${tumbler}-WRA-PRINT-SINGLE?obj=DECO&decal&src=(${itemcode}?${preset2})&res=300&show&obj=DECO&req=object}&scl=1&fmt=png-alpha)&layer=3&src=(http://s7d4.scene7.com/is/image/tervis?src=ir{tervisRender/${tumbler}-WRA-PRINT-SINGLE?obj=DECO&decal&src=(${itemcode}?${preset2})&res=300&show&obj=DECO&req=object}&scl=1&fmt=png-alpha)${anchor}&show&obj=DECO&req=object}`;
               $('#wraptypediv:hidden').show("#wraptypediv");
             } else if (codetype == "ugcCode" && decorationtype == "-EMB") {
-              codetypeURL = "is{tervis/" + tumbler + decorationtype + print + "?$img-src=(" + itemcode + "?" + preset2 + ")&show&obj=DECO&req=object}";
+              codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?$img-src=(${itemcode}?${preset2})&show&obj=DECO&req=object}`;
               $('#wraptypediv:hidden').show("#wraptypediv");
 
             } else if (codetype == "ugcCode" && decorationtype == "-DPT") {
-              codetypeURL = "is{tervis/" + tumbler + decorationtype + print + "?$img-src=(" + itemcode + "?" + preset2 + ")&show&obj=DECO&req=object}";
+              codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?$img-src=(${itemcode}?${preset2})&show&obj=DECO&req=object}`;
               $('#wraptypediv:hidden').show("#wraptypediv");
 
             } else if (codetype == "ugcCode" && decorationtype == "customyzer") {
-              codetypeURL = "is{tervis/" + tumbler + "-WRA" + print + "?$img-src=(" + itemcode + "?" + preset2 + ")&show&obj=DECO&req=object}";
+              codetypeURL = `is{tervis/${tumbler}-WRA${print}?$img-src=(${itemcode}?${preset2})&show&obj=DECO&req=object}`;
               $('#wraptypediv:hidden').show("#wraptypediv");
 
             } else if (codetype == "ugcCode") {
-              codetypeURL = "is{tervis/" + tumbler + decorationtype + print + "?$img-src=(" + itemcode + "?fmt=png-alpha)" + res + "&show&obj=DECO&req=object}";
+              codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?$img-src=(${itemcode}?fmt=png-alpha)${res}&show&obj=DECO&req=object}`;
               $('#wraptypediv:hidden').show("#wraptypediv");
             } else if (codetype == "rmCode" || codetype == "choose") {
-              codetypeURL = "is{tervis/" + tumbler + decorationtype + print + "?&" + templateexist + "src=" + itemcode + res + "}";
+              codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?&${templateexist}src=${itemcode}${res}}`;
               $('#wraptypediv:visible').hide("#wraptypediv");
             }
 
@@ -2331,19 +2339,19 @@
 
 
             if (codetype == "ugcCode" && iteration == "&") {
-              var finalURL = "http://s7d4.scene7.com/is/image/tervis/" + imageName + "?src=ir{tervisRender/" + tumbler + decorationtype + "-PRINT-SINGLE?obj=DECO&decal&src=(" + itemcode + "?scl=1&fmt=png-alpha)&show&res=300&obj=DECO&req=object}&scl=1&fmt=png-alpha";
+              var finalURL = `http://s7d4.scene7.com/is/image/tervis/${imageName}?src=ir{tervisRender/${tumbler}${decorationtype}-PRINT-SINGLE?obj=DECO&decal&src=(${itemcode}?scl=1&fmt=png-alpha)&show&res=300&obj=DECO&req=object}&scl=1&fmt=png-alpha`;
             } else if (iteration == "&") {
-              var finalURL = "http://s7d4.scene7.com/is/image/tervis/" + imageName + "?src=ir{tervisRender/" + tumbler + decorationtype + "-PRINT-SINGLE?obj=DECO&decal&src=" + itemcode + "&show&obj=DECO&req=object}&scl=1&fmt=png-alpha";
+              var finalURL = `http://s7d4.scene7.com/is/image/tervis/${imageName}?src=ir{tervisRender/${tumbler}${decorationtype}-PRINT-SINGLE?obj=DECO&decal&src=${itemcode}&show&obj=DECO&req=object}&scl=1&fmt=png-alpha`;
             } else {
-              var finalURL = "http://s7d4.scene7.com/is/image/tervis/" + imageName + "?layer=0&src=ir{tervisRender/" + tumbler + iteration + "?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/" + outerform + "/" + outercolor + "&show&obj=MAIN/INNER/" + innerform + "/" + innercolor + "&show&obj=MAIN/DECO&decal&src=" + codetypeURL + res2 + "&pos=" + slider + ",0&show" + lidColor + handle + "&obj=MAIN&req=object}" + preset;
+              var finalURL = `http://s7d4.scene7.com/is/image/tervis/${imageName}?layer=0&src=ir{tervisRender/${tumbler}${iteration}?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/${outerform}/${outercolor}&show&obj=MAIN/INNER/${innerform}/${innercolor}&show&obj=MAIN/DECO&decal&src=${codetypeURL}${res2}&pos=${slider},0&show${lidColor}${handle}&obj=MAIN&req=object}${preset}`;
             };
             // SHOW DECORATION AS MAIN IMAGE
             if (codetype == "ugcCode" && iteration == "RM") {
-              var finalURL = itemcode + "?" + preset;
+              var finalURL = `${itemcode}?${preset}`;
               $('#slider:visible').hide("#slider");
               $('.menupad:visible').hide(".menupad");
             } else if (codetype != "ugcCode" && iteration == "RM") {
-              var finalURL = "http://s7d4.scene7.com/is/image/tervis/" + itemcode + "?" + preset;
+              var finalURL = `http://s7d4.scene7.com/is/image/tervis/${itemcode}?${preset}`;
               $('#slider:visible').hide("#slider");
               $('.menupad:visible').hide(".menupad");
             } else {
@@ -2352,20 +2360,17 @@
             }
             // MAKE THUMBNAIL FOR DECORATION
             if (codetype == "ugcCode") {
-              var thumbnailDecoration = itemcode + "?$PDP-ALT-THMB$";
+              var thumbnailDecoration = `${itemcode}?$PDP-ALT-THMB$`;
             } else {
-              var thumbnailDecoration = "http://s7d4.scene7.com/is/image/tervis/" + itemcode + "?$PDP-ALT-THMB$";
+              var thumbnailDecoration = `http://s7d4.scene7.com/is/image/tervis/${itemcode}?$PDP-ALT-THMB$`;
             };
             // DEFAULT MAIN IMAGE
             if (codetype == "choose") {
-              var finalURL = "http://s7d4.scene7.com/is/image/tervis/" + imageName + "?layer=0&src=ir{tervisRender/" + tumbler + iteration + "?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/" + outerform + "/" + outercolor + "&show&obj=MAIN/INNER/" + innerform + "/" + innercolor + "&show" + lidColor + handle + "&obj=MAIN&req=object}" + preset;
+              var finalURL = `http://s7d4.scene7.com/is/image/tervis/${imageName}?layer=0&src=ir{tervisRender/${tumbler}${iteration}?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/${outerform}/${outercolor}&show&obj=MAIN/INNER/${innerform}/${innercolor}&show${lidColor}${handle}&obj=MAIN&req=object}${preset}`;
             }
             if (itemcode == null || itemcode == "") {
-              var finalURL = "http://s7d4.scene7.com/is/image/tervis/" + imageName + "?layer=0&src=ir{tervisRender/" + tumbler + iteration + "?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/" + outerform + "/" + outercolor + "&show&obj=MAIN/INNER/" + innerform + "/" + innercolor + "&show" + lidColor + handle + "&obj=MAIN&req=object}" + preset;
+              var finalURL = `http://s7d4.scene7.com/is/image/tervis/${imageName}?layer=0&src=ir{tervisRender/${tumbler}${iteration}?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/${outerform}/${outercolor}&show&obj=MAIN/INNER/${innerform}/${innercolor}&show${lidColor}${handle}&obj=MAIN&req=object}${preset}`;
             }
-
-
-
 
             $("#vignetteUrl").val(finalURL);
             $('#poshold').val(slider);
@@ -3103,7 +3108,7 @@
             var UploadToken = '';
             var vXMLResponse = '';
 
-            var urlScene7 = 'https://s7ugc1.scene7.com/ugc/image?op=get_uploadtoken&shared_secret=' + sharedSecret + '&expires=1800';
+            var urlScene7 = `https://s7ugc1.scene7.com/ugc/image?op=get_uploadtoken&shared_secret=${sharedSecret}&expires=1800`;
             console.log("getting upload token from: " + urlScene7);
 
             $.ajax({
