@@ -2102,7 +2102,7 @@
         import { 
           Get_TervisAdobeScene7VignetteWrapPrintSingleURL,
           Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL 
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.7/TervisAdobeScene7JS.js?module'
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.9/TervisAdobeScene7JS.js?module'
 
         import { Get_SizeAndFormTypeFromString } from 'https://unpkg.com/@tervis/terviscustomyzerjs@^0.1.2/TervisCustomyzerJS.js?module'
         
@@ -2311,9 +2311,6 @@
             // }
 
             var res2 = ""
-            var print = "-DECO3"
-            var templateexist = "$img-"
-            var BkgdPos = "&"
 
             if (codetype == "ugcCode") {
               var res = "&res=300"
@@ -2326,25 +2323,87 @@
             var $SizeAndFormType = Get_SizeAndFormTypeFromString({ $String: $RadioButtonValue })
 
             if (codetype == "ugcCode" && decorationtype == "-WRA") {
-              var codetypeURL = Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL({...$SizeAndFormType, $AsScene7RelativeURL: true, $WrapImageURL: `${itemcode}?${preset2}` })
-              $('#wraptypediv:hidden').show("#wraptypediv");
+              var $WrapPrintSingleScene7RelativeURL = Get_TervisAdobeScene7VignetteWrapPrintSingleURL({
+                  ...$SizeAndFormType,
+                  $AsScene7RelativeURL: true,
+                  $WrapImageURL: `${itemcode}?${preset2}`
+              })
+
+              var codetypeURL = Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
+                ...$SizeAndFormType,
+                $AsScene7RelativeURL: true,
+                $DecorationType: "WRA",
+                $RepeatedImageSource: $WrapPrintSingleScene7RelativeURL
+              })
+
+              $('#wraptypediv:hidden').show("#wraptypediv")
             } else if (codetype == "ugcCode" && decorationtype == "-EMB") {
-              var codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?$img-src=(${itemcode}?${preset2})&show&obj=DECO&req=object}`.replace(/\s/g, "");
+              var codetypeURL = `
+                is{
+                  tervis/${tumbler}${decorationtype}-DECO3?
+                  $img-src=(
+                    ${itemcode}?
+                    ${preset2}
+                  )
+                  &show
+                  &obj=DECO
+                  &req=object
+                }
+              `.replace(/\s/g, "");
               $('#wraptypediv:hidden').show("#wraptypediv");
 
             } else if (codetype == "ugcCode" && decorationtype == "-DPT") {
-              var codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?$img-src=(${itemcode}?${preset2})&show&obj=DECO&req=object}`.replace(/\s/g, "");
+              var codetypeURL = `
+                is{
+                  tervis/${tumbler}${decorationtype}-DECO3?
+                  $img-src=(
+                    ${itemcode}?
+                    ${preset2}
+                  )
+                  &show
+                  &obj=DECO
+                  &req=object
+                }
+              `.replace(/\s/g, "");
               $('#wraptypediv:hidden').show("#wraptypediv");
 
             } else if (codetype == "ugcCode" && decorationtype == "customyzer") {
-              var codetypeURL = `is{tervis/${tumbler}-WRA${print}?$img-src=(${itemcode}?${preset2})&show&obj=DECO&req=object}`.replace(/\s/g, "");
+              var codetypeURL = `
+                is{
+                  tervis/${tumbler}-WRA-DECO3?
+                  $img-src=(
+                    ${itemcode}?
+                    ${preset2}
+                  )
+                  &show
+                  &obj=DECO
+                  &req=object
+                }
+              `.replace(/\s/g, "")
               $('#wraptypediv:hidden').show("#wraptypediv");
 
             } else if (codetype == "ugcCode") {
-              var codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?$img-src=(${itemcode}?fmt=png-alpha)${res}&show&obj=DECO&req=object}`;
+              var codetypeURL = `
+                is{
+                  tervis/${tumbler}${decorationtype}-DECO3?
+                  $img-src=(
+                    ${itemcode}?
+                    fmt=png-alpha
+                  )
+                  ${res}
+                  &show
+                  &obj=DECO
+                  &req=object
+                }
+              `.replace(/\s/g, "")
               $('#wraptypediv:hidden').show("#wraptypediv");
             } else if (codetype == "rmCode" || codetype == "choose") {
-              var codetypeURL = `is{tervis/${tumbler}${decorationtype}${print}?&${templateexist}src=${itemcode}${res}}`;
+              var codetypeURL = `
+                is{
+                  tervis/${tumbler}${decorationtype}-DECO3?
+                  &$img-src=${itemcode}${res}
+                }
+              `.replace(/\s/g, "")
               $('#wraptypediv:visible').hide("#wraptypediv");
             }
 
