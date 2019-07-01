@@ -2100,13 +2100,15 @@
       </script>
       <script type="module">
         import { 
-          Get_TervisAdobeScene7VignetteWrapPrintSingleURL,
-          Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL 
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.9/TervisAdobeScene7JS.js?module'
+          Get_TervisAdobeScene7VignettePrintSingleURL,
+          Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL,
+          New_TervisAdobeScene7URL,
+          New_TervisAdobeScene7VignetteVirtualURL
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.14/TervisAdobeScene7JS.js?module'
 
         import { Get_SizeAndFormTypeFromString } from 'https://unpkg.com/@tervis/terviscustomyzerjs@^0.1.2/TervisCustomyzerJS.js?module'
         
-        // console.log(Get_TervisAdobeScene7VignetteWrapPrintSingleURL ({$Size: 16, $FormType: "DWT", $WrapImageRelativeURL: "tervisRender/ugc/845161827.tif?$UGC-ALPHA$", $AsScene7RelativeURL: true}))
+        console.log(Get_TervisAdobeScene7VignettePrintSingleURL ({$Size: 16, $FormType: "DWT", $DecorationType: "WRA", $ImageSrcValue: "is{tervisRender/ugc/845161827.tif?$UGC-ALPHA$}", $AsScene7SrcValue: false}))
         $(window).on("load", function () {
 
           if ($.cookie("codetype") == "choose" || $.cookie("codetype") == null) {
@@ -2231,7 +2233,6 @@
             var lidColor = $("input[name='lidRadio']:checked").val();
             var handle = $("input[name='handleRadio']:checked").val();
             var preset = ("$" + $("#preset").val() + "$");
-            var preset2 = "$UGC-ALPHA$"
             var poshold = $("#poshold").val();
             var precision = $("#precision").val();
 
@@ -2303,86 +2304,61 @@
               var slider = $("#slider").val();
             };
 
-            // // EMBLEM ANCHOR
-            // if (decorationtype == "-EMB") {
-            //   var anchor = "&anchorN=0,-.5";
-            // } else {
-            //   anchor = "";
-            // }
-
-            var res2 = ""
-
-            if (codetype == "ugcCode") {
-              var res = "&res=300"
-            } else {
-              var res = ""
-            }
-
             // IMAGE SOURCE
             var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
             var $SizeAndFormType = Get_SizeAndFormTypeFromString({ $String: $RadioButtonValue })
+            var $DecorationTypeWithoutLeadingDash = decorationtype.substring(1)
+            var $SrcValue = New_TervisAdobeScene7URL({$AsScene7SrcValue: true, $ExternalURL: `${itemcode}?$UGC-ALPHA$`})
 
             if (codetype == "ugcCode" && decorationtype == "-WRA") {
-              var $WrapPrintSingleScene7RelativeURL = Get_TervisAdobeScene7VignetteWrapPrintSingleURL({
+              var $WrapPrintSingleScene7RelativeURL = Get_TervisAdobeScene7VignettePrintSingleURL({
                   ...$SizeAndFormType,
-                  $AsScene7RelativeURL: true,
-                  $WrapImageURL: `${itemcode}?${preset2}`
+                  $DecorationType: $DecorationTypeWithoutLeadingDash,
+                  $AsScene7SrcValue: true,
+                  $ImageSrcValue: $SrcValue
               })
 
               var codetypeURL = Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
                 ...$SizeAndFormType,
-                $AsScene7RelativeURL: true,
-                $DecorationType: "WRA",
+                $AsScene7SrcValue: true,
+                $DecorationType: $DecorationTypeWithoutLeadingDash,
                 $RepeatedImageSource: $WrapPrintSingleScene7RelativeURL
               })
 
               $('#wraptypediv:hidden').show("#wraptypediv")
-            } else if (codetype == "ugcCode" && decorationtype == "-EMB") {
-              var codetypeURL = `
-                is{
-                  tervis/${tumbler}${decorationtype}-DECO3?
-                  $img-src=(
-                    ${itemcode}?
-                    ${preset2}
-                  )
-                  &show
-                  &obj=DECO
-                  &req=object
-                }
-              `.replace(/\s/g, "");
-              $('#wraptypediv:hidden').show("#wraptypediv");
+            } else if (codetype == "ugcCode" && (decorationtype == "-EMB" || decorationtype == "-DPT")) {
+              var codetypeURL = Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
+                ...$SizeAndFormType,
+                $AsScene7SrcValue: true,
+                $DecorationType: $DecorationTypeWithoutLeadingDash,
+                $RepeatedImageSource: $SrcValue
+              })
 
-            } else if (codetype == "ugcCode" && decorationtype == "-DPT") {
-              var codetypeURL = `
-                is{
-                  tervis/${tumbler}${decorationtype}-DECO3?
-                  $img-src=(
-                    ${itemcode}?
-                    ${preset2}
-                  )
-                  &show
-                  &obj=DECO
-                  &req=object
-                }
-              `.replace(/\s/g, "");
               $('#wraptypediv:hidden').show("#wraptypediv");
 
             } else if (codetype == "ugcCode" && decorationtype == "customyzer") {
-              var codetypeURL = `
-                is{
-                  tervis/${tumbler}-WRA-DECO3?
-                  $img-src=(
-                    ${itemcode}?
-                    ${preset2}
-                  )
-                  &show
-                  &obj=DECO
-                  &req=object
-                }
-              `.replace(/\s/g, "")
+              var codetypeURL = Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
+                ...$SizeAndFormType,
+                $AsScene7SrcValue: true,
+                $DecorationType: "WRA",
+                $RepeatedImageSource: $SrcValue
+              })
               $('#wraptypediv:hidden').show("#wraptypediv");
 
             } else if (codetype == "ugcCode") {
+              // var $SrcValueForUGCCodeType = New_TervisAdobeScene7URL({
+              //   $AsScene7SrcValue: true, 
+              //   $ExternalURL: `${itemcode}?fmt=png-alpha`
+              // })
+
+              // var codetypeURL = Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
+              //   ...$SizeAndFormType,
+              //   $AsScene7SrcValue: true,
+              //   $DecorationType: $DecorationTypeWithoutLeadingDash,
+              //   $RepeatedImageSource: $SrcValueForUGCCodeType
+              // })
+              
+              // In what scenario is this code executed?
               var codetypeURL = `
                 is{
                   tervis/${tumbler}${decorationtype}-DECO3?
@@ -2390,7 +2366,7 @@
                     ${itemcode}?
                     fmt=png-alpha
                   )
-                  ${res}
+                  &res=300
                   &show
                   &obj=DECO
                   &req=object
@@ -2401,76 +2377,53 @@
               var codetypeURL = `
                 is{
                   tervis/${tumbler}${decorationtype}-DECO3?
-                  &$img-src=${itemcode}${res}
+                  &$img-src=${itemcode}
                 }
               `.replace(/\s/g, "")
               $('#wraptypediv:visible').hide("#wraptypediv");
             }
 
             // FINAL IMAGE URL
+            var $ElementPathsToShow = [
+              "MAIN/GLARE",
+              `MAIN/OUTER/${outerform}/${outercolor}`,
+              `MAIN/INNER/${innerform}/${innercolor}`
+            ]
+            
+            if (lidColor !== "&") { //Do nothing if NoLid option which has value of & is selected
+              $ElementPathsToShow.push(
+                lidColor
+                .replace("&obj=","")
+                .replace("&show","")
+              )
+            }
 
+            if (handle !== "&") { //Do nothing if NoHANDLE option which has value of & is selected
+              $ElementPathsToShow.push(
+                handle
+                .replace("&obj=","")
+                .replace("&show","")
+              )
+            }
+            
+            var $VignetteVirtual = New_TervisAdobeScene7VignetteVirtualURL({
+              ...$SizeAndFormType,
+              $VignetteSuffix: iteration,
+              $DecorationType: $DecorationTypeWithoutLeadingDash,
+              $DecorationSrc: codetypeURL,
+              $DecorationPositionXValue: slider,
+              $ElementPathsToShow,
+              $AsScene7SrcValue: true
+            })
 
-            if (codetype == "ugcCode" && iteration == "&") {
-              var finalURL = `
-                //imagegenerator.tervis.com/is/image/tervis/${imageName}?
-                src=ir{
-                  tervisRender/${tumbler}${decorationtype}-PRINT-SINGLE?
-                  obj=DECO
-                  &decal
-                  &src=(
-                    ${itemcode}?
-                    scl=1
-                    &fmt=png-alpha
-                  )
-                  &show
-                  &res=300
-                  &obj=DECO
-                  &req=object
-                }
-                &scl=1
-                &fmt=png-alpha
-              `.replace(/\s/g, "")
-            } else if (iteration == "&") {
-              var finalURL = `
-                //imagegenerator.tervis.com/is/image/tervis/${imageName}?
-                src=ir{
-                  tervisRender/${tumbler}${decorationtype}-PRINT-SINGLE?
-                  obj=DECO
-                  &decal
-                  &src=${itemcode}
-                  &show
-                  &obj=DECO
-                  &req=object
-                }
-                &scl=1
-                &fmt=png-alpha
-              `.replace(/\s/g, "")
-            } else {
-              var finalURL = `
+            var finalURL = `
                 //imagegenerator.tervis.com/is/image/tervis/${imageName}?
                 layer=0
-                &src=ir{
-                  tervisRender/${tumbler}${iteration}?
-                  &obj=MAIN/GLARE
-                  &show
-                  &obj=MAIN/OUTER/${outerform}/${outercolor}
-                  &show
-                  &obj=MAIN/INNER/${innerform}/${innercolor}
-                  &show
-                  &obj=MAIN/DECO
-                  &decal
-                  &src=${codetypeURL}
-                  ${res2}
-                  &pos=${slider},0
-                  &show
-                  ${lidColor}
-                  ${handle}
-                  &obj=MAIN
-                  &req=object
-                }
+                &src=${$VignetteVirtual}
                 ${preset}
               `.replace(/\s/g, "")
-            };
+            
+
             // SHOW DECORATION AS MAIN IMAGE
             if (codetype == "ugcCode" && iteration == "RM") {
               var finalURL = `${itemcode}?${preset}`;
@@ -2492,10 +2445,43 @@
             };
             // DEFAULT MAIN IMAGE
             if (codetype == "choose") {
-              var finalURL = `//imagegenerator.tervis.com/is/image/tervis/${imageName}?layer=0&src=ir{tervisRender/${tumbler}${iteration}?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/${outerform}/${outercolor}&show&obj=MAIN/INNER/${innerform}/${innercolor}&show${lidColor}${handle}&obj=MAIN&req=object}${preset}`;
+              var finalURL = `
+                //imagegenerator.tervis.com/is/image/tervis/${imageName}?
+                layer=0
+                &src=ir{
+                  tervisRender/${tumbler}${iteration}?
+                  &obj=MAIN/GLARE
+                  &show
+                  &obj=MAIN/OUTER/${outerform}/${outercolor}
+                  &show
+                  &obj=MAIN/INNER/${innerform}/${innercolor}
+                  &show
+                  ${lidColor}
+                  ${handle}
+                  &obj=MAIN
+                  &req=object
+                }
+                ${preset}
+              `.replace(/\s/g, "")
             }
             if (itemcode == null || itemcode == "") {
-              var finalURL = `//imagegenerator.tervis.com/is/image/tervis/${imageName}?layer=0&src=ir{tervisRender/${tumbler}${iteration}?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/${outerform}/${outercolor}&show&obj=MAIN/INNER/${innerform}/${innercolor}&show${lidColor}${handle}&obj=MAIN&req=object}${preset}`;
+              var finalURL = `
+                //imagegenerator.tervis.com/is/image/tervis/${imageName}?
+                layer=0
+                &src=ir{
+                  tervisRender/${tumbler}${iteration}?
+                  &obj=MAIN/GLARE&show
+                  &obj=MAIN/OUTER/${outerform}/${outercolor}
+                  &show
+                  &obj=MAIN/INNER/${innerform}/${innercolor}
+                  &show
+                  ${lidColor}
+                  ${handle}
+                  &obj=MAIN
+                  &req=object
+                }
+                ${preset}
+              `.replace(/\s/g, "")
             }
 
             $("#vignetteUrl").val(finalURL);
@@ -2524,16 +2510,6 @@
           // IMAGE ZOOM
 
           // END FUNCTION (UPDATE)
-
-          //PRECISE SELECTION WARNING
-          /* $('#precision').on("input change", function() {
-             if ($('#precision').val() == "1") {
-                if (confirm('Warning: The "Precise" selection may increase image load times. Do you wish to proceed?')) {
-                } else {
-                  $('#precision').prop('val', "4");
-                };
-              };
-           });  */
 
           // UPDATE ON SLIDER CHANGE	
           $('#poshold').on("input change", function () {
@@ -2577,8 +2553,6 @@
               open(printURL, "_blank");
             }
           });
-
-
         });
 
 
