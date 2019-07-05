@@ -2100,11 +2100,11 @@
       </script>
       <script type="module">
         import { 
-          Get_TervisAdobeScene7VignettePrintSingleURL,
-          Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL,
+          New_TervisAdobeScene7VignettePrintSingleURL,
+          New_TervisAdobeScene7VignetteWrapDecoration3TimesURL,
           New_TervisAdobeScene7URL,
           New_TervisAdobeScene7VignetteVirtualURL
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.14/TervisAdobeScene7JS.js?module'
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.19/TervisAdobeScene7JS.js?module'
 
         import { Get_SizeAndFormTypeFromString } from 'https://unpkg.com/@tervis/terviscustomyzerjs@^0.1.2/TervisCustomyzerJS.js?module'
         
@@ -2310,14 +2310,14 @@
             var $SrcValue = New_TervisAdobeScene7URL({$AsScene7SrcValue: true, $ExternalURL: `${itemcode}?$UGC-ALPHA$`})
 
             if (codetype == "ugcCode" && decorationtype == "-WRA") {
-              var $WrapPrintSingleScene7RelativeURL = Get_TervisAdobeScene7VignettePrintSingleURL({
+              var $WrapPrintSingleScene7RelativeURL = New_TervisAdobeScene7VignettePrintSingleURL({
                   ...$SizeAndFormType,
                   $DecorationType: $DecorationTypeWithoutLeadingDash,
                   $AsScene7SrcValue: true,
                   $ImageSrcValue: $SrcValue
               })
 
-              var codetypeURL = Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
+              var codetypeURL = New_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
                 ...$SizeAndFormType,
                 $AsScene7SrcValue: true,
                 $DecorationType: $DecorationTypeWithoutLeadingDash,
@@ -2326,7 +2326,7 @@
 
               $('#wraptypediv:hidden').show("#wraptypediv")
             } else if (codetype == "ugcCode" && (decorationtype == "-EMB" || decorationtype == "-DPT")) {
-              var codetypeURL = Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
+              var codetypeURL = New_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
                 ...$SizeAndFormType,
                 $AsScene7SrcValue: true,
                 $DecorationType: $DecorationTypeWithoutLeadingDash,
@@ -2336,7 +2336,7 @@
               $('#wraptypediv:hidden').show("#wraptypediv");
 
             } else if (codetype == "ugcCode" && decorationtype == "customyzer") {
-              var codetypeURL = Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
+              var codetypeURL = New_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
                 ...$SizeAndFormType,
                 $AsScene7SrcValue: true,
                 $DecorationType: "WRA",
@@ -2350,7 +2350,7 @@
               //   $ExternalURL: `${itemcode}?fmt=png-alpha`
               // })
 
-              // var codetypeURL = Get_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
+              // var codetypeURL = New_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
               //   ...$SizeAndFormType,
               //   $AsScene7SrcValue: true,
               //   $DecorationType: $DecorationTypeWithoutLeadingDash,
