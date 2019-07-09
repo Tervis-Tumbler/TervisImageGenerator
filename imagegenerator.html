@@ -2115,11 +2115,11 @@
       </script>
       <script type="module">
         import { 
-          New_TervisAdobeScene7VignettePrintSingleURL,
-          New_TervisAdobeScene7VignetteWrapDecoration3TimesURL,
+          New_TervisAdobeScene7PrintSingleURL,
+          New_TervisAdobeScene7WrapDecoration3TimesURL,
           New_TervisAdobeScene7URL,
-          New_TervisAdobeScene7VignetteVirtualURL
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.23/TervisAdobeScene7JS.js?module'
+          New_TervisAdobeScene7ProductVirtualURL
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.24/TervisAdobeScene7JS.js?module'
 
         import { Get_SizeAndFormTypeFromString } from 'https://unpkg.com/@tervis/terviscustomyzerjs@^0.1.2/TervisCustomyzerJS.js?module'
         
@@ -2325,14 +2325,14 @@
             var $SrcValue = New_TervisAdobeScene7URL({$AsScene7SrcValue: true, $ExternalURL: `${itemcode}?$UGC-ALPHA$`})
 
             if (codetype == "ugcCode" && decorationtype == "-WRA") {
-              var $WrapPrintSingleScene7RelativeURL = New_TervisAdobeScene7VignettePrintSingleURL({
+              var $WrapPrintSingleScene7RelativeURL = New_TervisAdobeScene7PrintSingleURL({
                   ...$SizeAndFormType,
                   $DecorationType: $DecorationTypeWithoutLeadingDash,
                   $AsScene7SrcValue: true,
                   $ImageSrcValue: $SrcValue
               })
 
-              var codetypeURL = New_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
+              var codetypeURL = New_TervisAdobeScene7WrapDecoration3TimesURL({
                 ...$SizeAndFormType,
                 $AsScene7SrcValue: true,
                 $DecorationType: $DecorationTypeWithoutLeadingDash,
@@ -2341,7 +2341,7 @@
 
               $('#wraptypediv:hidden').show("#wraptypediv")
             } else if (codetype == "ugcCode" && (decorationtype == "-EMB" || decorationtype == "-DPT")) {
-              var codetypeURL = New_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
+              var codetypeURL = New_TervisAdobeScene7WrapDecoration3TimesURL({
                 ...$SizeAndFormType,
                 $AsScene7SrcValue: true,
                 $DecorationType: $DecorationTypeWithoutLeadingDash,
@@ -2351,7 +2351,7 @@
               $('#wraptypediv:hidden').show("#wraptypediv");
 
             } else if (codetype == "ugcCode" && decorationtype == "customyzer") {
-              var codetypeURL = New_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
+              var codetypeURL = New_TervisAdobeScene7WrapDecoration3TimesURL({
                 ...$SizeAndFormType,
                 $AsScene7SrcValue: true,
                 $DecorationType: "WRA",
@@ -2365,7 +2365,7 @@
               //   $ExternalURL: `${itemcode}?fmt=png-alpha`
               // })
 
-              // var codetypeURL = New_TervisAdobeScene7VignetteWrapDecoration3TimesURL({
+              // var codetypeURL = New_TervisAdobeScene7WrapDecoration3TimesURL({
               //   ...$SizeAndFormType,
               //   $AsScene7SrcValue: true,
               //   $DecorationType: $DecorationTypeWithoutLeadingDash,
@@ -2420,7 +2420,7 @@
               )
             }
             
-            var $VignetteVirtual = New_TervisAdobeScene7VignetteVirtualURL({
+            var $ProductVirtualURL = New_TervisAdobeScene7ProductVirtualURL({
               ...$SizeAndFormType,
               $VignetteSuffix: iteration,
               $DecorationType: $DecorationTypeWithoutLeadingDash,
@@ -2433,7 +2433,7 @@
             var finalURL = `
                 //imagegenerator.tervis.com/is/image/tervis/${imageName}?
                 layer=0
-                &src=${$VignetteVirtual}
+                &src=${$ProductVirtualURL}
                 ${preset}
               `.replace(/\s/g, "")
             
@@ -3346,17 +3346,17 @@
           Get_SizeAndFormTypeMetaDataUsingIndex
         } from 'https://unpkg.com/@tervis/terviscustomyzerjs@0.1.3/TervisCustomyzerJS.js?module'
 
-        function Get_URLSFourSides() {
+        async function Get_URLSFourSides() {
           var $URLs = []
           var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
           var $SizeAndFormType = Get_SizeAndFormTypeFromString({ $String: $RadioButtonValue })
-          var $SizeAndFormTypeMetaData = Get_SizeAndFormTypeMetaDataUsingIndex({ ...$SizeAndFormType })
+          var $SizeAndFormTypeMetaData = await Get_SizeAndFormTypeMetaDataUsingIndex({ ...$SizeAndFormType })
           var $RotateValues = []
 
           $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfFront)
-          $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfLeft)
-          $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfBack)
           $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfRight)
+          $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfBack)
+          $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfLeft)
 
           document.querySelector("#poshold").value = 0
           document.querySelector("#poshold").dispatchEvent(new InputEvent("input"))
@@ -3372,6 +3372,7 @@
           return ($URLs)
         }
 
+        // window.Get_URLSFourSides = Get_URLSFourSides
         document.querySelector('#downloadFourSides').addEventListener('click', Invoke_DownloadFourSides)
 
         async function downloadAll(urls) {
@@ -3379,29 +3380,18 @@
             var link = document.createElement('a');
             link.style.display = 'none';
             link.setAttribute('download', `${i + 1}.png`);
-            // link.setAttribute('target', '_blank');
             link.setAttribute('href', urls[i]);
             link.setAttribute('class', "FourImageDownload");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
           }
-          // await sleep(10000)
-          //test too see if we can do everything in the loop above and not have a separate step for clicking and removing
-          // for (let link of document.querySelectorAll("a[class='FourImageDownload']")) {
-          //   link.click();
-          //   document.body.removeChild(link);
-          // }
-        }
-
-        function sleep(ms) {
-          return new Promise(resolve => setTimeout(resolve, ms));
         }
 
         async function Invoke_DownloadFourSides() {
-          var $URLs = Get_URLSFourSides()
+          var $URLs = await Get_URLSFourSides()
           await downloadAll($URLs)
         }
-        window.Invoke_DownloadFourSides = Invoke_DownloadFourSides
+        // window.Invoke_DownloadFourSides = Invoke_DownloadFourSides
       </script>
     </div>
