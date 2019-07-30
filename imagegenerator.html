@@ -650,6 +650,7 @@
           <button type="button" class="buttonblue" id="updateTumbler" style="display:none;">Update Tumbler</button>
           <button type="button" class="buttonblue" id="print">Download Hi-Res</button>
           <button type="button" class="buttonblue" id="downloadFourSides">Download 4 Sides</button>
+          <button type="button" class="buttonblue" id="downloadOneSidedVirtual">1 Sided Virtual</button>
         </div>
       </div>
 
@@ -2119,7 +2120,7 @@
           New_TervisAdobeScene7WrapDecoration3TimesURL,
           New_TervisAdobeScene7URL,
           New_TervisAdobeScene7ProductVirtualURL
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.24/TervisAdobeScene7JS.js?module'
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.44/TervisAdobeScene7JS.js?module'
 
         import { Get_SizeAndFormTypeFromString } from 'https://unpkg.com/@tervis/terviscustomyzerjs@^0.1.2/TervisCustomyzerJS.js?module'
         
@@ -3346,6 +3347,14 @@
           Get_SizeAndFormTypeMetaDataUsingIndex
         } from 'https://unpkg.com/@tervis/terviscustomyzerjs@0.1.3/TervisCustomyzerJS.js?module'
 
+        import { 
+          New_TervisAdobeScene7URL,
+          New_TervisAdobeScene7VirtualImageURL,
+          New_TervisAdobeScene7ProofImageURL,
+          New_AdobeScene7SizeStanza,
+          New_TervisAdobeScene7ArcedImageURL
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.49/TervisAdobeScene7JS.js?module'
+
         async function Get_URLSFourSides() {
           var $URLs = []
           var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
@@ -3364,8 +3373,7 @@
 
           for (var $RotateValue of $RotateValues) {
             var $URLWithCorrectPosition = $URLWithMangledPosition.replace(/(?<=&pos=)-?\d+(?=,0)/, $RotateValue)
-            var $URLWithCorectDomain = $URLWithCorrectPosition.replace(/^http:\/\/s7d4.scene7.com/, "//imagegenerator.tervis.com")
-            var $URL = $URLWithCorectDomain
+            var $URL = $URLWithCorrectPosition
             $URLs.push($URL)
           }
 
@@ -3393,5 +3401,91 @@
           await downloadAll($URLs)
         }
         // window.Invoke_DownloadFourSides = Invoke_DownloadFourSides
+
+        async function Invoke_OneSidedVirtualDownload () {
+          var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
+          var {$Size, $FormType} = Get_SizeAndFormTypeFromString({ $String: $RadioButtonValue })
+          
+          var $SizeAndFormTypeMetaData = await Get_SizeAndFormTypeMetaDataUsingIndex({$Size, $FormType})
+          var $DecorationProofWidthOnVirtual = $SizeAndFormTypeMetaData.DecorationProofWidthOnVirtual    
+          var $DecorationProofAspectRatio = $SizeAndFormTypeMetaData.PrintImageDimensions.Width / $SizeAndFormTypeMetaData.PrintImageDimensions.Height
+          var $DecorationProofHeightOnVirtual = Math.round($DecorationProofWidthOnVirtual / $DecorationProofAspectRatio)
+
+          var $DecorationTypeDropDownValue = document.querySelector('#decorationtype').value
+          
+          var $URLOfDecoration = document.querySelector('#itemcode').value
+          var $DecorationProofSizeStanza = New_AdobeScene7SizeStanza({ $Width: $DecorationProofWidthOnVirtual, $Height: $DecorationProofHeightOnVirtual})
+          var $DecorationImageURLAsSourceValue = New_TervisAdobeScene7URL({
+            $ExternalURL: `
+              ${$URLOfDecoration}?
+              ${$DecorationProofSizeStanza}
+              &scl=1
+              &fmt=png-alpha
+            `.replace(/\s/g, ""),
+            $AsScene7SrcValue: true
+          })
+
+          if ($DecorationTypeDropDownValue === "customyzer") {
+            $URLOfDecoration = await New_TervisAdobeScene7ArcedImageURL({
+              $Size,
+              $FormType,
+              $AsScene7SrcValue: true,
+              $DecalSourceValue: $URLOfDecoration
+            })
+          }
+
+      
+
+          var $DecorationProofImageURLAsSourceValue
+          if ($DecorationTypeDropDownValue === "-WRA" || $DecorationTypeDropDownValue === "customyzer") {
+            $DecorationProofImageURLAsSourceValue = await New_TervisAdobeScene7ProofImageURL({
+              $DecorationImageURLAsSourceValue,
+              $ArcedDecoration: true,
+              $Size,
+              $FormType,
+              $Width: $DecorationProofWidthOnVirtual,
+              $Height: $DecorationProofHeightOnVirtual,
+              $AsScene7SrcValue: true,
+              $IncludeDiecutterCalibrationLine: true
+            })
+          } else if ($DecorationTypeDropDownValue === "-DPT") {
+            $DecorationProofImageURLAsSourceValue = await New_TervisAdobeScene7ProofImageURL({
+              $DecorationImageURLAsSourceValue,
+              $Size,
+              $FormType,
+              $Width: $DecorationProofWidthOnVirtual,
+              $Height: $DecorationProofHeightOnVirtual,
+              $AsScene7SrcValue: true
+            })
+          }
+          
+          var $PosHoldNode = document.querySelector("#poshold")
+          if (!$PosHoldNode.value) {
+            $PosHoldNode.value = 0
+            $PosHoldNode.dispatchEvent(new InputEvent("input"))
+          }
+
+          var $ProductVirtualImageURL = document.querySelector("#tumblerimagelink").href
+          var $ProductVirtualWidth = 1079
+          var $ProductVirtualHeight = 949
+          var $ProductVirtualSizeStanza = New_AdobeScene7SizeStanza({ $Width: $ProductVirtualWidth, $Height: $ProductVirtualHeight})
+          
+          var $ProductVirtualImageURLAsSourceValue = New_TervisAdobeScene7URL({
+            $ExternalURL: `${$ProductVirtualImageURL}${$ProductVirtualSizeStanza}`,
+            $AsScene7SrcValue: true
+          })
+
+          var $VirtualImageURL = await New_TervisAdobeScene7VirtualImageURL({
+            $Size,
+            $FormType,
+            $DecorationProofImageURLAsSourceValue,
+            $ProductVirtualURLAsSourceValue: $ProductVirtualImageURLAsSourceValue
+          })
+
+          await downloadAll([$VirtualImageURL])
+        }
+
+        document.querySelector('#downloadOneSidedVirtual').addEventListener('click', Invoke_OneSidedVirtualDownload)
+        
       </script>
     </div>
