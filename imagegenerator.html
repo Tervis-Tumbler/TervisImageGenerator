@@ -3563,67 +3563,16 @@
             $VirtualImageURLs,
             function(images) {
               for (var i = 0; i < images.length; i++) {
-                  gif.addFrame(images[i], {copy: true});
+                  gif.addFrame(images[i], {delay: 1000});
               }
+              gif.addFrame(images[0], {delay: 1000})
               gif.on('finished', function(blob) {
-                // window.open(URL.createObjectURL(blob));
                 saveAs(blob, "FourSidedVirtual.gif")
               });
 
               gif.render();
             }
           )
-          
-          // // add an image element
-          // // gif.addFrame(imageElement);
-          // $VirtualImageURLs.forEach( $ImageURL => {
-          //   var $ImageElement = document.createElement('img')
-          //   $ImageElement.src = $ImageURL
-          //   $ImageElement.style.display = 'none'
-          //   // $ImageElement.crossOrigin = "Anonymous"
-          //   $ImageElement.setAttribute('crossOrigin', '')
-          //   gif.addFrame($ImageElement)
-          // })
-
-          // gif.on('finished', function(blob) {
-          // //   window.open(URL.createObjectURL(blob));
-          //   saveAs(blob, "FourSidedVirtual.gif")
-          // });
-
-          // gif.render();
-          
-          
-          // $VirtualImageURLs.push($VirtualImageURLs[0])
-          // $VirtualImageURLs.push($VirtualImageURLs[0])
-          // gifshot.createGIF({
-          //   images: $VirtualImageURLs,
-          //   interval: 1, // seconds
-          //   // frameDuration: 2, // seconds
-          //   gifWidth: 1650,
-          //   gifHeight: 1275,
-          //   //sampleInterval: 1,
-          //   progressCallback: function(captureProgress) { console.log('progress: ', captureProgress); },
-          //   completeCallback: function() { console.log('completed!!!'); },
-          // },function(obj) {
-          //   if(!obj.error) {
-          //     var image = obj.image
-
-          //     var animatedImage = document.createElement('img');
-          //     animatedImage.src = image;
-          //     var image_data = atob(animatedImage.src.split(',')[1]);
-          //     var arraybuffer = new ArrayBuffer(image_data.length);
-          //     var view = new Uint8Array(arraybuffer);
-          //     for (var i=0; i<image_data.length; i++) {
-          //         view[i] = image_data.charCodeAt(i) & 0xff
-          //     }
-          //     var blob = new Blob([arraybuffer], {type: 'application/octet-stream'})
-
-          //     saveAs(blob, "FourSidedVirtual.gif")
-
-          //   }
-          // });
-
-          // await downloadAll($VirtualImageURLs)j
         }
 
         document.querySelector('#downloadFourSidedVirtual').addEventListener('click', Invoke_FourSidedVirtualDownload)
