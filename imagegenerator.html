@@ -2127,7 +2127,10 @@
           New_TervisAdobeScene7ProductVirtualURL
         } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.44/TervisAdobeScene7JS.js?module'
 
-        import { Get_SizeAndFormTypeFromString } from 'https://unpkg.com/@tervis/terviscustomyzerjs@^0.1.2/TervisCustomyzerJS.js?module'
+        import {
+          Get_TervisProductSizeAndFormTypeFromString          
+        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.2/TervisProductMetadata.js?module'
+
         
         $(window).on("load", function () {
 
@@ -2326,7 +2329,7 @@
 
             // IMAGE SOURCE
             var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
-            var $SizeAndFormType = Get_SizeAndFormTypeFromString({ $String: $RadioButtonValue })
+            var $SizeAndFormType = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
             var $DecorationTypeWithoutLeadingDash = decorationtype.substring(1)
             var $SrcValue = New_TervisAdobeScene7URL({$AsScene7SrcValue: true, $ExternalURL: `${itemcode}?$UGC-ALPHA$`})
 
@@ -3348,25 +3351,25 @@
       </script>
       <script type="module">
         import {
-          Get_SizeAndFormTypeFromString,
-          Get_SizeAndFormTypeMetaDataUsingIndex
-        } from 'https://unpkg.com/@tervis/terviscustomyzerjs@0.1.8/TervisCustomyzerJS.js?module'
-
-        import { 
+          Get_TervisProductSizeAndFormTypeFromString,
+          Get_TervisProductMetaDataUsingIndex
+        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.2/TervisProductMetadata.js?module'
+        
+        import {
           New_TervisAdobeScene7URL,
           New_TervisAdobeScene7VirtualImageURL,
           New_TervisAdobeScene7ProofImageURL,
           New_AdobeScene7SizeStanza,
           New_TervisAdobeScene7ArcedImageURL
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.51/TervisAdobeScene7JS.js?module'
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.53/TervisAdobeScene7JS.js?module'
 
         // import gifshot from 'https://unpkg.com/gifshot@0.4.5/dist/gifshot.js?module'
 
         async function Get_URLSFourSides() {
           var $URLs = []
           var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
-          var $SizeAndFormType = Get_SizeAndFormTypeFromString({ $String: $RadioButtonValue })
-          var $SizeAndFormTypeMetaData = await Get_SizeAndFormTypeMetaDataUsingIndex({ ...$SizeAndFormType })
+          var $SizeAndFormType = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
+          var $SizeAndFormTypeMetaData = await Get_TervisProductMetaDataUsingIndex({ ...$SizeAndFormType })
           var $RotateValues = []
 
           $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfFront)
@@ -3408,7 +3411,7 @@
 
         async function Invoke_OneSidedVirtualDownload () {
           var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
-          var {$Size, $FormType} = Get_SizeAndFormTypeFromString({ $String: $RadioButtonValue })
+          var {$Size, $FormType} = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
           
           var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$Size, $FormType})
           var $ProductVirtualImageURLAsSourceValue = New_ImageGeneratorProductVirtualImageURLAsSourceValue()
@@ -3429,7 +3432,7 @@
           var {
             DecorationProofWidthOnVirtual: $DecorationProofWidthOnVirtual,
             DecorationProofHeightOnVirtual: $DecorationProofHeightOnVirtual
-          } = await Get_SizeAndFormTypeMetaDataUsingIndex({$Size, $FormType})
+          } = await Get_TervisProductMetaDataUsingIndex({$Size, $FormType})
 
           var $DecorationTypeDropDownValue = document.querySelector('#decorationtype').value
           
@@ -3513,7 +3516,7 @@
 
         async function Invoke_FourSidedVirtualDownload () {
           var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
-          var {$Size, $FormType} = Get_SizeAndFormTypeFromString({ $String: $RadioButtonValue })
+          var {$Size, $FormType} = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
           
           var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$Size, $FormType})
 
