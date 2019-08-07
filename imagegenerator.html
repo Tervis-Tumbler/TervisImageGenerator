@@ -2125,11 +2125,11 @@
           New_TervisAdobeScene7WrapDecoration3TimesURL,
           New_TervisAdobeScene7URL,
           New_TervisAdobeScene7ProductVirtualURL
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.54/TervisAdobeScene7JS.js?module'
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.58/TervisAdobeScene7JS.js?module'
 
         import {
           Get_TervisProductSizeAndFormTypeFromString          
-        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.2/TervisProductMetadata.js?module'
+        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.4/TervisProductMetadata.js?module'
 
         
         $(window).on("load", function () {
@@ -3353,15 +3353,18 @@
         import {
           Get_TervisProductSizeAndFormTypeFromString,
           Get_TervisProductMetaDataUsingIndex
-        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.2/TervisProductMetadata.js?module'
+        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.4/TervisProductMetadata.js?module'
         
+        import {
+          New_AdobeScene7SizeStanza
+        } from 'https://unpkg.com/@tervis/adobescene7js@0.1.0/AdobeScene7JS.js?module'
+
         import {
           New_TervisAdobeScene7URL,
           New_TervisAdobeScene7VirtualImageURL,
-          New_TervisAdobeScene7ProofImageURL,
-          New_AdobeScene7SizeStanza,
+          New_TervisAdobeScene7DecorationProofImageURL,
           New_TervisAdobeScene7ArcedImageURL
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.54/TervisAdobeScene7JS.js?module'
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.58/TervisAdobeScene7JS.js?module'
 
         // import gifshot from 'https://unpkg.com/gifshot@0.4.5/dist/gifshot.js?module'
 
@@ -3464,7 +3467,7 @@
             $ArcedDecorationAndIncludeDieCutterCalibrationLine = false
           }
           
-          var $DecorationProofImageURLAsSourceValue = await New_TervisAdobeScene7ProofImageURL({
+          var $DecorationProofImageURLAsSourceValue = await New_TervisAdobeScene7DecorationProofImageURL({
             $DecorationImageURLAsSourceValue,
             $ArcedDecoration: $ArcedDecorationAndIncludeDieCutterCalibrationLine,
             $IncludeDiecutterCalibrationLine: $ArcedDecorationAndIncludeDieCutterCalibrationLine,
