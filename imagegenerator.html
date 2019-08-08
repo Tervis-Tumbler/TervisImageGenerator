@@ -3441,6 +3441,16 @@
           
           var $URLOfDecoration = document.querySelector('#itemcode').value
           var $DecorationProofOnVirtualSizeStanza = New_AdobeScene7SizeStanza({ $Width: $DecorationProofWidthOnVirtual, $Height: $DecorationProofHeightOnVirtual})
+          
+          if ($DecorationTypeDropDownValue === "customyzer") {
+            $URLOfDecoration = await New_TervisAdobeScene7ArcedImageURL({
+              $Size,
+              $FormType,
+              $AsScene7SrcValue: true,
+              $DecalSourceValue: $URLOfDecoration
+            })
+          }
+          
           var $DecorationImageURLAsSourceValue = New_TervisAdobeScene7URL({
             $ExternalURL: `
               ${$URLOfDecoration}?
@@ -3450,15 +3460,6 @@
             `.replace(/\s/g, ""),
             $AsScene7SrcValue: true
           })
-
-          if ($DecorationTypeDropDownValue === "customyzer") {
-            $URLOfDecoration = await New_TervisAdobeScene7ArcedImageURL({
-              $Size,
-              $FormType,
-              $AsScene7SrcValue: true,
-              $DecalSourceValue: $URLOfDecoration
-            })
-          }
 
           var $ArcedDecorationAndIncludeDieCutterCalibrationLine
           if ($DecorationTypeDropDownValue === "-WRA" || $DecorationTypeDropDownValue === "customyzer") {
