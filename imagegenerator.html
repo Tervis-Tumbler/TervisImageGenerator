@@ -651,7 +651,15 @@
           }) => html`
           <li>
             <label>
-              <input type="radio" name="${$CarouselName}" value="${$CarouselItemValue}" id="${$CarouselItemTitle}" ?checked=${$IsChecked} />
+              <input 
+                type="radio"
+                name="${$CarouselName}"
+                value="${$CarouselItemValue}"
+                id="${$CarouselItemTitle}"
+                ?checked=${$IsChecked}
+                @click=${window.radioSelect}
+                @input=${window.radioSelect}
+              />
               <img 
                 src="${$CarouselItemURL}"
                 title="${$CarouselItemTitle}">
@@ -687,25 +695,22 @@
             $CarouselItems,
             $ProductCarousel
           )
-        })
+          $('#product_carousel').carouFredSel({
+            auto: false,
+            prev: '#prev2',
+            next: '#next2',
+            pagination: "#pager2",
+            mousewheel: true,
+            swipe: {
+              onMouse: true,
+              onTouch: true
+            }
+          });
         
-        $('#product_carousel').carouFredSel({
-          auto: false,
-          prev: '#prev2',
-          next: '#next2',
-          pagination: "#pager2",
-          mousewheel: true,
-          swipe: {
-            onMouse: true,
-            onTouch: true
-          }
-        });
-
-        $("input[name='tumblerRadio']").on("input change", window.radioSelect);
-        $("input[name='tumblerRadio']").ready(window.radioSelect);
+          $("input[name='tumblerRadio']").on("input change", window.radioSelect);
+          $("input[name='tumblerRadio']").ready(window.radioSelect);
+        })
       </script>
-      <!-- CarouselClass list_carousel, list_carousel2 -->
-      <!--  -->
 
       <!-- <template id="carousel" >
         <div class="carousel1">
@@ -721,32 +726,6 @@
         <br />
       </template> -->
 
-      <template id="crouselitem">
-        <li>
-          <label>
-            <!-- <input type="radio" name="CaroselName" id="CaroselItemID" value="CaroselItemValue" /> -->
-            <input type="radio" name="CaroselName" value="CaroselItemValue" />
-            <img 
-              src="CarouselItemURL"
-              title="CarouselItemTitle" />
-              <br />
-            <span class="swatch-label">CarouselItemTitle</span>
-          </label>
-        </li>
-      </template>
-
-      <!-- $('#lid_carousel10').carouFredSel({
-        auto: false,
-        prev: '#lid10prev',
-        next: '#lid10next',
-        pagination: "#pager2",
-        mousewheel: true,
-        swipe: {
-          onMouse: true,
-          onTouch: true
-        }
-      }); -->
-
       <div id="togglediv">
         <!-- <div class="Options-Header"> Image Generator </div>
         <br /> -->
@@ -755,7 +734,7 @@
           <a id="prev2" class="prev" href="#"></a>
           <div class="list_carousel">
             <ul id="product_carousel">
-              <li>
+              <!-- <li>
                 <label>
                   <input type="radio" name="tumblerRadio" id="16oz" value="16DWT" checked="checked" />
                   <img src="//imagegenerator.tervis.com/is/image/tervis/16DWT1?$ICO-SIL-BA$"
@@ -873,7 +852,7 @@
                   <img src="//imagegenerator.tervis.com/is/image/tervis/12SS1?$ICO-SIL-BA$"
                     title="Stainless Steel 12oz" /><br />
                   <span class="swatch-label">Stainless Steel 12oz</span></label>
-              </li>
+              </li> -->
             </ul>
           </div>
           <a id="next2" class="next" href="#"></a>
@@ -2138,19 +2117,6 @@
 
       <script type="text/javascript" language="javascript">
         $(function () {
-          // Scrolled by user interaction 
-          $('#product_carousel').carouFredSel({
-            auto: false,
-            prev: '#prev2',
-            next: '#next2',
-            pagination: "#pager2",
-            mousewheel: true,
-            swipe: {
-              onMouse: true,
-              onTouch: true
-            }
-          });
-
           //	Scrolled by user interaction 
           $('#lid_carousel16').carouFredSel({
             auto: false,
