@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <title>Image Generator</title>
 <div class="content-asset">
   <style>
@@ -27,14 +27,14 @@
       font-size: 12px;
       -webkit-font-smoothing: antialiased;
       text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
-      padding-top: 100px;
+      /* padding-top: 100px; */
     }
 
     .tooltip_templates {
       display: none;
     }
 
-    .header-banner {
+    /* .header-banner {
       display: block;
       background-color: #f5f6f6;
       width: 100%;
@@ -99,7 +99,7 @@
       vertical-align: middle;
       height: 100%;
       width: 100%;
-    }
+    } */
 
     .visually-hidden {
       border: 0;
@@ -148,7 +148,7 @@
     }
 
     #container {
-      margin-top: 80px;
+      /* margin-top: 80px; */
       width: 100%;
       min-height: 700px;
     }
@@ -547,40 +547,9 @@
   <link rel="stylesheet" href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/tooltipster-sideTip-light.min.css">
   <link type="text/javascript" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/tooltipster.bundle.js">
   <link type="text/javascript" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/tooltipster.bundle.min.js">
-
-  <div id="header" class="headroom header--fixed headroom--pinned headroom--top">
-    <div class="header-banner"> </div>
-  </div>
-  <div class="top-banner" role="banner">
-    <div class="inner-wrapper">
-      <h1 class="primary-logo"> <a href="http://www.tervis.com/home" title="Tervis Home" target="_blank"> <img
-            id="tervislogo"
-            src="https://www.tervis.com/on/demandware.static/-/Sites-Tervis-Library/default/dw443b7746/images/interface/tervis-logo.svg"
-            alt="Tervis"> <span class="visually-hidden">Tervis</span> </a> </h1>
-      <table width="300" align="right" cellspacing="0" cellpadding="0" border="0">
-        <tbody>
-          <tr>
-            <td height="30"></td>
-          </tr>
-          <tr>
-
-          </tr>
-          <tr>
-            <td align="center">
-              <div style="text-align:right;">
-                <a
-                  href="mailto:rpaul@tervis.com;jward@tervis.com;c.magnuson@tervis.com?subject=Image Generator Comment">Comments
-                  or Questions?</a>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  
   <div id="center">
     <div id="container">
-
       <div>
         <div class="thumbnailPreview">
           <label>
@@ -599,18 +568,25 @@
           </label>
           <label>
             <input type="radio" name="thmbRadio" value="RM" />
-            <div class="loader" id="loader" style="display: none;"> <img
+            <div class="loader" id="loader" style="display: none;"> 
+              <img 
                 src="//imagegenerator.tervis.com/is/content/tervis/loading93x93.gif"
-                style="max-height: 93px; max-width:93px; margin:0px auto; display:block;" /> </div>
-            <div id="thumbnailDecoration" style="display:none;"> <img id="previewImage"
+                style="max-height: 93px; max-width:93px; margin:0px auto; display:block;" />
+            </div>
+            <div id="thumbnailDecoration" style="display:none;">
+              <img id="previewImage"
                 style="max-height: 93px; max-width:93px; margin:0px auto;"
                 src="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$"
-                onerror="this.src='//imagegenerator.tervis.com/is/content/tervis/loading93x93.gif';" class="tip-trigger"
-                data-tooltip-content="#decorationPreview" /></a> </div>
-            <div class="tooltip_templates"> <span id="decorationPreview"> Decoration View </span> </div>
+                onerror="this.src='//imagegenerator.tervis.com/is/content/tervis/loading93x93.gif';"
+                class="tip-trigger"
+                data-tooltip-content="#decorationPreview" />
+            </div>
+            <div class="tooltip_templates">
+              <span id="decorationPreview">Decoration View</span>
+            </div>
             <input type="text" class="form-control" id="previewImagePath" style="display:none;">
-        </div>
-        </label>
+            </div>
+            </label>
       </div>
       <div id="content">
         <div class="tumblerPreview">
@@ -656,39 +632,125 @@
         </div>
       </div>
 
+      <script type="module">
+        import {
+          Get_TervisProductMetaData
+        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.9?module'
+        import { html, render } from 'https://unpkg.com/lit-html?module'
+        
+        import { 
+          Get_TervisAdobeScene7Silhouette 
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.65/TervisAdobeScene7JS.js?module'
+        
+        $(window).on("load", async function () {
+          const $CrouselItem = ({
+            $CarouselName,
+            $CarouselItemValue,
+            $CarouselItemURL,
+            $CarouselItemTitle
+          }) => html`
+          <li>
+            <label>
+              <input type="radio" name="${$CarouselName}" value="${$CarouselItemValue}" id="${$CarouselItemTitle}" ?checked=${$IsChecked} />
+              <img 
+                src="${$CarouselItemURL}"
+                title="${$CarouselItemTitle}">
+                <br>
+              <span class="swatch-label">${$CarouselItemTitle}</span>
+            </label>
+          </li>
+          `
 
-      <div id="togglediv">
-        <div class="Options-Header"> Image Generator </div>
-        <br />
-        <div class="selected-type"> Select Decoration (Optional) </div>
-        <select id="codetype" class="menupad">
-          <option value="choose" selected="selected" class="menupad">Code Type &nbsp;&or;</option>
+          var $ProductCarousel = document.querySelector('#product_carousel');
 
-          <option value="rmCode">Raw Material</option>
-          <option value="ugcCode">UGC Upload</option>
-        </select>
-        <input type="text" style="width: 110px;" id="itemcode" placeholder="Item Code" value="1218906"
-          class="menupad" />
-        <div id="divFileUploader" class="menupad">
-          <form name="frmFileUpload" id="frmFileUpload" method="post" enctype="multipart/form-data">
-            <input name="txtUploadFile" type="file" id="txtUploadFile" multiple accept="image/*" class="btn btn-default"
-              style="width: 210px; height:30px; vertical-align:bottom;" />
-          </form>
+          var $Products = await Get_TervisProductMetaData()
+          var $ProductSizeAndFormTypes = $Products.map( ({Size, FormType}) => ({Size, FormType}))
+          var $CarouselItems = []
+          for (var $Product of $Products) {
+            var {Size: $Size, FormType: $FormType} = $Product
+            var $CarouselItemURL = await Get_TervisAdobeScene7Silhouette({$Size, $FormType})
+            $CarouselItemURL += "&$ICO-SIL-BA$"
+            var $IsChecked = $Product === $Products[0]
+            $CarouselItems.push(
+              $CrouselItem({
+                // $CarouselName: "ProductCarousel",
+                $CarouselName: "tumblerRadio",
+                $CarouselItemValue: `${$Size}${$FormType}`,
+                $CarouselItemURL,
+                $CarouselItemTitle: $Product.MarketingName,
+                $IsChecked
+              })
+            )
+            
+          }
+          render(
+            $CarouselItems,
+            $ProductCarousel
+          )
+        })
+        
+        $('#product_carousel').carouFredSel({
+          auto: false,
+          prev: '#prev2',
+          next: '#next2',
+          pagination: "#pager2",
+          mousewheel: true,
+          swipe: {
+            onMouse: true,
+            onTouch: true
+          }
+        });
+
+        $("input[name='tumblerRadio']").on("input change", window.radioSelect);
+        $("input[name='tumblerRadio']").ready(window.radioSelect);
+      </script>
+      <!-- CarouselClass list_carousel, list_carousel2 -->
+      <!--  -->
+
+      <!-- <template id="carousel" >
+        <div class="carousel1">
+          <br />
+          <a id="prev2" class="prev" href="#"></a>
+          <div class="CarouselItemsContainerDIVClass">
+            <ul id="CarouselItemUL">
+            </ul>
+          </div>
+          <a id="next2" class="next" href="#"></a>
         </div>
         <br />
-        <select id="decorationtype" class="menupad" style="display:none; float:left;">
-          <option value="&" selected="selected" class="menupad">Decoration Type &nbsp;&or;</option>
-
-          <option value="-WRA">Wrap</option>
-          <option value="-EMB">Emblem</option>
-          <option value="-DPT">Direct to Print</option>
-          <option value="customyzer">Customyzer Wrap</option>
-
-        </select>
-        <div id="chooseDeco" style="display:none;"> &lt;- Choose Decoration Type</div>
-
         <br />
-        <div class="selected-type"> 1. Select a Product: </div>
+      </template> -->
+
+      <template id="crouselitem">
+        <li>
+          <label>
+            <!-- <input type="radio" name="CaroselName" id="CaroselItemID" value="CaroselItemValue" /> -->
+            <input type="radio" name="CaroselName" value="CaroselItemValue" />
+            <img 
+              src="CarouselItemURL"
+              title="CarouselItemTitle" />
+              <br />
+            <span class="swatch-label">CarouselItemTitle</span>
+          </label>
+        </li>
+      </template>
+
+      <!-- $('#lid_carousel10').carouFredSel({
+        auto: false,
+        prev: '#lid10prev',
+        next: '#lid10next',
+        pagination: "#pager2",
+        mousewheel: true,
+        swipe: {
+          onMouse: true,
+          onTouch: true
+        }
+      }); -->
+
+      <div id="togglediv">
+        <!-- <div class="Options-Header"> Image Generator </div>
+        <br /> -->
+        <div class="selected-type"> Select a Product: </div>
         <div class="carousel1"><br />
           <a id="prev2" class="prev" href="#"></a>
           <div class="list_carousel">
@@ -813,14 +875,13 @@
                   <span class="swatch-label">Stainless Steel 12oz</span></label>
               </li>
             </ul>
-
           </div>
           <a id="next2" class="next" href="#"></a>
         </div>
         <br />
         <br />
 
-        <div class="selected-type" id="select-outer" style="display:none"> 2. Select an Outer Color </div>
+        <div class="selected-type" id="select-outer" style="display:none">Select an Outer Color </div>
         <div class="carousel2" id="outerSS" style="display:none"><br />
 
           <div class="list_carousel2">
@@ -846,8 +907,35 @@
 
           </div>
         </div>
+        <div class="selected-type">Select Decoration</div>
+        <select id="codetype" class="menupad">
+          <option value="choose" selected="selected" class="menupad">Code Type &nbsp;&or;</option>
 
-        <div class="selected-type" id="select-inner"> 2. Select an Inner Color </div>
+          <option value="rmCode">Raw Material</option>
+          <option value="ugcCode">UGC Upload</option>
+        </select>
+        <input type="text" style="width: 110px;" id="itemcode" placeholder="Item Code" value="1218906"
+          class="menupad" />
+        <div id="divFileUploader" class="menupad">
+          <form name="frmFileUpload" id="frmFileUpload" method="post" enctype="multipart/form-data">
+            <input name="txtUploadFile" type="file" id="txtUploadFile" multiple accept="image/*" class="btn btn-default"
+              style="width: 210px; height:30px; vertical-align:bottom;" />
+          </form>
+        </div>
+        <br />
+        <select id="decorationtype" class="menupad" style="display:none; float:left;">
+          <option value="&" selected="selected" class="menupad">Decoration Type &nbsp;&or;</option>
+
+          <option value="-WRA">Wrap</option>
+          <option value="-EMB">Emblem</option>
+          <option value="-DPT">Direct to Print</option>
+          <option value="customyzer">Customyzer Wrap</option>
+
+        </select>
+        <div id="chooseDeco" style="display:none;"> &lt;- Choose Decoration Type</div>
+
+        <br />
+        <div class="selected-type" id="select-inner">Select an Inner Color </div>
         <div class="carousel2" id="innerall" style="display:none"><br />
           <div class="list_carousel2">
             <ul id="innercolorfoo2">
@@ -1299,7 +1387,7 @@
           </div>
         </div>
 
-        <div class="selected-type"> 3. Choose Accessories: </div>
+        <div class="selected-type">Choose Accessories: </div>
         <div class="selected-type-sub" id="title-lid"> Lid Color </div>
         <div class="carousel2" id="travellid"><br />
           <a id="lidprev" class="prev" href="#"></a>
@@ -2050,10 +2138,7 @@
 
       <script type="text/javascript" language="javascript">
         $(function () {
-
-
-
-          //	Scrolled by user interaction 
+          // Scrolled by user interaction 
           $('#product_carousel').carouFredSel({
             auto: false,
             prev: '#prev2',
@@ -2640,7 +2725,7 @@
         });
 
         // SHOW ACCESSORIES PER PRODUCT
-        $(function () {
+        // $(function () {
           function radioSelect() {
 
 
@@ -3198,10 +3283,10 @@
             }
 
           };
-
+          window.radioSelect = radioSelect
           $("input[name='tumblerRadio']").on("input change", radioSelect);
           $("input[name='tumblerRadio']").ready(radioSelect);
-        });
+        // });
         //Image Upload Section
 
         var sharedSecret = '9f91ce08-1501-459f-ab09-3d2ddc103344';
