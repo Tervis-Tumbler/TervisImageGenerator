@@ -34,73 +34,6 @@
       display: none;
     }
 
-    /* .header-banner {
-      display: block;
-      background-color: #f5f6f6;
-      width: 100%;
-      height: 40px;
-      line-height: 0;
-    }
-
-    .header--fixed {
-      position: fixed;
-      z-index: 10;
-      right: 0;
-      left: 0;
-      top: 0;
-    }
-
-    .headroom--pinned {
-      -webkit-transform: translateY(0);
-      transform: translateY(0);
-    }
-
-    .headroom {
-      width: 100%;
-      position: fixed;
-      z-index: 10;
-      top: 0;
-      left: 0;
-      -webkit-transition: -webkit-transform 200ms linear;
-      transition: transform 200ms linear;
-    }
-
-    .top-banner {
-      z-index: 2;
-      height: 88px;
-      width: 100%;
-      margin-top: -65px;
-      background: white;
-      border-bottom: 1px solid #ecedee;
-    }
-
-    .top-banner .inner-wrapper {
-      max-width: 1280px;
-      padding: 0px 75px 0;
-      display: block;
-      margin: 0 auto;
-      width: 100%;
-      height: 100%;
-    }
-
-    .primary-logo {
-      display: inline-block;
-      position: relative;
-      margin: 0;
-      width: 185px;
-      float: left;
-      height: 100%;
-      z-index: 1;
-    }
-
-    .primary-logo>a {
-      display: block;
-      text-align: center;
-      vertical-align: middle;
-      height: 100%;
-      width: 100%;
-    } */
-
     .visually-hidden {
       border: 0;
       clip: rect(0 0 0 0);
@@ -141,7 +74,7 @@
     #center {
       width: 100%;
       min-width: 600px;
-      max-width: 1200px;
+      max-width: 2000px;
       height: 100%;
       background-color: white;
       margin: 0 auto;
@@ -355,14 +288,6 @@
 
     /* START Carousel CSS */
 
-    .wrapper {
-      background-color: white;
-      width: 480px;
-      margin: 40px auto;
-      padding: 50px;
-      box-shadow: 0 0 5px #999;
-    }
-
     /* START Form Carousel */
 
     .list_carousel {
@@ -376,13 +301,6 @@
       list-style: none;
       display: block;
     }
-
-    /* .list_carousel li label span {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: block;
-} */
 
     .list_carousel li {
       width: 60px;
@@ -441,6 +359,9 @@
       width: auto;
       margin-left: 0;
     }
+
+
+    
 
     .clearfix {
       float: none;
@@ -588,6 +509,8 @@
             </div>
             </label>
       </div>
+
+      
       <div id="content">
         <div class="tumblerPreview">
           <div class="tumblerPreviewZoom"> <a id="tumblerimagelink"
@@ -634,69 +557,211 @@
 
       <script type="module">
         import {
-          Get_TervisProductMetaData
-        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.9?module'
-        import { html, render } from 'https://unpkg.com/lit-html?module'
+          // Get_TervisProductMetaData,
+          Get_TervisProductMetaDataUsingIndex,
+          Get_TervisProductSizeAndFormTypeFromString,
+          Get_TervisProductColorMarketingNameUsingIndex
+        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.13?module'
+        import { 
+          // html, 
+          render } from 'https://unpkg.com/lit-html?module'
         
         import { 
-          Get_TervisAdobeScene7Silhouette 
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.65/TervisAdobeScene7JS.js?module'
-        
+          Get_TervisAdobeScene7Silhouette,
+          Get_TervisAdobeScene7VignetteAccessories,
+          Get_TervisAdobeScene7SwatchImageURL
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.71/TervisAdobeScene7JS.js?module'
+
+        import {LitElement, html, css} from 'https://unpkg.com/@polymer/lit-element@latest/lit-element.js?module'
+
+
+        var $ProductOrderInCarousel = [
+          {
+            $Size: 16,
+            $FormType: "DWT"
+          },
+          {
+            $Size: 24,
+            $FormType: "DWT"
+          },
+          {
+            $Size: 24,
+            $FormType: "WB"
+          },
+          {
+            $Size: 16,
+            $FormType: "BEER"
+          },
+          {
+            $Size: 16,
+            $FormType: "MUG"
+          },
+          {
+            $Size: 12,
+            $FormType: "DWT"
+          },
+          {
+            $Size: 10,
+            $FormType: "WAV"
+          },
+          {
+            $Size: 6,
+            $FormType: "SIP"
+          },
+          {
+            $Size: 87,
+            $FormType: "ICE"
+          },
+          {
+            $Size: 2,
+            $FormType: "SHO"
+          },
+          {
+            $Size: 9,
+            $FormType: "WINE"
+          },
+          {
+            $Size: 9,
+            $FormType: "SWG"
+          },
+          {
+            $Size: 16,
+            $FormType: "TALL"
+          },
+          {
+            $Size: 20,
+            $FormType: "SS"
+          },
+          {
+            $Size: 30,
+            $FormType: "SS"
+          },
+          {
+            $Size: 17,
+            $FormType: "SS"
+          },
+          {
+            $Size: 24,
+            $FormType: "SS"
+          },
+          {
+            $Size: 12,
+            $FormType: "SS"
+          }
+        ]
+
         $(window).on("load", async function () {
-          const $CrouselItem = ({
-            $CarouselName,
-            $CarouselItemValue,
-            $CarouselItemURL,
-            $CarouselItemTitle
-          }) => html`
-          <li>
-            <label>
-              <input 
-                type="radio"
-                name="${$CarouselName}"
-                value="${$CarouselItemValue}"
-                id="${$CarouselItemTitle}"
-                ?checked=${$IsChecked}
-                @click=${window.radioSelect}
-                @input=${window.radioSelect}
-              />
-              <img 
-                src="${$CarouselItemURL}"
-                title="${$CarouselItemTitle}">
-                <br>
-              <span class="swatch-label">${$CarouselItemTitle}</span>
-            </label>
-          </li>
-          `
+          const New_Carousel = ({
+              $CarouselTitle,
+              $CarouselID,
+              $CarouselItems,
+              $CarouselContainerStyle,
+              $CarouselItemsContainerStyle,
+              $ShiftArrowsDown
+            }) => {
 
-          var $ProductCarousel = document.querySelector('#product_carousel');
+              // return html`
+              //     <br>
+              //     <a class="prev" id="prev2" href="#"></a>
+              //     <div class="${$CarouselItemsContainerStyle}">
+              //       <ul id="${$CarouselID}">
+              //         ${$CarouselItems}
+              //       </ul>
+              //     </div>
+              //     <a class="next" id="next2" href="#"></a>
+              // `
 
-          var $Products = await Get_TervisProductMetaData()
-          var $ProductSizeAndFormTypes = $Products.map( ({Size, FormType}) => ({Size, FormType}))
+              var $PreviousArrowID
+              var $NextArrowID
+              if ($ShiftArrowsDown) {
+                $PreviousArrowID = "prev2"
+                $NextArrowID = "next2"
+              }
+              return html`
+                ${$CarouselTitle ? html`<div class="selected-type-sub" id="title-lid">${$CarouselTitle}</div>` : "" }
+                <div class="${$CarouselContainerStyle}" id="${$CarouselID}Container" style="display:block">
+                  <br>
+                  <a class="prev" id="${$PreviousArrowID}" href="#"></a>
+                  <div class="${$CarouselItemsContainerStyle}">
+                    <ul id="${$CarouselID}">
+                      ${$CarouselItems}
+                    </ul>
+                  </div>
+                  <a class="next" id="${$NextArrowID}" href="#"></a>
+                </div>
+              `
+            }
+
+            const New_CrouselItem = ({
+              $CarouselName,
+              $CarouselItemValue,
+              $CarouselItemImageURL,
+              $CarouselItemTitle,
+              $IsChecked,
+              $ShowTitleAsSpan
+            }) => html`
+            <li>
+              <label>
+                <input 
+                  type="radio"
+                  name="${$CarouselName}"
+                  value="${$CarouselItemValue}"
+                  id="${$CarouselItemTitle}"
+                  ?checked=${$IsChecked}
+                  @click=${window.radioSelect}
+                  @input=${window.radioSelect}
+                />
+                <img 
+                  src="${$CarouselItemImageURL}"
+                  title="${$CarouselItemTitle}"
+                  class="tip-trigger"
+                  data-tooltip-content=".${$CarouselItemValue}-preview"
+                >
+                ${$ShowTitleAsSpan ? html`<span class="swatch-label">${$CarouselItemTitle}</span>` : ""}
+                <div class="tooltip_templates">
+                  <span class="${$CarouselItemValue}-preview">${$CarouselItemTitle}</span> 
+                </div>
+              </label>
+            </li>
+            `
+
           var $CarouselItems = []
-          for (var $Product of $Products) {
-            var {Size: $Size, FormType: $FormType} = $Product
-            var $CarouselItemURL = await Get_TervisAdobeScene7Silhouette({$Size, $FormType})
-            $CarouselItemURL += "&$ICO-SIL-BA$"
-            var $IsChecked = $Product === $Products[0]
+          var $IsFirstProduct = true
+          for (var {$Size, $FormType} of $ProductOrderInCarousel) {
+            var $Product = await Get_TervisProductMetaDataUsingIndex({$Size, $FormType})
+            var $CarouselItemImageURL = await Get_TervisAdobeScene7Silhouette({$Size, $FormType})
+            $CarouselItemImageURL += "&$ICO-SIL-BA$"
             $CarouselItems.push(
-              $CrouselItem({
-                // $CarouselName: "ProductCarousel",
+              New_CrouselItem({
                 $CarouselName: "tumblerRadio",
                 $CarouselItemValue: `${$Size}${$FormType}`,
-                $CarouselItemURL,
+                $CarouselItemImageURL,
                 $CarouselItemTitle: $Product.MarketingName,
-                $IsChecked
+                $IsChecked: $IsFirstProduct,
+                $ShowTitleAsSpan: true
               })
             )
-            
+            $IsFirstProduct = false
           }
-          render(
+          
+          var $ProductCarousel = New_Carousel({
+            $CarouselID: "product_carousel",
             $CarouselItems,
-            $ProductCarousel
+            $CarouselContainerStyle: "carousel1",
+            $CarouselItemsContainerStyle: "list_carousel",
+            $ShiftArrowsDown: true
+          })
+
+          var $ProductCarouselContainer = document.querySelector('#select-product')
+
+          render(
+            $ProductCarousel,
+            $ProductCarouselContainer
           )
+
           $('#product_carousel').carouFredSel({
             auto: false,
+            circular: false,
             prev: '#prev2',
             next: '#next2',
             pagination: "#pager2",
@@ -706,186 +771,340 @@
               onTouch: true
             }
           });
-        
+          
           $("input[name='tumblerRadio']").on("input change", window.radioSelect);
           $("input[name='tumblerRadio']").ready(window.radioSelect);
-        })
+
+
+          var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
+          var $SizeAndFormType = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
+          var $VignetteSuffix = $("input[name='thmbRadio']:checked").val();
+
+          var $Accessories = await Get_TervisAdobeScene7VignetteAccessories({
+            ...$SizeAndFormType,
+            $VignetteSuffix
+          })
+
+          var $AccessoryCodeToMarketingName = {
+            HAND: "Handle",
+            LIDTRV: "Travel Lid",
+            TOPSHK: "Shacker Top Lid",
+            LIDSTW: "Straw Lid",
+            LIDHOT: "Hot Lid",
+            LIDSIP: "Sippy Lid",
+            LIDWB: "Water Bottle Lid",
+            SSLIDTRV: "Slider Lid",
+            SSLIDHMR: "Hammer Lid",
+            LIDWIN: "Wine Lid"
+          }
+
+          var $AccessoryCarousels = []
+          var $CarouselIDs = []
+          for (var $Accessory of $Accessories) {
+            var $CarouselItems = []
+            for (var $ColorCode of $Accessory.AvailableColorCodes) {
+              var $ColorMetaData = await Get_TervisProductColorMarketingNameUsingIndex({$ColorCode})
+              
+              if ($ColorMetaData) { 
+                var { MarketingName: $ColorMarketingName } = $ColorMetaData
+              } else {
+                continue
+              }
+              
+              var $CarouselItemImageURL = Get_TervisAdobeScene7SwatchImageURL({$ColorCode})
+              $CarouselItems.push(
+                New_CrouselItem({
+                  $CarouselName: $Accessory.Code,
+                  $CarouselItemValue: `${$ColorCode}`,
+                  $CarouselItemImageURL,
+                  $CarouselItemTitle: `${$ColorMarketingName} - ${$ColorCode}`
+                })
+                // $LidSwatchListItem({
+                //   $AccessoryCode: $Accessory.Code,
+                //   $ColorCode,
+                //   $ColorMarketingName
+                // })
+              )
+            }
+
+            var $CarouselID = $Accessory.Code
+            $CarouselIDs.push($CarouselID)
+            var $Carousel = New_Carousel({
+              $CarouselTitle: $AccessoryCodeToMarketingName[$Accessory.Code],
+              $CarouselID,
+              $CarouselItems,
+              $CarouselItemsContainerStyle: "list_carousel2"
+            })
+
+            $AccessoryCarousels.push($Carousel)
+
+          }
+
+          var $SelectAccessoriesDiv = document.querySelector('#select-accessories')
+          render($AccessoryCarousels, $SelectAccessoriesDiv)
+
+          $CarouselIDs.forEach(
+            $CarouselID =>
+            $(`#${$CarouselID}`).carouFredSel({
+              auto: false,
+              circular: false,
+              prev: `#${$CarouselID} .prev`,
+              next: `#${$CarouselID} .next`,
+              mousewheel: true,
+              swipe: {
+                onMouse: true,
+                onTouch: true
+              }
+            })
+          )
+
+          $('.tip-trigger').tooltipster({
+            animation: 'grow',
+            speed: 300,
+            theme: 'tooltipster-light',
+            maxWidth: 320,
+            delay: 10,
+
+          });
+          // class CaroFredSel extends LitElement {
+          //   static get styles() {
+          //     return css`
+          //       .list_carousel {
+          //         float: left;
+          //         width: 600px;
+          //       }
+
+          //       .list_carousel ul {
+          //         margin: 0;
+          //         padding: 0;
+          //         list-style: none;
+          //         display: block;
+          //       }
+
+          //       .list_carousel li {
+          //         width: 60px;
+          //         padding: 0;
+          //         display: block;
+          //         float: left;
+          //         text-align: center;
+          //       }
+
+          //       .list_carousel li img {
+          //         width: 58px;
+          //         padding-bottom: 8px;
+          //       }
+
+          //       .list_carousel.responsive {
+          //         width: auto;
+          //         margin-left: 0;
+          //       }
+                
+          //       .list_carousel2 {
+          //         float: left;
+          //         width: 360px;
+          //       }
+
+          //       .list_carousel2 ul {
+          //         margin: 0;
+          //         padding: 0;
+          //         list-style: none;
+          //         display: block;
+          //       }
+
+          //       .list_carousel2 li {
+          //         width: 35px;
+          //         height: 35px;
+          //         padding: 0;
+          //         display: block;
+          //         float: left;
+          //         text-align: center;
+          //       }
+
+          //       .list_carousel2 li img {
+          //         width: 25px;
+          //         height: 25px;
+          //         padding: 1px;
+          //       }
+
+          //       .list_carousel2 li img:hover {
+          //         width: 25px;
+          //         height: 25px;
+          //         padding: 0px;
+          //       }
+
+          //       .list_carousel2.responsive {
+          //         width: auto;
+          //         margin-left: 0;
+          //       }
+          //     `
+          //   }
+
+          //   static get properties() {
+          //     return { 
+          //       CarouselName: { type: String },
+          //       CarouselName: { type: String },
+          //       CarouselName: { type: String },
+          //       CarouselName: { type: String },
+          //       CarouselName: { type: String },
+          //     };
+          //   }
+           
+          //   New_Carousel = ({
+          //     $CarouselID,
+          //     $CarouselItems,
+          //     $CarouselContainerStyle,
+          //     $CarouselItemsContainerStyle
+          //   }) => {
+
+          //     return html`
+          //       <div class="${$CarouselContainerStyle}" id="${$CarouselID}Container" style="display:block">
+          //         <br>
+          //         <a class="prev" href="#" />
+          //         <div class="${$CarouselItemsContainerStyle}">
+          //           <ul id="${$CarouselID}">
+          //             ${$CarouselItems}
+          //           </ul>
+          //         </div>
+          //         <a class="next" href="#" />
+          //       </div>
+          //     `
+          //   }
+
+          //   New_CrouselItem = ({
+          //     $CarouselName,
+          //     $CarouselItemValue,
+          //     $CarouselItemImageURL,
+          //     $CarouselItemTitle,
+          //     $IsChecked
+          //   }) => html`
+          //   <li>
+          //     <label>
+          //       <input 
+          //         type="radio"
+          //         name="${$CarouselName}"
+          //         value="${$CarouselItemValue}"
+          //         id="${$CarouselItemTitle}"
+          //         ?checked=${$IsChecked}
+          //         @click=${window.radioSelect}
+          //         @input=${window.radioSelect}
+          //       />
+          //       <img 
+          //         src="${$CarouselItemImageURL}"
+          //         title="${$CarouselItemTitle}">
+          //         <br>
+          //       <span class="swatch-label">${$CarouselItemTitle}</span>
+          //     </label>
+          //   </li>
+          //   `
+
+
+          //   render(){
+          //     return  New_Carousel()
+          //   }
+          // }
+          // customElements.define('x-carofredsel', CaroFredSel);
+          // class MyElement extends LitElement {
+          // }
+
+        
+        
+          // $("input[name='tumblerRadio']").on("input change", window.radioSelect);
+          // $("input[name='tumblerRadio']").ready(window.radioSelect);
+
+
+          // const $LidSwatchListItem = ({
+          //   $AccessoryCode,
+          //   $ColorCode,
+          //   $ColorMarketingName
+          // }) => {
+          //   var $SwatchImageURL = Get_TervisAdobeScene7SwatchImageURL({$ColorCode})
+          //   return html`
+          //     <li>
+          //       <label>
+          //         <input type="radio" name="${$AccessoryCode}Radio" id="${$ColorCode}" value="${$ColorCode}">
+          //         <img 
+          //           src="${$SwatchImageURL}"
+          //           title="${$ColorMarketingName}"
+          //           class="tip-trigger"
+          //           data-tooltip-content=".${$ColorCode}-preview"
+          //         >
+          //         <div class="tooltip_templates">
+          //           <span class="${$ColorCode}-preview">${$ColorMarketingName}</span> 
+          //         </div>
+          //       </label>
+          //     </li>
+          //   `
+          // }
+
+
+          // const $LidSwatchListItem = ({
+          //   $ColorCode,
+          //   $ColorMarketingName
+          // }) => html`
+          //   <li>
+          //     <label>
+          //       <input type="radio" name="lidRadio" id="${$ColorCode}" value="&obj=MAIN/ACCESSORIES/LIDTRV/${$ColorCode}&show">
+          //       <img 
+          //         src="//imagegenerator.tervis.com/is/image/tervis/${$ColorCode}?$SWATCH$" 
+          //         title="${$ColorMarketingName} - ${$ColorCode}"
+          //         class="tip-trigger"
+          //         data-tooltip-content=".${$ColorCode}-preview"
+          //       >
+          //       <div class="tooltip_templates">
+          //         <span class="${$ColorCode}-preview">${$ColorMarketingName} - ${$ColorCode}</span>
+          //       </div>
+          //     </label>
+          //   </li>
+          // `
+
+          
+
+          // var $ProductSizeAndFormTypeImageGeneratorFrontEndMetaData = [
+          //   {
+          //     Size: 10,
+          //     FormType: "DWT",
+          //     TracelLidCarouselID = "travellid10"
+          //   }
+          // ]
+
+          // const New_Carousel = ({
+          //   $CarouselID,
+          //   $CarouselItems
+          // }) => {
+
+          //   return html`
+          //     <div class="CarouselContainerStyle" id="${$CarouselID}Container" style="display:block">
+          //       <br>
+          //       <a class="prev" href="#" />
+          //       <div class="CarouselItemsContainerStyle">
+          //         <ul id="${$CarouselID}">
+          //           ${$CarouselItems}
+          //         </ul>
+          //       </div>
+          //       <a class="next" href="#" />
+          //     </div>
+          //   `
+          // }
+
+          
+
+
+        })// End of window on load
       </script>
-
-      <!-- <template id="carousel" >
-        <div class="carousel1">
-          <br />
-          <a id="prev2" class="prev" href="#"></a>
-          <div class="CarouselItemsContainerDIVClass">
-            <ul id="CarouselItemUL">
-            </ul>
-          </div>
-          <a id="next2" class="next" href="#"></a>
-        </div>
-        <br />
-        <br />
-      </template> -->
-
+      <!-- <x-carofredsel /> -->
       <div id="togglediv">
-        <!-- <div class="Options-Header"> Image Generator </div>
-        <br /> -->
-        <div class="selected-type"> Select a Product: </div>
-        <div class="carousel1"><br />
+        <div class="selected-type">Select a Product:</div>
+        <div class="carousel1" id="select-product"></div>
+        <!-- <div class="carousel1">
+          <br>
           <a id="prev2" class="prev" href="#"></a>
           <div class="list_carousel">
             <ul id="product_carousel">
-              <!-- <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="16oz" value="16DWT" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/16DWT1?$ICO-SIL-BA$"
-                    title="16oz Tumbler" /><br />
-                  <span class="swatch-label">16oz</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="24oz" value="24DWT" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/24DWT1?$ICO-SIL-BA$"
-                    title="24oz Tumbler" /><br />
-                  <span class="swatch-label">24oz</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="waterBottle" value="24WB" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/24WB1?$ICO-SIL-BA$"
-                    title="Water Bottle" /><br />
-                  <span class="swatch-label">Water Bottle</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="beerMug" value="16BEER" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/16BEER1?$ICO-SIL-BA$" title="Beer Mug" /><br />
-                  <span class="swatch-label">Beer Mug</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="mug" value="16MUG" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/16MUG1?$ICO-SIL-BA$" title="Mug" /><br />
-                  <span class="swatch-label">Mug</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="12oz" value="12DWT" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/12DWT1?$ICO-SIL-BA$" title="12oz" /><br />
-                  <span class="swatch-label">12oz</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="Wavy" value="10WAV" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/10WAV1?$ICO-SIL-BA$" title="Wavy" /><br />
-                  <span class="swatch-label">Wavy</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="sippy" value="6SIP" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/6SIP1?$ICO-SIL-BA$" title="sippy" /><br />
-                  <span class="swatch-label">Sippy</span></label>
-              </li>
-
-
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="iceBucket" value="87ICE" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/87ICE1?$ICO-SIL-BA$" title="Ice Bucket" /><br />
-                  <span class="swatch-label">Ice Bucket</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="Collectible" value="2SHO" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/2SHO1?$ICO-SIL-BA$" title="Collectible" /><br />
-                  <span class="swatch-label">Collectible</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="Wine Glass" value="9WINE" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/9WINE1?$ICO-SIL-BA$" title="Wine Glass" /><br />
-                  <span class="swatch-label">Wine Glass</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="Stemless Wine Glass" value="9SWG" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/9SWG1?$ICO-SIL-BA$"
-                    title="Stemless Wine Glass" /><br />
-                  <span class="swatch-label">Stemless</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="Tall" value="16TALL" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/16TALL1?$ICO-SIL-BA$" title="Tall" /><br />
-                  <span class="swatch-label">Tall</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="Stainless Steel 20oz" value="20SS" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/20SS1?$ICO-SIL-BA$"
-                    title="Stainless Steel 20oz" /><br />
-                  <span class="swatch-label">Stainless Steel 20oz</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="Stainless Steel 30oz" value="30SS" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/30SS1?$ICO-SIL-BA$"
-                    title="Stainless Steel 30oz" /><br />
-                  <span class="swatch-label">Stainless Steel 30oz</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="Stainless Steel 17oz Bottle" value="17SS" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/17SS1?$ICO-SIL-BA$"
-                    title="Stainless Steel 17oz Bottle" /><br />
-                  <span class="swatch-label">Stainless Steel 17oz Bottle</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="Stainless Steel Water Bottle" value="24SS" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/24SS1?$ICO-SIL-BA$"
-                    title="Stainless Steel Water Bottle" /><br />
-                  <span class="swatch-label">Stainless Steel Water Bottle</span></label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="tumblerRadio" id="Stainless Steel 12oz" value="12SS" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/12SS1?$ICO-SIL-BA$"
-                    title="Stainless Steel 12oz" /><br />
-                  <span class="swatch-label">Stainless Steel 12oz</span></label>
-              </li> -->
             </ul>
           </div>
           <a id="next2" class="next" href="#"></a>
-        </div>
-        <br />
-        <br />
+        </div> -->
 
-        <div class="selected-type" id="select-outer" style="display:none">Select an Outer Color </div>
-        <div class="carousel2" id="outerSS" style="display:none"><br />
-
-          <div class="list_carousel2">
-            <ul id="outercolorfoo2">
-              <li style="display:none;">
-                <label>
-                  <input type="radio" name="outerRadio" id="CL1" value="CL1" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/CL1?$SWATCH$" title="Clear" class="tip-trigger"
-                    data-tooltip-content=".CL1-preview" />
-                  <div class="tooltip_templates"> <span class="CL1-preview"> Clear </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="outerRadio" id="SS1" value="SS1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/SS1?$SWATCH$" title="Stainless Steel"
-                    class="tip-trigger" data-tooltip-content=".SS1-preview" />
-                  <div class="tooltip_templates"> <span class="SS1-preview"> Stainless Steel </span> </div>
-                </label>
-              </li>
-
-            </ul>
-
-          </div>
-        </div>
         <div class="selected-type">Select Decoration</div>
         <select id="codetype" class="menupad">
           <option value="choose" selected="selected" class="menupad">Code Type &nbsp;&or;</option>
@@ -914,1185 +1133,17 @@
         <div id="chooseDeco" style="display:none;"> &lt;- Choose Decoration Type</div>
 
         <br />
+
+        <div class="selected-type" id="select-outer" style="display:none">Select an Outer Color </div>
+        
         <div class="selected-type" id="select-inner">Select an Inner Color </div>
-        <div class="carousel2" id="innerall" style="display:none"><br />
-          <div class="list_carousel2">
-            <ul id="innercolorfoo2">
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="CL1" value="CL1" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/CL1?$SWATCH$" title="Clear" class="tip-trigger"
-                    data-tooltip-content=".CL1-preview" />
-                  <div class="tooltip_templates"> <span class="CL1-preview"> Clear </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="BR1" value="BR1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BR1?$SWATCH$" title="Topaz" class="tip-trigger"
-                    data-tooltip-content=".BR1-preview" />
-                  <div class="tooltip_templates"> <span class="BR1-preview"> Topaz </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="BL1" value="BL1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL1?$SWATCH$" title="Sapphire"
-                    class="tip-trigger" data-tooltip-content=".BL1-preview" />
-                  <div class="tooltip_templates"> <span class="BL1-preview"> Sapphire </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="BK1" value="BK1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BK1?$SWATCH$" title="Quartz" class="tip-trigger"
-                    data-tooltip-content=".BK1-preview" />
-                  <div class="tooltip_templates"> <span class="BK1-preview"> Quartz </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="PU1" value="PU1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PU1?$SWATCH$" title="Amethyst"
-                    class="tip-trigger" data-tooltip-content=".PU1-preview" />
-                  <div class="tooltip_templates"> <span class="PU1-preview"> Amethyst </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="RD13" value="RD13" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/RD13?$SWATCH$" title="Red" class="tip-trigger"
-                    data-tooltip-content=".RD13-preview" />
-                  <div class="tooltip_templates"> <span class="RD13-preview"> Red </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="PK1" value="PK1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PK1?$SWATCH$" title="Ruby" class="tip-trigger"
-                    data-tooltip-content=".PK1-preview" />
-                  <div class="tooltip_templates"> <span class="PK1-preview"> Ruby </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="GN1" value="GN1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN1?$SWATCH$" title="Emerald"
-                    class="tip-trigger" data-tooltip-content=".GN1-preview" />
-                  <div class="tooltip_templates"> <span class="GN1-preview"> Emerald </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="PU10" value="PU10" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PU10?$SWATCH$" title="Lakeside Lavender"
-                    class="tip-trigger" data-tooltip-content=".PU10-preview" />
-                  <div class="tooltip_templates"> <span class="PU10-preview"> Lakeside Lavender </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="BL19" value="BL19" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL19?$SWATCH$" title="Beachfront Blue"
-                    class="tip-trigger" data-tooltip-content=".BL19-preview" />
-                  <div class="tooltip_templates"> <span class="BL19-preview"> Beachfront Blue </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="GN12" value="GN12" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN12?$SWATCH$" title="Coastal Green"
-                    class="tip-trigger" data-tooltip-content=".GN12-preview" />
-                  <div class="tooltip_templates"> <span class="GN12-preview"> Coastal Green </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="BL14" value="BL14" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL14?$SWATCH$" title="Blue Infusion"
-                    class="tip-trigger" data-tooltip-content=".BL14-preview" />
-                  <div class="tooltip_templates"> <span class="BL14-preview"> Blue Infusion </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="PU8" value="PU8" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PU8?$SWATCH$" title="Plum Twist"
-                    class="tip-trigger" data-tooltip-content=".PU8-preview" />
-                  <div class="tooltip_templates"> <span class="PU8-preview"> Plum Twist </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="RD10" value="RD10" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/RD10?$SWATCH$" title="Cherry Fizz"
-                    class="tip-trigger" data-tooltip-content=".RD10-preview" />
-                  <div class="tooltip_templates"> <span class="RD10-preview"> Cherry Fizz </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="GN9" value="GN9" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN9?$SWATCH$" title="Mint Sprig"
-                    class="tip-trigger" data-tooltip-content=".GN9-preview" />
-                  <div class="tooltip_templates"> <span class="GN9-preview"> Mint Sprig </span> </div>
-                </label>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="carousel2" id="inner16"><br />
-          <div class="list_carousel2">
-            <ul id="innercolorfoo2">
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="CL1" value="CL1" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/CL1?$SWATCH$" title="Clear" class="tip-trigger"
-                    data-tooltip-content=".CL1-preview" />
-                  <div class="tooltip_templates"> <span class="CL1-preview"> Clear </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="BR1" value="BR1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BR1?$SWATCH$" title="Topaz" class="tip-trigger"
-                    data-tooltip-content=".BR1-preview" />
-                  <div class="tooltip_templates"> <span class="BR1-preview"> Topaz </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="BL1" value="BL1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL1?$SWATCH$" title="Sapphire"
-                    class="tip-trigger" data-tooltip-content=".BL1-preview" />
-                  <div class="tooltip_templates"> <span class="BL1-preview"> Sapphire </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="BK1" value="BK1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BK1?$SWATCH$" title="Quartz" class="tip-trigger"
-                    data-tooltip-content=".BK1-preview" />
-                  <div class="tooltip_templates"> <span class="BK1-preview"> Quartz </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="PU1" value="PU1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PU1?$SWATCH$" title="Amethyst"
-                    class="tip-trigger" data-tooltip-content=".PU1-preview" />
-                  <div class="tooltip_templates"> <span class="PU1-preview"> Amethyst </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="RD13" value="RD13" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/RD13?$SWATCH$" title="Red" class="tip-trigger"
-                    data-tooltip-content=".RD13-preview" />
-                  <div class="tooltip_templates"> <span class="RD13-preview"> Red </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="PK1" value="PK1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PK1?$SWATCH$" title="Ruby" class="tip-trigger"
-                    data-tooltip-content=".PK1-preview" />
-                  <div class="tooltip_templates"> <span class="PK1-preview"> Ruby </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="GN1" value="GN1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN1?$SWATCH$" title="Emerald"
-                    class="tip-trigger" data-tooltip-content=".GN1-preview" />
-                  <div class="tooltip_templates"> <span class="GN1-preview"> Emerald </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="GN15" value="GN15" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN15?$SWATCH$" title="Green" class="tip-trigger"
-                    data-tooltip-content=".GN15-preview" />
-                  <div class="tooltip_templates"> <span class="GN15-preview"> Green </span> </div>
-                </label>
-              </li>
+        
 
-            </ul>
-          </div>
-        </div>
-        <div class="carousel2" id="inner24"><br />
-          <div class="list_carousel2">
-            <ul id="innercolorfoo2">
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="CL1" value="CL1" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/CL1?$SWATCH$" title="Clear" class="tip-trigger"
-                    data-tooltip-content=".CL1-preview" />
-                  <div class="tooltip_templates"> <span class="CL1-preview"> Clear </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="BR1" value="BR1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BR1?$SWATCH$" title="Topaz" class="tip-trigger"
-                    data-tooltip-content=".BR1-preview" />
-                  <div class="tooltip_templates"> <span class="BR1-preview"> Topaz </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="BL1" value="BL1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL1?$SWATCH$" title="Sapphire"
-                    class="tip-trigger" data-tooltip-content=".BL1-preview" />
-                  <div class="tooltip_templates"> <span class="BL1-preview"> Sapphire </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="BK1" value="BK1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BK1?$SWATCH$" title="Quartz" class="tip-trigger"
-                    data-tooltip-content=".BK1-preview" />
-                  <div class="tooltip_templates"> <span class="BK1-preview"> Quartz </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="PU1" value="PU1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PU1?$SWATCH$" title="Amethyst"
-                    class="tip-trigger" data-tooltip-content=".PU1-preview" />
-                  <div class="tooltip_templates"> <span class="PU1-preview"> Amethyst </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="RD13" value="RD13" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/RD13?$SWATCH$" title="Red" class="tip-trigger"
-                    data-tooltip-content=".RD13-preview" />
-                  <div class="tooltip_templates"> <span class="RD13-preview"> Red </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="PK1" value="PK1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PK1?$SWATCH$" title="Ruby" class="tip-trigger"
-                    data-tooltip-content=".PK1-preview" />
-                  <div class="tooltip_templates"> <span class="PK1-preview"> Ruby </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="GN1" value="GN1" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN1?$SWATCH$" title="Emerald"
-                    class="tip-trigger" data-tooltip-content=".GN1-preview" />
-                  <div class="tooltip_templates"> <span class="GN1-preview"> Emerald </span> </div>
-                </label>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="carousel2" id="innerclear" style="display:none"><br />
-          <div class="list_carousel2">
-            <ul id="innercolorfoo2">
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="CL1" value="CL1" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/CL1?$SWATCH$" title="Clear" class="tip-trigger"
-                    data-tooltip-content=".CL1-preview" />
-                  <div class="tooltip_templates"> <span class="CL1-preview"> Clear </span> </div>
-                </label>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="carousel2" id="innerBeer" style="display:none"><br />
-          <div class="list_carousel2">
-            <ul id="innercolorfoo2">
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="CL1" value="CL1" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/CL1?$SWATCH$" title="Clear" class="tip-trigger"
-                    data-tooltip-content=".CL1-preview" />
-                  <div class="tooltip_templates"> <span class="CL1-preview"> Clear </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="GN15" value="GN15" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN15?$SWATCH$" title="Green" class="tip-trigger"
-                    data-tooltip-content=".GN15-preview" />
-                  <div class="tooltip_templates"> <span class="GN15-preview"> Green </span> </div>
-                </label>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="carousel2" id="innerwb" style="display:none"><br />
-          <div class="list_carousel2">
-            <ul id="innercolorfoo2">
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="CL1" value="CL1" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/CL1?$SWATCH$" title="Clear" class="tip-trigger"
-                    data-tooltip-content=".CL1-preview" />
-                  <div class="tooltip_templates"> <span class="CL1-preview"> Clear </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="PU10" value="PU10" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PU10?$SWATCH$" title="Lakeside Lavender"
-                    class="tip-trigger" data-tooltip-content=".PU10-preview" />
-                  <div class="tooltip_templates"> <span class="PU10-preview"> Lakeside Lavender </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="BL19" value="BL19" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL19?$SWATCH$" title="Beachfront Blue"
-                    class="tip-trigger" data-tooltip-content=".BL19-preview" />
-                  <div class="tooltip_templates"> <span class="BL19-preview"> Beachfront Blue </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="GN12" value="GN12" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN12?$SWATCH$" title="Coastal Green"
-                    class="tip-trigger" data-tooltip-content=".GN12-preview" />
-                  <div class="tooltip_templates"> <span class="GN12-preview"> Coastal Green </span> </div>
-                </label>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="carousel2" id="innerwine" style="display:none"><br />
-          <div class="list_carousel2">
-            <ul id="innercolorfoo2">
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="CL1" value="CL1" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/CL1?$SWATCH$" title="Clear" class="tip-trigger"
-                    data-tooltip-content=".CL1-preview" />
-                  <div class="tooltip_templates"> <span class="CL1-preview"> Clear </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="BL14" value="BL14" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL14?$SWATCH$" title="Blue Infusion"
-                    class="tip-trigger" data-tooltip-content=".BL14-preview" />
-                  <div class="tooltip_templates"> <span class="BL14-preview"> Blue Infusion </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="RD10" value="RD10" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/RD10?$SWATCH$" title="Cherry Fizz"
-                    class="tip-trigger" data-tooltip-content=".RD10-preview" />
-                  <div class="tooltip_templates"> <span class="RD10-preview"> Cherry Fizz </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="GN9" value="GN9" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN9?$SWATCH$" title="Mint Sprig"
-                    class="tip-trigger" data-tooltip-content=".GN9-preview" />
-                  <div class="tooltip_templates"> <span class="GN9-preview"> Mint Sprig </span> </div>
-                </label>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="carousel2" id="innerent" style="display:none"><br />
-          <a id="innercolorprev" class="prev" href="#"></a>
-          <div class="list_carousel2">
-            <ul id="innercolorfoo2">
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="CL1" value="CL1" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/CL1?$SWATCH$" title="Clear" class="tip-trigger"
-                    data-tooltip-content=".CL1-preview" />
-                  <div class="tooltip_templates"> <span class="CL1-preview"> Clear </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="BL14" value="BL14" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL14?$SWATCH$" title="Blue Infusion"
-                    class="tip-trigger" data-tooltip-content=".BL14-preview" />
-                  <div class="tooltip_templates"> <span class="BL14-preview"> Blue Infusion </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="PU8" value="PU8" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PU8?$SWATCH$" title="Plum Twist"
-                    class="tip-trigger" data-tooltip-content=".PU8-preview" />
-                  <div class="tooltip_templates"> <span class="PU8-preview"> Plum Twist </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="RD10" value="RD10" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/RD10?$SWATCH$" title="Cherry Fizz"
-                    class="tip-trigger" data-tooltip-content=".RD10-preview" />
-                  <div class="tooltip_templates"> <span class="RD10-preview"> Cherry Fizz </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="GN9" value="GN9" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN9?$SWATCH$" title="Mint Sprig"
-                    class="tip-trigger" data-tooltip-content=".GN9-preview" />
-                  <div class="tooltip_templates"> <span class="GN9-preview"> Mint Sprig </span> </div>
-                </label>
-              </li>
-            </ul>
-
-          </div>
-        </div>
-        <div class="carousel2" id="innerSS" style="display:none"><br />
-          <a id="innercolorprev" class="prev" href="#"></a>
-          <div class="list_carousel2">
-            <ul id="innercolorfoo2">
-              <li>
-                <label>
-                  <input type="radio" name="innerRadio" id="SS1" value="SS1" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/SS1?$SWATCH$" title="Stainless Steel"
-                        class="tip-trigger" data-tooltip-content=".SS1-preview" />
-                        <div class="tooltip_templates"> <span class="SS1-preview"> Stainless Steel </span> </div>
-                </label>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="selected-type">Choose Accessories: </div>
-        <div class="selected-type-sub" id="title-lid"> Lid Color </div>
-        <div class="carousel2" id="travellid"><br />
-          <a id="lidprev" class="prev" href="#"></a>
-          <div class="list_carousel2">
-            <ul id="lid_carousel16">
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="NoLid" value="&" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/REMOVE?$SWATCH$" title="Remove Lid"
-                    class="tip-trigger" data-tooltip-content=".NoLid-preview" />
-                  <div class="tooltip_templates"> <span class="NoLid-preview"> Remove Lid </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BK2" value="&obj=MAIN/ACCESSORIES/LIDTRV/BK2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BK2?$SWATCH$" title="Black - BK2"
-                    class="tip-trigger" data-tooltip-content=".BK2-preview" />
-                  <div class="tooltip_templates"> <span class="BK2-preview"> Black - BK2 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="GN6" value="&obj=MAIN/ACCESSORIES/LIDTRV/GN6&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN6?$SWATCH$" title="Lime Green - GN6"
-                    class="tip-trigger" data-tooltip-content=".GN6-preview" />
-                  <div class="tooltip_templates"> <span class="GN6-preview"> Lime Green - GN6 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="YE5" value="&obj=MAIN/ACCESSORIES/LIDTRV/YE5&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/YE5?$SWATCH$" title="Neon Yellow - YE5"
-                    class="tip-trigger" data-tooltip-content=".YE5-preview" />
-                  <div class="tooltip_templates"> <span class="YE5-preview"> Neon Yellow - YE5 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="RD1" value="&obj=MAIN/ACCESSORIES/LIDTRV/RD1&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/RD1?$SWATCH$" title="Red - RD1"
-                    class="tip-trigger" data-tooltip-content=".RD1-preview" />
-                  <div class="tooltip_templates"> <span class="RD1-preview"> Red - RD1 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="GN2" value="&obj=MAIN/ACCESSORIES/LIDTRV/GN2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN2?$SWATCH$" title="Hunter Green - GN2"
-                    class="tip-trigger" data-tooltip-content=".GN2-preview" />
-                  <div class="tooltip_templates"> <span class="GN2-preview"> Hunter Green - GN2 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="YE1" value="&obj=MAIN/ACCESSORIES/LIDTRV/YE1&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/YE1?$SWATCH$" title="Yellow - YE1"
-                    class="tip-trigger" data-tooltip-content=".YE1-preview" />
-                  <div class="tooltip_templates"> <span class="YE1-preview"> Yellow - YE1 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="MR1" value="&obj=MAIN/ACCESSORIES/LIDTRV/MR1&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/MR1?$SWATCH$" title="Maroon - MR1"
-                    class="tip-trigger" data-tooltip-content=".MR1-preview" />
-                  <div class="tooltip_templates"> <span class="MR1-preview"> Maroon - MR1 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BR2" value="&obj=MAIN/ACCESSORIES/LIDTRV/BR2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BR2?$SWATCH$" title="Brown - BR2"
-                    class="tip-trigger" data-tooltip-content=".BR2-preview" />
-                  <div class="tooltip_templates"> <span class="BR2-preview"> Brown - BR2 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BL3" value="&obj=MAIN/ACCESSORIES/LIDTRV/BL3&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL3?$SWATCH$" title="Navy Blue - BL3"
-                    class="tip-trigger" data-tooltip-content=".BL3-preview" />
-                  <div class="tooltip_templates"> <span class="BL3-preview"> Navy Blue - BL3 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="OR2" value="&obj=MAIN/ACCESSORIES/LIDTRV/OR2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/OR2?$SWATCH$" title="Orange - OR2"
-                    class="tip-trigger" data-tooltip-content=".OR2-preview" />
-                  <div class="tooltip_templates"> <span class="OR2-preview"> Orange - OR2 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BL2" value="&obj=MAIN/ACCESSORIES/LIDTRV/BL2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL2?$SWATCH$" title="Blue - BL2"
-                    class="tip-trigger" data-tooltip-content=".BL2-preview" />
-                  <div class="tooltip_templates"> <span class="BL2-preview"> Blue - BL2 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="PK3" value="&obj=MAIN/ACCESSORIES/LIDTRV/PK3&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PK3?$SWATCH$" title="Pink - PK3"
-                    class="tip-trigger" data-tooltip-content=".PK3-preview" />
-                  <div class="tooltip_templates"> <span class="PK3-preview"> Pink - PK3 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="CL2" value="&obj=MAIN/ACCESSORIES/LIDTRV/CL2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/CL2?$SWATCH$" title="Clear - CL2"
-                    class="tip-trigger" data-tooltip-content=".CL2-preview" />
-                  <div class="tooltip_templates"> <span class="CL2-preview"> Clear - CL2 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BL10" value="&obj=MAIN/ACCESSORIES/LIDTRV/BL10&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL10?$SWATCH$" title="Turquoise - BL10"
-                    class="tip-trigger" data-tooltip-content=".BL10-preview" />
-                  <div class="tooltip_templates"> <span class="BL10-preview"> Turquoise - BL10 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="PK10" value="&obj=MAIN/ACCESSORIES/LIDTRV/PK10&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PK10?$SWATCH$" title="Neon Pink - PK10"
-                    class="tip-trigger" data-tooltip-content=".PK10-preview" />
-                  <div class="tooltip_templates"> <span class="PK10-preview"> Neon Pink - PK10 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="WH1" value="&obj=MAIN/ACCESSORIES/LIDTRV/WH1&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/WH1?$SWATCH$" title="White - WH1"
-                    class="tip-trigger" data-tooltip-content=".WH1-preview" />
-                  <div class="tooltip_templates"> <span class="WH1-preview"> White - WH1 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="PU7" value="&obj=MAIN/ACCESSORIES/LIDTRV/PU7&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PU7?$SWATCH$" title="Royal Purple - PU7"
-                    class="tip-trigger" data-tooltip-content=".PU7-preview" />
-                  <div class="tooltip_templates"> <span class="PU7-preview"> Royal Purple - PU7 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="PK2" value="&obj=MAIN/ACCESSORIES/LIDTRV/PK2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PK2?$SWATCH$" title="Fuchsia - PK2"
-                    class="tip-trigger" data-tooltip-content=".PK2-preview" />
-                  <div class="tooltip_templates"> <span class="PK2-preview"> Fuchsia - PK2 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="PU3" value="&obj=MAIN/ACCESSORIES/LIDTRV/PU3&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PU3?$SWATCH$" title="Purple - PU3"
-                    class="tip-trigger" data-tooltip-content=".PU3-preview" />
-                  <div class="tooltip_templates"> <span class="PU3-preview"> Purple - PU3 </span> </div>
-                </label>
-              </li>
-            </ul>
-          </div>
-          <a id="lidnext" class="next" href="#"></a>
-        </div>
-        <div class="carousel2" id="travellid10" style="display:block"><br />
-          <a id="lid10prev" class="prev" href="#"></a>
-          <div class="list_carousel2">
-            <ul id="lid_carousel10">
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="NoLid" value="&" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/REMOVE?$SWATCH$" title="Remove Lid"
-                    class="tip-trigger" data-tooltip-content=".NoLid-preview" />
-                  <div class="tooltip_templates"> <span class="NoLid-preview"> Remove Lid </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BK2" value="&obj=MAIN/ACCESSORIES/LIDTRV/BK2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BK2?$SWATCH$" title="Black - BK2"
-                    class="tip-trigger" data-tooltip-content=".BK2-preview" />
-                  <div class="tooltip_templates"> <span class="BK2-preview"> Black - BK2 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="GN6" value="&obj=MAIN/ACCESSORIES/LIDTRV/GN6&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN6?$SWATCH$" title="Lime Green - GN6"
-                    class="tip-trigger" data-tooltip-content=".GN6-preview" />
-                  <div class="tooltip_templates"> <span class="GN6-preview"> Lime Green - GN6 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="YE5" value="&obj=MAIN/ACCESSORIES/LIDTRV/YE5&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/YE5?$SWATCH$" title="Neon Yellow - YE5"
-                    class="tip-trigger" data-tooltip-content=".YE5-preview" />
-                  <div class="tooltip_templates"> <span class="YE5-preview"> Neon Yellow - YE5 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="RD1" value="&obj=MAIN/ACCESSORIES/LIDTRV/RD1&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/RD1?$SWATCH$" title="Red - RD1"
-                    class="tip-trigger" data-tooltip-content=".RD1-preview" />
-                  <div class="tooltip_templates"> <span class="RD1-preview"> Red - RD1 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="GN2" value="&obj=MAIN/ACCESSORIES/LIDTRV/GN2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN2?$SWATCH$" title="Hunter Green - GN2"
-                    class="tip-trigger" data-tooltip-content=".GN2-preview" />
-                  <div class="tooltip_templates"> <span class="GN2-preview"> Hunter Green - GN2 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="YE1" value="&obj=MAIN/ACCESSORIES/LIDTRV/YE1&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/YE1?$SWATCH$" title="Yellow - YE1"
-                    class="tip-trigger" data-tooltip-content=".YE1-preview" />
-                  <div class="tooltip_templates"> <span class="YE1-preview"> Yellow - YE1 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="MR1" value="&obj=MAIN/ACCESSORIES/LIDTRV/MR1&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/MR1?$SWATCH$" title="Maroon - MR1"
-                    class="tip-trigger" data-tooltip-content=".MR1-preview" />
-                  <div class="tooltip_templates"> <span class="MR1-preview"> Maroon - MR1 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BL3" value="&obj=MAIN/ACCESSORIES/LIDTRV/BL3&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL3?$SWATCH$" title="Navy Blue - BL3"
-                    class="tip-trigger" data-tooltip-content=".BL3-preview" />
-                  <div class="tooltip_templates"> <span class="BL3-preview"> Navy Blue - BL3 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="OR2" value="&obj=MAIN/ACCESSORIES/LIDTRV/OR2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/OR2?$SWATCH$" title="Orange - OR2"
-                    class="tip-trigger" data-tooltip-content=".OR2-preview" />
-                  <div class="tooltip_templates"> <span class="OR2-preview"> Orange - OR2 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BL2" value="&obj=MAIN/ACCESSORIES/LIDTRV/BL2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL2?$SWATCH$" title="Blue - BL2"
-                    class="tip-trigger" data-tooltip-content=".BL2-preview" />
-                  <div class="tooltip_templates"> <span class="BL2-preview"> Blue - BL2 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="PK3" value="&obj=MAIN/ACCESSORIES/LIDTRV/PK3&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PK3?$SWATCH$" title="Pink - PK3"
-                    class="tip-trigger" data-tooltip-content=".PK3-preview" />
-                  <div class="tooltip_templates"> <span class="PK3-preview"> Pink - PK3 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="CL2" value="&obj=MAIN/ACCESSORIES/LIDTRV/CL2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/CL2?$SWATCH$" title="Clear - CL2"
-                    class="tip-trigger" data-tooltip-content=".CL2-preview" />
-                  <div class="tooltip_templates"> <span class="CL2-preview"> Clear - CL2 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BL10" value="&obj=MAIN/ACCESSORIES/LIDTRV/BL10&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL10?$SWATCH$" title="Turquoise - BL10"
-                    class="tip-trigger" data-tooltip-content=".BL10-preview" />
-                  <div class="tooltip_templates"> <span class="BL10-preview"> Turquoise - BL10 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="PK10" value="&obj=MAIN/ACCESSORIES/LIDTRV/PK10&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PK10?$SWATCH$" title="Neon Pink - PK10"
-                    class="tip-trigger" data-tooltip-content=".PK10-preview" />
-                  <div class="tooltip_templates"> <span class="PK10-preview"> Neon Pink - PK10 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="PU9" value="&obj=MAIN/ACCESSORIES/LIDTRV/PU7&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PU7?$SWATCH$" title="Royal Purple - PU7"
-                    class="tip-trigger" data-tooltip-content=".PU7-preview" />
-                  <div class="tooltip_templates"> <span class="PU7-preview"> Royal Purple - PU7 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="PK2" value="&obj=MAIN/ACCESSORIES/LIDTRV/PK2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PK2?$SWATCH$" title="Fuchsia - PK2"
-                    class="tip-trigger" data-tooltip-content=".PK2-preview" />
-                  <div class="tooltip_templates"> <span class="PK2-preview"> Fuchsia - PK2 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="PU3" value="&obj=MAIN/ACCESSORIES/LIDTRV/PU3&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PU3?$SWATCH$" title="Purple - PU3"
-                    class="tip-trigger" data-tooltip-content=".PU3-preview" />
-                  <div class="tooltip_templates"> <span class="PU3-preview"> Purple - PU3 </span> </div>
-                </label>
-              </li>
-            </ul>
-          </div>
-          <a id="lid10next" class="next" href="#"></a>
-        </div>
-        <div class="carousel2" id="wblid" style="display:block"><br />
-          <a id="WBlidprev" class="prev" href="#"></a>
-          <div class="list_carousel2">
-            <ul id="WBlid_carousel">
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="WH3" value="&obj=MAIN/ACCESSORIES/LIDWB/WH3&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/WH3?$SWATCH$" title="Beach Front Blue - WH3"
-                    class="tip-trigger" data-tooltip-content=".WH3-preview" />
-                  <div class="tooltip_templates"> <span class="WH3-preview"> Beach Front Blue - WH3 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BK5" value="&obj=MAIN/ACCESSORIES/LIDWB/BK5&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BK5?$SWATCH$" title="Black - BK5"
-                    class="tip-trigger" data-tooltip-content=".BK5-preview" />
-                  <div class="tooltip_templates"> <span class="BK5-preview"> Black - BK5 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="WH4" value="&obj=MAIN/ACCESSORIES/LIDWB/WH4&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/WH4?$SWATCH$" title="Coastal Green - WH4"
-                    class="tip-trigger" data-tooltip-content=".WH4-preview" />
-                  <div class="tooltip_templates"> <span class="WH4-preview"> Coastal Green - WH4 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="GY1" value="&obj=MAIN/ACCESSORIES/LIDWB/GY1&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GY1?$SWATCH$" title="Gray - GY1"
-                    class="tip-trigger" data-tooltip-content=".GY1-preview" />
-                  <div class="tooltip_templates"> <span class="GY1-preview"> Gray - GY1 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="GN10" value="&obj=MAIN/ACCESSORIES/LIDWB/GN10&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN10?$SWATCH$" title="Hunter Green - GN10"
-                    class="tip-trigger" data-tooltip-content=".GN10-preview" />
-                  <div class="tooltip_templates"> <span class="GN10-preview"> Hunter Green - GN10 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="WH5" value="&obj=MAIN/ACCESSORIES/LIDWB/WH5&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/WH5?$SWATCH$" title="Lakeside Lavender - WH5"
-                    class="tip-trigger" data-tooltip-content=".WH5-preview" />
-                  <div class="tooltip_templates"> <span class="WH5-preview"> Lakeside Lavender - WH5 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="GN11" value="&obj=MAIN/ACCESSORIES/LIDWB/GN11&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN11?$SWATCH$" title="Lime Green - GN11"
-                    class="tip-trigger" data-tooltip-content=".GN11-preview" />
-                  <div class="tooltip_templates"> <span class="GN11-preview"> Lime Green - GN11 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="MR2" value="&obj=MAIN/ACCESSORIES/LIDWB/MR2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/MR2?$SWATCH$" title="Maroon - MR2"
-                    class="tip-trigger" data-tooltip-content=".MR2-preview" />
-                  <div class="tooltip_templates"> <span class="MR2-preview"> Maroon - MR2 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BL17" value="&obj=MAIN/ACCESSORIES/LIDWB/BL17&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL17?$SWATCH$" title="Navy - BL17"
-                    class="tip-trigger" data-tooltip-content=".BL17-preview" />
-                  <div class="tooltip_templates"> <span class="BL17-preview"> Navy - BL17 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="OR6" value="&obj=MAIN/ACCESSORIES/LIDWB/OR6&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/OR6?$SWATCH$" title="Orange - OR6"
-                    class="tip-trigger" data-tooltip-content=".OR6-preview" />
-                  <div class="tooltip_templates"> <span class="OR6-preview"> Orange - OR6 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="PK12" value="&obj=MAIN/ACCESSORIES/LIDWB/PK12&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PK12?$SWATCH$" title="Passion Pink - PK12"
-                    class="tip-trigger" data-tooltip-content=".PK12-preview" />
-                  <div class="tooltip_templates"> <span class="PK12-preview"> Passion Pink - PK12 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BL16" value="&obj=MAIN/ACCESSORIES/LIDWB/BL16&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL16?$SWATCH$" title="Royal Blue - BL16"
-                    class="tip-trigger" data-tooltip-content=".BL16-preview" />
-                  <div class="tooltip_templates"> <span class="BL16-preview"> Royal Blue - BL16 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="RD11" value="&obj=MAIN/ACCESSORIES/LIDWB/RD11&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/RD11?$SWATCH$" title="Red - RD11"
-                    class="tip-trigger" data-tooltip-content=".RD11-preview" />
-                  <div class="tooltip_templates"> <span class="RD11-preview"> Red - RD11 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="PU9" value="&obj=MAIN/ACCESSORIES/LIDWB/PU9&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PU9?$SWATCH$" title="Royal Purple - PU9"
-                    class="tip-trigger" data-tooltip-content=".PU9-preview" />
-                  <div class="tooltip_templates"> <span class="PU9-preview"> Royal Purple - PU9 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BL18" value="&obj=MAIN/ACCESSORIES/LIDWB/BL18&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL18?$SWATCH$" title="Turquoise - BL18"
-                    class="tip-trigger" data-tooltip-content=".BL18-preview" />
-                  <div class="tooltip_templates"> <span class="BL18-preview"> Turquoise - BL18 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="YE8" value="&obj=MAIN/ACCESSORIES/LIDWB/YE8&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/YE8?$SWATCH$" title="Yellow - YE8"
-                    class="tip-trigger" data-tooltip-content=".YE8-preview" />
-                  <div class="tooltip_templates"> <span class="YE8-preview"> Yellow - YE8 </span> </div>
-                </label>
-              </li>
-            </ul>
-
-          </div>
-          <a id="WBlidnext" class="next" href="#"></a>
-        </div>
-        <div class="carousel2" id="hotlid" style="display:none"><br />
-          <a id="lidprev" class="prev" href="#"></a>
-          <div class="list_carousel2">
-            <ul id="lidfoo2">
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BK5" value="&obj=MAIN/ACCESSORIES/LIDHOT/BK5&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BK5?$SWATCH$" title="Black - BK5"
-                    class="tip-trigger" data-tooltip-content=".BK5-preview" />
-                  <div class="tooltip_templates"> <span class="BK5-preview"> Black - BK5 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BL21" value="&obj=MAIN/ACCESSORIES/LIDHOT/BL21&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL21?$SWATCH$" title="Blue - BL21"
-                    class="tip-trigger" data-tooltip-content=".BL21-preview" />
-                  <div class="tooltip_templates"> <span class="BL21-preview"> Blue - BL21 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BR6" value="&obj=MAIN/ACCESSORIES/LIDHOT/BR6&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BR6?$SWATCH$" title="Brown - BR6"
-                    class="tip-trigger" data-tooltip-content=".BR6-preview" />
-                  <div class="tooltip_templates"> <span class="BR6-preview"> Brown - BR6 </span> </div>
-                </label>
-              </li>
-            </ul>
-
-          </div>
-          <a id="lidnext" class="next" href="#"></a>
-        </div>
-        <div class="carousel2" id="sippylid" style="display:block"><br />
-          <a id="lidprev" class="prev" href="#"></a>
-          <div class="list_carousel2">
-            <ul id="lidfoo2">
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="NoLid" value="&" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/REMOVE?$SWATCH$" title="Remove Lid"
-                    class="tip-trigger" data-tooltip-content=".NoLid-preview" />
-                  <div class="tooltip_templates"> <span class="NoLid-preview"> Remove Lid </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="GY3" value="&obj=MAIN/ACCESSORIES/LIDSIP/GY3&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GY3?$SWATCH$" title="Gray - GY3"
-                    class="tip-trigger" data-tooltip-content=".GY3-preview" />
-                  <div class="tooltip_templates"> <span class="GY3-preview"> Gray - GY3 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="YE9" value="&obj=MAIN/ACCESSORIES/LIDSIP/YE9&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/YE9?$SWATCH$" title="Bumblebee Yellow - YE9"
-                    class="tip-trigger" data-tooltip-content=".YE9-preview" />
-                  <div class="tooltip_templates"> <span class="YE9-preview"> Bumblebee Yellow - YE9 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="RD12" value="&obj=MAIN/ACCESSORIES/LIDSIP/RD12&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/RD12?$SWATCH$" title="Fire Engine Red - RD12"
-                    class="tip-trigger" data-tooltip-content=".RD12-preview" />
-                  <div class="tooltip_templates"> <span class="RD12-preview"> Fire Engine Red - RD12 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="PU12" value="&obj=MAIN/ACCESSORIES/LIDSIP/PU12&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PU12?$SWATCH$" title="Parachute Purple - PU12"
-                    class="tip-trigger" data-tooltip-content=".PU12-preview" />
-                  <div class="tooltip_templates"> <span class="PU12-preview"> Parachute Purple - PU12 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="PK11" value="&obj=MAIN/ACCESSORIES/LIDSIP/PK11&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PK11?$SWATCH$" title="Playful Pink - PK11"
-                    class="tip-trigger" data-tooltip-content=".PK11-preview" />
-                  <div class="tooltip_templates"> <span class="PK11-preview"> Playful Pink - PK11 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="GN13" value="&obj=MAIN/ACCESSORIES/LIDSIP/GN13&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN13?$SWATCH$" title="Rainforest Green - GN13"
-                    class="tip-trigger" data-tooltip-content=".GN13-preview" />
-                  <div class="tooltip_templates"> <span class="GN13-preview"> Rainforest Green - GN13 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BL13" value="&obj=MAIN/ACCESSORIES/LIDSIP/BL13&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL13?$SWATCH$" title="Rocket Blue - BL13"
-                    class="tip-trigger" data-tooltip-content=".BL13-preview" />
-                  <div class="tooltip_templates"> <span class="BL13-preview"> Rocket Blue - BL13 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="OR7" value="&obj=MAIN/ACCESSORIES/LIDSIP/OR7&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/OR7?$SWATCH$" title="Sunburst Orange - OR7"
-                    class="tip-trigger" data-tooltip-content=".OR7-preview" />
-                  <div class="tooltip_templates"> <span class="OR7-preview"> Sunburst Orange - OR7 </span> </div>
-                </label>
-              </li>
-            </ul>
-
-          </div>
-          <a id="lidnext" class="next" href="#"></a>
-        </div>
-        <div class="carousel2" id="sstravellid" style="display: none"><br />
-          <a id="lidprev" class="prev" href="#"></a>
-          <div class="list_carousel2">
-            <ul id="lidfoo2">
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="NoLid" value="&" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/REMOVE?$SWATCH$" title="Remove Lid"
-                    class="tip-trigger" data-tooltip-content=".NoLid-preview" />
-                  <div class="tooltip_templates"> <span class="NoLid-preview"> Remove Lid </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="BK7" value="&obj=MAIN/ACCESSORIES/SSLIDHMR/BK7&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BK7?$SWATCH$" title="Black - BK7"
-                    class="tip-trigger" data-tooltip-content=".BK7-preview" />
-                  <div class="tooltip_templates"> <span class="BK7-preview"> Black - BK7 </span> </div>
-                </label>
-              </li>
-            </ul>
-
-          </div>
-          <a id="lidnext" class="next" href="#"></a>
-        </div>
-        <div class="carousel2" id="sswblid" style="display: none"><br />
-          <a id="lidprev" class="prev" href="#"></a>
-          <div class="list_carousel2">
-            <ul id="lidfoo2">
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="NoLid" value="&" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/REMOVE?$SWATCH$" title="Remove Lid"
-                    class="tip-trigger" data-tooltip-content=".NoLid-preview" />
-                  <div class="tooltip_templates"> <span class="NoLid-preview"> Remove Lid </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="lidRadio" id="lidSS1" value="&obj=MAIN/ACCESSORIES/SSWBLID/SS1&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/SS1?$SWATCH$" title="Stainless - SS1"
-                    class="tip-trigger" data-tooltip-content=".lidSS1-preview" />
-                  <div class="tooltip_templates"> <span class="lidSS1-preview"> Stainless - SS1 </span> </div>
-                </label>
-              </li>
-            </ul>
-
-          </div>
-          <a id="lidnext" class="next" href="#"></a>
-        </div>
-        <br />
-        <div class="selected-type-sub" id="title-handle"> Handle Color </div>
-        <div class="carousel2" id="handle"><br />
-          <div class="list_carousel2">
-            <ul id="handlefoo2">
-              <li>
-                <label>
-                  <input type="radio" name="handleRadio" id="NoHANDLE" value="&" checked="checked" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/REMOVE?$SWATCH$" title="No Handle"
-                    class="tip-trigger" data-tooltip-content=".NoHANDLE-preview" />
-                  <div class="tooltip_templates"> <span class="NoHANDLE-preview"> No Handle </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="handleRadio" id="BK3" value="&obj=MAIN/ACCESSORIES/HAND/BK3&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BK3?$SWATCH$" title="Black - BK3"
-                    class="tip-trigger" data-tooltip-content=".BK3-preview" />
-                  <div class="tooltip_templates"> <span class="BK3-preview"> Black - BK3 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="handleRadio" id="PK5" value="&obj=MAIN/ACCESSORIES/HAND/PK5&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/PK5?$SWATCH$" title="Fuchsia - PK5"
-                    class="tip-trigger" data-tooltip-content=".PK5-preview" />
-                  <div class="tooltip_templates"> <span class="PK5-preview"> Fuchsia - PK5 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="handleRadio" id="RD3" value="&obj=MAIN/ACCESSORIES/HAND/RD3&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/RD3?$SWATCH$" title="Red - RD3"
-                    class="tip-trigger" data-tooltip-content=".RD3-preview" />
-                  <div class="tooltip_templates"> <span class="RD3-preview"> Red - RD3 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="handleRadio" id="YE6" value="&obj=MAIN/ACCESSORIES/HAND/YE6&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/YE6?$SWATCH$" title="Neon Yellow - YE6"
-                    class="tip-trigger" data-tooltip-content=".YE6-preview" />
-                  <div class="tooltip_templates"> <span class="YE6-preview"> Neon Yellow - YE6 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="handleRadio" id="OR5" value="&obj=MAIN/ACCESSORIES/HAND/OR5&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/OR5?$SWATCH$" title="Neon Orange - OR5"
-                    class="tip-trigger" data-tooltip-content=".OR5-preview" />
-                  <div class="tooltip_templates"> <span class="OR5-preview"> Neon Orange - OR5 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="handleRadio" id="GN7" value="&obj=MAIN/ACCESSORIES/HAND/GN7&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/GN7?$SWATCH$" title="Lime Green - GN7"
-                    class="tip-trigger" data-tooltip-content=".GN7-preview" />
-                  <div class="tooltip_templates"> <span class="GN7-preview"> Lime Green - GN7 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="handleRadio" id="BL11" value="&obj=MAIN/ACCESSORIES/HAND/BL11&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL11?$SWATCH$" title="Turquoise - BL11"
-                    class="tip-trigger" data-tooltip-content=".BL11-preview" />
-                  <div class="tooltip_templates"> <span class="BL11-preview"> Turquoise - BL11 </span> </div>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="radio" name="handleRadio" id="BL2" value="&obj=MAIN/ACCESSORIES/HAND/BL2&show" />
-                  <img src="//imagegenerator.tervis.com/is/image/tervis/BL2?$SWATCH$" title="Blue - BL2"
-                    class="tip-trigger" data-tooltip-content=".BL2-preview" />
-                  <div class="tooltip_templates"> <span class="BL2-preview"> Blue - BL2 </span> </div>
-                </label>
-              </li>
-            </ul>
-
-          </div>
-          <div style="display:none;">
-            <select id="iteration" class="menupad">
-              <option value="1-HERO2">Hero</option>
-              <option value="1">Virtual</option>
-              <option value="&">Flat Wrap</option>
-            </select>
-            <select id="innerform" class="menupad">
-              <option value="LINED">Lined</option>
-              <option value="SMOOTH">Smooth</option>
-            </select>
-            <select id="outerform" class="menupad">
-              <option value="SMOOTH">Smooth</option>
-              <option value="WAVY">Wavy</option>
-              <option value="RIPPLE">Ripple</option>
-            </select>
-            <select id="licSticker" class="menupad">
-              Sticker
-              <option value="&">-Choose a License Cling-</option>
-              <option value="RIGHT=LIC-StarWars">LucasFilm</option>
-              <option value="RIGHT=LIC-Coke">Coca-Cola</option>
-            </select>
-          </div>
-        </div>
+        <div class="selected-type">Choose Accessories:</div>
+        <div id="select-accessories"></div>
       </div>
+
+      
       <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
       <script src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script>
       <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js'></script>
@@ -2120,6 +1171,7 @@
           //	Scrolled by user interaction 
           $('#lid_carousel16').carouFredSel({
             auto: false,
+            circular: false,
             prev: '#lidprev',
             next: '#lidnext',
             pagination: "#pager2",
@@ -2133,6 +1185,7 @@
           //	Scrolled by user interaction 
           $('#WBlid_carousel').carouFredSel({
             auto: false,
+            circular: false,
             prev: '#WBlidprev',
             next: '#WBlidnext',
             pagination: "#pager2",
@@ -2146,6 +1199,7 @@
           //	Scrolled by user interaction 
           $('#lid_carousel10').carouFredSel({
             auto: false,
+            circular: false,
             prev: '#lid10prev',
             next: '#lid10next',
             pagination: "#pager2",
@@ -3263,7 +2317,7 @@
           var el = document.getElementById("txtUploadFile");
 
           if (el) {
-            el.click();
+            // el.click();
             el.addEventListener('change', AddImageFromDevice, false);
           }
         });
@@ -3404,7 +2458,7 @@
         import {
           Get_TervisProductSizeAndFormTypeFromString,
           Get_TervisProductMetaDataUsingIndex
-        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.5/TervisProductMetadata.js?module'
+        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.10/TervisProductMetadata.js?module'
         
         import {
           New_AdobeScene7SizeStanza
