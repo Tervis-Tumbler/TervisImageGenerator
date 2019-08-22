@@ -146,12 +146,12 @@
       vertical-align: text-top;
     }
 
-    .rm-menupad {
+    /* .rm-menupad {
       display: inline-block;
       height: 30px;
       margin: 10px 0px 0px 0px;
       vertical-align: text-top;
-    }
+    } */
 
     #warning {
       height: 25px;
@@ -430,24 +430,9 @@
       line-height: 15px;
     }
 
-    #prev2,
-    #next2 {
+    .prev2,
+    .next2 {
       margin-top: 30px;
-    }
-
-    #innercolorprev,
-    #innercolornext {
-      margin-top: 0px;
-    }
-
-    #lidprev,
-    #lidnext {
-      margin-top: 0px;
-    }
-
-    #handleprev,
-    #handlenext {
-      margin-top: 0px;
     }
 
     /* END Carousel CSS */
@@ -674,16 +659,13 @@
               $CarouselTitle,
               $CarouselID,
               $CarouselItems,
-              $CarouselContainerStyle,
               $CarouselItemsContainerStyle,
               $ShiftArrowsDown
             }) => {
               var $PreviousArrowID
               var $NextArrowID
-              if ($ShiftArrowsDown) {
-                $PreviousArrowID = "prev2"
-                $NextArrowID = "next2"
-              }
+              var $ArrowClassSuffix = $ShiftArrowsDown ? "2" : ""
+
               return html`
                 ${
                   $CarouselTitle ?
@@ -698,15 +680,15 @@
                   ` :
                   ""
                 }
-                <div class="${$CarouselContainerStyle}" id="${$CarouselID}Container" style="display:block">
+                <div class="${$CarouselID}Container" style="display:block">
                   <br>
-                  <a class="prev" id="${$PreviousArrowID}" href="#"></a>
+                  <a class="prev prev${$ArrowClassSuffix}" href="#"></a>
                   <div class="${$CarouselItemsContainerStyle}">
                     <ul class="${$CarouselID}">
                       ${$CarouselItems}
                     </ul>
                   </div>
-                  <a class="next" id="${$NextArrowID}" href="#"></a>
+                  <a class="next next${$ArrowClassSuffix}" href="#"></a>
                 </div>
               `
             }
@@ -728,7 +710,6 @@
                   type="radio"
                   name="${$CarouselName}"
                   value="${$CarouselItemValue}"
-                  id="${$CarouselItemTitle}"
                   ?checked=${$IsChecked}
                   @click=${Receive_RadioButtonChanged}
                 />
@@ -769,7 +750,6 @@
           var $ProductCarousel = New_Carousel({
             $CarouselID: "product_carousel",
             $CarouselItems,
-            $CarouselContainerStyle: "carousel1",
             $CarouselItemsContainerStyle: "list_carousel",
             $ShiftArrowsDown: true
           })
@@ -784,15 +764,16 @@
           $('.product_carousel').carouFredSel({
             auto: false,
             circular: false,
-            prev: '#prev2',
-            next: '#next2',
-            pagination: "#pager2",
+            prev: '.prev2',
+            next: '.next2',
             mousewheel: true,
             swipe: {
               onMouse: true,
               onTouch: true
             }
           });
+
+          Receive_ProductSelectionEvent()
           
           async function Receive_ProductSelectionEvent() {
             var tumbler = $("input[name='tumblerRadio']:checked").val();
@@ -893,15 +874,11 @@
               $(".decoWrap:hidden").show(".decoWrap");
               $(".decoEmblem:hidden").show(".decoEmblem");
               $(".decoDirect:visible").hide(".decoDirect");
-              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
-              $("input[name='innerRadio'][value='CL1']").prop('checked', true)
             } else if (tumbler == "2SHO") {
               $(".decoWrap:hidden").show(".decoWrap");
               $(".decoEmblem:visible").hide(".decoEmblem");
               $(".decoDirect:visible").hide(".decoDirect");
               $("#decorationtype").val("-WRA");
-              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
-              $("input[name='innerRadio'][value='CL1']").prop('checked', true);
             } else if (tumbler == "6SIP") {
               $(".decoWrap:hidden").show(".decoWrap");
               $(".decoEmblem:visible").hide(".decoEmblem");
@@ -923,7 +900,6 @@
               $(".decoDirect:visible").hide(".decoDirect");
               $("#decorationtype").val("-WRA");
             } else if (tumbler == "16BEER") {
-              $("input[name='lidRadio'][value='&']").prop('checked', true);
               $(".decoWrap:hidden").show(".decoWrap");
               $(".decoEmblem:hidden").show(".decoEmblem");
               $(".decoDirect:visible").hide(".decoDirect");
@@ -932,7 +908,6 @@
               $(".decoEmblem:hidden").show(".decoEmblem");
               $(".decoDirect:visible").hide(".decoDirect");
             } else if (tumbler == "24DWT") {
-              $("input[name='lidRadio'][value='&']").prop('checked', true);
               $(".decoWrap:hidden").show(".decoWrap");
               $(".decoEmblem:hidden").show(".decoEmblem");
               $(".decoDirect:visible").hide(".decoDirect");
@@ -944,31 +919,27 @@
               $(".decoWrap:hidden").show(".decoWrap");
               $(".decoEmblem:hidden").show(".decoEmblem");
               $(".decoDirect:visible").hide(".decoDirect");
-            } else if (tumbler == "16TALL" || tumbler == "8STO") {
+            } else if (tumbler == "16TALL") {
               $(".decoWrap:visible").hide(".decoWrap");
               $(".decoEmblem:hidden").show(".decoEmblem");
               $(".decoDirect:visible").hide(".decoDirect");
               $("#decorationtype").val("-EMB");
             } else if (tumbler == "30SS" || tumbler == "20SS") {
-              $("input[name='lidRadio'][value='&']").prop('checked', true);
               $(".decoWrap:visible").hide(".decoWrap");
               $(".decoEmblem:visible").hide(".decoEmblem");
               $(".decoDirect:hidden").show(".decoDirect");
               $("#decorationtype").val("-DPT");
             } else if (tumbler == "17SS") {
-              $("input[name='lidRadio'][value='&']").prop('checked', true);
               $(".decoWrap:visible").hide(".decoWrap");
               $(".decoEmblem:visible").hide(".decoEmblem");
               $(".decoDirect:hidden").show(".decoDirect");
               $("#decorationtype").val("-DPT");
             } else if (tumbler == "24SS") {
-              $("input[name='lidRadio'][value='&']").prop('checked', true);
               $(".decoWrap:visible").hide(".decoWrap");
               $(".decoEmblem:visible").hide(".decoEmblem");
               $(".decoDirect:hidden").show(".decoDirect");
               $("#decorationtype").val("-DPT");
             } else if (tumbler == "12SS") {
-              $("input[name='lidRadio'][value='&']").prop('checked', true);
               $(".decoWrap:visible").hide(".decoWrap");
               $(".decoEmblem:visible").hide(".decoEmblem");
               $(".decoDirect:hidden").show(".decoDirect");
@@ -1005,9 +976,10 @@
             })
 
             var $CarouselGroups = []
+            var $CarouFredSelOptions = []
+            
             for (var $VignetteObjectWithColorOption of $VignetteObjectsWithColorOption ){
               var $Carousels = []
-              var $CarouselIDs = []
               for (var $ThingWithAvailableColorCode of $VignetteObjectWithColorOption.Options) {
                 var $CarouselItems = []
                 for (var $ColorCode of $ThingWithAvailableColorCode.AvailableColorCodes) {
@@ -1036,7 +1008,10 @@
                 }
 
                 var $CarouselID = $ThingWithAvailableColorCode.Code
-                $CarouselIDs.push($CarouselID)
+                $CarouFredSelOptions.push({
+                  CarouselContainerSelector: `.${$VignetteObjectWithColorOption.Code} .${$CarouselID}Container`,
+                  CaroFreDeslULSelector: `.${$VignetteObjectWithColorOption.Code} .${$CarouselID}Container .${$CarouselID}`
+                })
                 var $Carousel = New_Carousel({
                   $CarouselTitle: $VignetteCodeToMarketingName[$ThingWithAvailableColorCode.Code],
                   $CarouselID,
@@ -1059,13 +1034,13 @@
             var $ThingsWithColorOptionsDiv = document.querySelector('#select-vignette-object-color-options')
             render($CarouselGroups, $ThingsWithColorOptionsDiv)
 
-            $CarouselIDs.forEach(
-              $CarouselID =>
-              $(`.${$CarouselID}`).carouFredSel({
+            $CarouFredSelOptions.forEach(
+              $CarouFredSelOption =>
+              $($CarouFredSelOption.CaroFreDeslULSelector).carouFredSel({
                 auto: false,
                 circular: false,
-                prev: `#${$CarouselID} .prev`,
-                next: `#${$CarouselID} .next`,
+                prev: `${$CarouFredSelOption.CarouselContainerSelector} .prev`,
+                next: `${$CarouFredSelOption.CarouselContainerSelector} .next`,
                 mousewheel: true,
                 swipe: {
                   onMouse: true,
@@ -1120,13 +1095,15 @@
       <div id="togglediv">
         <div class="selected-type">Product</div>
         <div class="carousel1" id="select-product"></div>
-        <div class="selected-type">Decoration</div>
-        <select id="codetype" class="menupad">
-          <option value="choose" selected="selected" class="menupad">Code Type &nbsp;&or;</option>
 
-          <option value="rmCode">Raw Material</option>
-          <option value="ugcCode">UGC Upload</option>
+        <div class="selected-type">Decoration</div>
+        <select id="DecorationSource" class="menupad">
+          <option value="Choose" selected disabled class="menupad">Decoration Source</option>
+          <option value="RawMaterialItemNumber">Raw Material Item Number</option>
+          <option value="UGCUpload">UGC Upload</option>
+          <option value="CustomyzerProjectID">Customyzer Project ID</option>
         </select>
+
         <input type="text" style="width: 110px;" id="itemcode" placeholder="Item Code" value="1218906"
           class="menupad" />
         <div id="divFileUploader" class="menupad">
@@ -1136,9 +1113,9 @@
           </form>
         </div>
         <br />
+
         <select id="decorationtype" class="menupad" style="display:none; float:left;">
           <option value="&" selected="selected" class="menupad">Decoration Type &nbsp;&or;</option>
-
           <option value="-WRA">Wrap</option>
           <option value="-EMB">Emblem</option>
           <option value="-DPT">Direct to Print</option>
