@@ -561,16 +561,16 @@
           Get_TervisProductMetaDataUsingIndex,
           Get_TervisProductSizeAndFormTypeFromString,
           Get_TervisProductColorMarketingNameUsingIndex
-        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.13?module'
+        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.14?module'
         import { 
           // html, 
           render } from 'https://unpkg.com/lit-html?module'
         
         import { 
           Get_TervisAdobeScene7Silhouette,
-          Get_TervisAdobeScene7VignetteAccessories,
+          Get_TervisAdobeScene7VignetteObjectWithColorOption,
           Get_TervisAdobeScene7SwatchImageURL
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.71/TervisAdobeScene7JS.js?module'
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.73/TervisAdobeScene7JS.js?module'
 
         import {LitElement, html, css} from 'https://unpkg.com/@polymer/lit-element@latest/lit-element.js?module'
 
@@ -651,6 +651,25 @@
         ]
 
         $(window).on("load", async function () {
+          const New_CarouselGroup = ({
+            $CarouselGroupTitle,
+            $CarouselGroupCode,
+            $Carousels
+          }) => {
+            return html`
+              <div class="${$CarouselGroupCode}">
+                <div 
+                  class="selected-type tip-trigger" 
+                  data-tooltip-content=".${$CarouselGroupCode}-preview"
+                >${$CarouselGroupTitle}</div>
+                <div class="tooltip_templates">
+                  <span class="${$CarouselGroupCode}-preview">${$CarouselGroupCode}</span> 
+                </div>
+                ${$Carousels}
+              </div>
+            `
+          }
+
           const New_Carousel = ({
               $CarouselTitle,
               $CarouselID,
@@ -659,18 +678,6 @@
               $CarouselItemsContainerStyle,
               $ShiftArrowsDown
             }) => {
-
-              // return html`
-              //     <br>
-              //     <a class="prev" id="prev2" href="#"></a>
-              //     <div class="${$CarouselItemsContainerStyle}">
-              //       <ul id="${$CarouselID}">
-              //         ${$CarouselItems}
-              //       </ul>
-              //     </div>
-              //     <a class="next" id="next2" href="#"></a>
-              // `
-
               var $PreviousArrowID
               var $NextArrowID
               if ($ShiftArrowsDown) {
@@ -678,12 +685,24 @@
                 $NextArrowID = "next2"
               }
               return html`
-                ${$CarouselTitle ? html`<div class="selected-type-sub" id="title-lid">${$CarouselTitle}</div>` : "" }
+                ${
+                  $CarouselTitle ?
+                  html`
+                    <div 
+                      class="selected-type-sub tip-trigger"
+                      data-tooltip-content=".${$CarouselID}-preview"
+                    >${$CarouselTitle}</div>
+                    <div class="tooltip_templates">
+                      <span class="${$CarouselID}-preview">${$CarouselID}</span> 
+                    </div>
+                  ` :
+                  ""
+                }
                 <div class="${$CarouselContainerStyle}" id="${$CarouselID}Container" style="display:block">
                   <br>
                   <a class="prev" id="${$PreviousArrowID}" href="#"></a>
                   <div class="${$CarouselItemsContainerStyle}">
-                    <ul id="${$CarouselID}">
+                    <ul class="${$CarouselID}">
                       ${$CarouselItems}
                     </ul>
                   </div>
@@ -692,11 +711,14 @@
               `
             }
 
+            function Receive_RadioButtonChanged() {}
+
             const New_CrouselItem = ({
               $CarouselName,
               $CarouselItemValue,
               $CarouselItemImageURL,
               $CarouselItemTitle,
+              $CarouselItemToolTip,
               $IsChecked,
               $ShowTitleAsSpan
             }) => html`
@@ -708,8 +730,7 @@
                   value="${$CarouselItemValue}"
                   id="${$CarouselItemTitle}"
                   ?checked=${$IsChecked}
-                  @click=${window.radioSelect}
-                  @input=${window.radioSelect}
+                  @click=${Receive_RadioButtonChanged}
                 />
                 <img 
                   src="${$CarouselItemImageURL}"
@@ -719,7 +740,7 @@
                 >
                 ${$ShowTitleAsSpan ? html`<span class="swatch-label">${$CarouselItemTitle}</span>` : ""}
                 <div class="tooltip_templates">
-                  <span class="${$CarouselItemValue}-preview">${$CarouselItemTitle}</span> 
+                  <span class="${$CarouselItemValue}-preview">${$CarouselItemToolTip}</span> 
                 </div>
               </label>
             </li>
@@ -737,6 +758,7 @@
                 $CarouselItemValue: `${$Size}${$FormType}`,
                 $CarouselItemImageURL,
                 $CarouselItemTitle: $Product.MarketingName,
+                $CarouselItemToolTip: `${$Product.MarketingName} - ${$Size}${$FormType}`,
                 $IsChecked: $IsFirstProduct,
                 $ShowTitleAsSpan: true
               })
@@ -759,7 +781,7 @@
             $ProductCarouselContainer
           )
 
-          $('#product_carousel').carouFredSel({
+          $('.product_carousel').carouFredSel({
             auto: false,
             circular: false,
             prev: '#prev2',
@@ -772,340 +794,333 @@
             }
           });
           
-          $("input[name='tumblerRadio']").on("input change", window.radioSelect);
-          $("input[name='tumblerRadio']").ready(window.radioSelect);
+          async function Receive_ProductSelectionEvent() {
+            var tumbler = $("input[name='tumblerRadio']:checked").val();
+            var lidColor = $("input[name='lidRadio']:checked").val();
+            var codetype = $("#codetype").val();
 
-
-          var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
-          var $SizeAndFormType = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
-          var $VignetteSuffix = $("input[name='thmbRadio']:checked").val();
-
-          var $Accessories = await Get_TervisAdobeScene7VignetteAccessories({
-            ...$SizeAndFormType,
-            $VignetteSuffix
-          })
-
-          var $AccessoryCodeToMarketingName = {
-            HAND: "Handle",
-            LIDTRV: "Travel Lid",
-            TOPSHK: "Shacker Top Lid",
-            LIDSTW: "Straw Lid",
-            LIDHOT: "Hot Lid",
-            LIDSIP: "Sippy Lid",
-            LIDWB: "Water Bottle Lid",
-            SSLIDTRV: "Slider Lid",
-            SSLIDHMR: "Hammer Lid",
-            LIDWIN: "Wine Lid"
-          }
-
-          var $AccessoryCarousels = []
-          var $CarouselIDs = []
-          for (var $Accessory of $Accessories) {
-            var $CarouselItems = []
-            for (var $ColorCode of $Accessory.AvailableColorCodes) {
-              var $ColorMetaData = await Get_TervisProductColorMarketingNameUsingIndex({$ColorCode})
-              
-              if ($ColorMetaData) { 
-                var { MarketingName: $ColorMarketingName } = $ColorMetaData
-              } else {
-                continue
+            var $ProductVignetteDefaultSettings = [
+              {
+                Size: 16,
+                FormType: "DWT",
+                INNER: {
+                  LINED: "CL1" 
+                }
+              },
+              {
+                Size: 24,
+                FormType: "DWT",
+                INNER: {
+                  LINED: "CL1" 
+                }
+              },
+              {
+                Size: 24,
+                FormType: "WB",
+                INNER: {
+                  LINED: "CL1" 
+                },
+                ACCESSORIES: {
+                  LIDWB: "GY1"
+                }
+              },
+              {
+                Size: 16,
+                FormType: "BEER",
+                INNER: {
+                  LINED: "CL1" 
+                }
+              },
+              {
+                Size: 16,
+                FormType: "MUG",
+                INNER: {
+                  LINED: "CL1" 
+                }
+              },
+              {
+                Size: 6,
+                FormType: "SIP",
+                ACCESSORIES: {
+                  LIDSIP: "GY3"
+                }
+              },
+              {
+                Size: 9,
+                FormType: "WINE",
+                INNER: {
+                  LINED: "CL1" 
+                }
+              },
+              {
+                Size: 9,
+                FormType: "SWG",
+                INNER: {
+                  LINED: "CL1" 
+                }
+              },
+              {
+                Size: 16,
+                FormType: "TALL",
+                INNER: {
+                  SMOOTH: "CL1" 
+                }
+              },
+              {
+                Size: 20,
+                FormType: "SS",
+                OUTER: {
+                  SMOOTH: "SS1" 
+                }
+              },
+              {
+                Size: 30,
+                FormType: "SS",
+                OUTER: {
+                  SMOOTH: "SS1" 
+                }
+              },
+              {
+                Size: 24,
+                FormType: "SS",
+                ACCESSORIES: {
+                  LIDWB: "GY1" 
+                }
               }
-              
-              var $CarouselItemImageURL = Get_TervisAdobeScene7SwatchImageURL({$ColorCode})
-              $CarouselItems.push(
-                New_CrouselItem({
-                  $CarouselName: $Accessory.Code,
-                  $CarouselItemValue: `${$ColorCode}`,
-                  $CarouselItemImageURL,
-                  $CarouselItemTitle: `${$ColorMarketingName} - ${$ColorCode}`
-                })
-                // $LidSwatchListItem({
-                //   $AccessoryCode: $Accessory.Code,
-                //   $ColorCode,
-                //   $ColorMarketingName
-                // })
-              )
+            ]
+           
+            if (tumbler == "10WAV") {
+              $(".decoWrap:hidden").show(".decoWrap");
+              $(".decoEmblem:hidden").show(".decoEmblem");
+              $(".decoDirect:visible").hide(".decoDirect");
+              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
+              $("input[name='innerRadio'][value='CL1']").prop('checked', true)
+            } else if (tumbler == "2SHO") {
+              $(".decoWrap:hidden").show(".decoWrap");
+              $(".decoEmblem:visible").hide(".decoEmblem");
+              $(".decoDirect:visible").hide(".decoDirect");
+              $("#decorationtype").val("-WRA");
+              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
+              $("input[name='innerRadio'][value='CL1']").prop('checked', true);
+            } else if (tumbler == "6SIP") {
+              $(".decoWrap:hidden").show(".decoWrap");
+              $(".decoEmblem:visible").hide(".decoEmblem");
+              $(".decoDirect:visible").hide(".decoDirect");
+              $("#decorationtype").val("-WRA");
+            } else if (tumbler == "12DWT") {
+              $(".decoWrap:visible").hide(".decoWrap");
+              $(".decoEmblem:hidden").show(".decoEmblem");
+              $(".decoDirect:visible").hide(".decoDirect");
+              $("#decorationtype").val("-EMB");
+            } else if (tumbler == "87ICE") {
+              $(".decoWrap:visible").hide(".decoWrap");
+              $(".decoEmblem:hidden").show(".decoEmblem");
+              $(".decoDirect:visible").hide(".decoDirect");
+              $("#decorationtype").val("-EMB");
+            } else if (tumbler == "9WINE" || tumbler == "9SWG") {
+              $(".decoWrap:hidden").show(".decoWrap");
+              $(".decoEmblem:visible").hide(".decoEmblem");
+              $(".decoDirect:visible").hide(".decoDirect");
+              $("#decorationtype").val("-WRA");
+            } else if (tumbler == "16BEER") {
+              $("input[name='lidRadio'][value='&']").prop('checked', true);
+              $(".decoWrap:hidden").show(".decoWrap");
+              $(".decoEmblem:hidden").show(".decoEmblem");
+              $(".decoDirect:visible").hide(".decoDirect");
+            } else if (tumbler == "16DWT") {
+              $(".decoWrap:hidden").show(".decoWrap");
+              $(".decoEmblem:hidden").show(".decoEmblem");
+              $(".decoDirect:visible").hide(".decoDirect");
+            } else if (tumbler == "24DWT") {
+              $("input[name='lidRadio'][value='&']").prop('checked', true);
+              $(".decoWrap:hidden").show(".decoWrap");
+              $(".decoEmblem:hidden").show(".decoEmblem");
+              $(".decoDirect:visible").hide(".decoDirect");
+            } else if (tumbler == "16MUG") {
+              $(".decoWrap:visible").hide(".decoWrap");
+              $(".decoEmblem:hidden").show(".decoEmblem");
+              $(".decoDirect:visible").hide(".decoDirect");
+            } else if (tumbler == "24WB") {
+              $(".decoWrap:hidden").show(".decoWrap");
+              $(".decoEmblem:hidden").show(".decoEmblem");
+              $(".decoDirect:visible").hide(".decoDirect");
+            } else if (tumbler == "16TALL" || tumbler == "8STO") {
+              $(".decoWrap:visible").hide(".decoWrap");
+              $(".decoEmblem:hidden").show(".decoEmblem");
+              $(".decoDirect:visible").hide(".decoDirect");
+              $("#decorationtype").val("-EMB");
+            } else if (tumbler == "30SS" || tumbler == "20SS") {
+              $("input[name='lidRadio'][value='&']").prop('checked', true);
+              $(".decoWrap:visible").hide(".decoWrap");
+              $(".decoEmblem:visible").hide(".decoEmblem");
+              $(".decoDirect:hidden").show(".decoDirect");
+              $("#decorationtype").val("-DPT");
+            } else if (tumbler == "17SS") {
+              $("input[name='lidRadio'][value='&']").prop('checked', true);
+              $(".decoWrap:visible").hide(".decoWrap");
+              $(".decoEmblem:visible").hide(".decoEmblem");
+              $(".decoDirect:hidden").show(".decoDirect");
+              $("#decorationtype").val("-DPT");
+            } else if (tumbler == "24SS") {
+              $("input[name='lidRadio'][value='&']").prop('checked', true);
+              $(".decoWrap:visible").hide(".decoWrap");
+              $(".decoEmblem:visible").hide(".decoEmblem");
+              $(".decoDirect:hidden").show(".decoDirect");
+              $("#decorationtype").val("-DPT");
+            } else if (tumbler == "12SS") {
+              $("input[name='lidRadio'][value='&']").prop('checked', true);
+              $(".decoWrap:visible").hide(".decoWrap");
+              $(".decoEmblem:visible").hide(".decoEmblem");
+              $(".decoDirect:hidden").show(".decoDirect");
+              $("#decorationtype").val("-DPT");
             }
 
-            var $CarouselID = $Accessory.Code
-            $CarouselIDs.push($CarouselID)
-            var $Carousel = New_Carousel({
-              $CarouselTitle: $AccessoryCodeToMarketingName[$Accessory.Code],
-              $CarouselID,
-              $CarouselItems,
-              $CarouselItemsContainerStyle: "list_carousel2"
+            var $VignetteCodeToMarketingName = {
+              INNER: "Product Inner",
+              LINED: "Lined",
+              SMOOTH: "Smooth",
+              OUTER: "Product Outer",
+              RIPPLE: "Ripple",
+              ACCESSORIES: "Accessories",
+              HAND: "Handle",
+              LIDTRV: "Travel Lid",
+              TOPSHK: "Shacker Top Lid",
+              LIDSTW: "Straw Lid",
+              LIDHOT: "Hot Lid",
+              LIDSIP: "Sippy Lid",
+              LIDWB: "Water Bottle Lid",
+              SSLIDTRV: "Slider Lid",
+              SSLIDHMR: "Hammer Lid",
+              LIDWIN: "Wine Lid",
+              SSWBLID: "Stainless Lid"
+            }
+            
+            var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
+            var $SizeAndFormType = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
+            var $VignetteSuffix = $("input[name='thmbRadio']:checked").val();
+
+            var $VignetteObjectsWithColorOption = await Get_TervisAdobeScene7VignetteObjectWithColorOption({
+              ...$SizeAndFormType,
+              $VignetteSuffix
             })
 
-            $AccessoryCarousels.push($Carousel)
+            var $CarouselGroups = []
+            for (var $VignetteObjectWithColorOption of $VignetteObjectsWithColorOption ){
+              var $Carousels = []
+              var $CarouselIDs = []
+              for (var $ThingWithAvailableColorCode of $VignetteObjectWithColorOption.Options) {
+                var $CarouselItems = []
+                for (var $ColorCode of $ThingWithAvailableColorCode.AvailableColorCodes) {
+                  var $ColorMetaData = await Get_TervisProductColorMarketingNameUsingIndex({$ColorCode})
+                  
+                  if ($ColorMetaData) { 
+                    var { MarketingName: $ColorMarketingName } = $ColorMetaData
+                  } else {
+                    continue
+                  }
+                  
+                  var $CarouselItemImageURL = Get_TervisAdobeScene7SwatchImageURL({$ColorCode})
+                  var $CarouselName = $ThingWithAvailableColorCode.Code === "HAND" ?
+                    $ThingWithAvailableColorCode.Code :
+                    $VignetteObjectWithColorOption.Code
 
-          }
+                  $CarouselItems.push(
+                    New_CrouselItem({
+                      $CarouselName,
+                      $CarouselItemValue: `${$ColorCode}`, 
+                      $CarouselItemImageURL,
+                      $CarouselItemTitle: `${$ColorMarketingName} - ${$ColorCode}`,
+                      $CarouselItemToolTip: `${$ColorMarketingName} - ${$ColorCode}`
+                    })
+                  )
+                }
 
-          var $SelectAccessoriesDiv = document.querySelector('#select-accessories')
-          render($AccessoryCarousels, $SelectAccessoriesDiv)
+                var $CarouselID = $ThingWithAvailableColorCode.Code
+                $CarouselIDs.push($CarouselID)
+                var $Carousel = New_Carousel({
+                  $CarouselTitle: $VignetteCodeToMarketingName[$ThingWithAvailableColorCode.Code],
+                  $CarouselID,
+                  $CarouselItems,
+                  $CarouselItemsContainerStyle: "list_carousel2"
+                })
 
-          $CarouselIDs.forEach(
-            $CarouselID =>
-            $(`#${$CarouselID}`).carouFredSel({
-              auto: false,
-              circular: false,
-              prev: `#${$CarouselID} .prev`,
-              next: `#${$CarouselID} .next`,
-              mousewheel: true,
-              swipe: {
-                onMouse: true,
-                onTouch: true
+                $Carousels.push($Carousel)
               }
-            })
-          )
+              
+              $CarouselGroups.push(
+                New_CarouselGroup({ 
+                  $CarouselGroupTitle: $VignetteCodeToMarketingName[$VignetteObjectWithColorOption.Code],
+                  $CarouselGroupCode: $VignetteObjectWithColorOption.Code,
+                  $Carousels
+                })
+              )
+            }
+            
+            var $ThingsWithColorOptionsDiv = document.querySelector('#select-vignette-object-color-options')
+            render($CarouselGroups, $ThingsWithColorOptionsDiv)
 
-          $('.tip-trigger').tooltipster({
-            animation: 'grow',
-            speed: 300,
-            theme: 'tooltipster-light',
-            maxWidth: 320,
-            delay: 10,
-
-          });
-          // class CaroFredSel extends LitElement {
-          //   static get styles() {
-          //     return css`
-          //       .list_carousel {
-          //         float: left;
-          //         width: 600px;
-          //       }
-
-          //       .list_carousel ul {
-          //         margin: 0;
-          //         padding: 0;
-          //         list-style: none;
-          //         display: block;
-          //       }
-
-          //       .list_carousel li {
-          //         width: 60px;
-          //         padding: 0;
-          //         display: block;
-          //         float: left;
-          //         text-align: center;
-          //       }
-
-          //       .list_carousel li img {
-          //         width: 58px;
-          //         padding-bottom: 8px;
-          //       }
-
-          //       .list_carousel.responsive {
-          //         width: auto;
-          //         margin-left: 0;
-          //       }
+            $CarouselIDs.forEach(
+              $CarouselID =>
+              $(`.${$CarouselID}`).carouFredSel({
+                auto: false,
+                circular: false,
+                prev: `#${$CarouselID} .prev`,
+                next: `#${$CarouselID} .next`,
+                mousewheel: true,
+                swipe: {
+                  onMouse: true,
+                  onTouch: true
+                }
+              })
+            )
+            
+            $('.tip-trigger:not(.tooltipstered)').tooltipster({
+              animation: 'grow',
+              speed: 300,
+              theme: 'tooltipster-light',
+              maxWidth: 320,
+              delay: 10,
+            });
+            
+            $ProductVignetteDefaultSettings.filter(
+              ({Size: $Size, FormType: $FormType}) =>
+              $Size === parseInt($SizeAndFormType.$Size) && $FormType === $SizeAndFormType.$FormType
+            )
+            .forEach(
+              $DefaultSettingEntry => {
+                var $DefaultSettings = Object.entries($DefaultSettingEntry)
+                .filter($Entry => ["Size","FormType"].includes($Entry[0]) === false)
                 
-          //       .list_carousel2 {
-          //         float: left;
-          //         width: 360px;
-          //       }
-
-          //       .list_carousel2 ul {
-          //         margin: 0;
-          //         padding: 0;
-          //         list-style: none;
-          //         display: block;
-          //       }
-
-          //       .list_carousel2 li {
-          //         width: 35px;
-          //         height: 35px;
-          //         padding: 0;
-          //         display: block;
-          //         float: left;
-          //         text-align: center;
-          //       }
-
-          //       .list_carousel2 li img {
-          //         width: 25px;
-          //         height: 25px;
-          //         padding: 1px;
-          //       }
-
-          //       .list_carousel2 li img:hover {
-          //         width: 25px;
-          //         height: 25px;
-          //         padding: 0px;
-          //       }
-
-          //       .list_carousel2.responsive {
-          //         width: auto;
-          //         margin-left: 0;
-          //       }
-          //     `
-          //   }
-
-          //   static get properties() {
-          //     return { 
-          //       CarouselName: { type: String },
-          //       CarouselName: { type: String },
-          //       CarouselName: { type: String },
-          //       CarouselName: { type: String },
-          //       CarouselName: { type: String },
-          //     };
-          //   }
-           
-          //   New_Carousel = ({
-          //     $CarouselID,
-          //     $CarouselItems,
-          //     $CarouselContainerStyle,
-          //     $CarouselItemsContainerStyle
-          //   }) => {
-
-          //     return html`
-          //       <div class="${$CarouselContainerStyle}" id="${$CarouselID}Container" style="display:block">
-          //         <br>
-          //         <a class="prev" href="#" />
-          //         <div class="${$CarouselItemsContainerStyle}">
-          //           <ul id="${$CarouselID}">
-          //             ${$CarouselItems}
-          //           </ul>
-          //         </div>
-          //         <a class="next" href="#" />
-          //       </div>
-          //     `
-          //   }
-
-          //   New_CrouselItem = ({
-          //     $CarouselName,
-          //     $CarouselItemValue,
-          //     $CarouselItemImageURL,
-          //     $CarouselItemTitle,
-          //     $IsChecked
-          //   }) => html`
-          //   <li>
-          //     <label>
-          //       <input 
-          //         type="radio"
-          //         name="${$CarouselName}"
-          //         value="${$CarouselItemValue}"
-          //         id="${$CarouselItemTitle}"
-          //         ?checked=${$IsChecked}
-          //         @click=${window.radioSelect}
-          //         @input=${window.radioSelect}
-          //       />
-          //       <img 
-          //         src="${$CarouselItemImageURL}"
-          //         title="${$CarouselItemTitle}">
-          //         <br>
-          //       <span class="swatch-label">${$CarouselItemTitle}</span>
-          //     </label>
-          //   </li>
-          //   `
-
-
-          //   render(){
-          //     return  New_Carousel()
-          //   }
-          // }
-          // customElements.define('x-carofredsel', CaroFredSel);
-          // class MyElement extends LitElement {
-          // }
-
-        
-        
-          // $("input[name='tumblerRadio']").on("input change", window.radioSelect);
-          // $("input[name='tumblerRadio']").ready(window.radioSelect);
-
-
-          // const $LidSwatchListItem = ({
-          //   $AccessoryCode,
-          //   $ColorCode,
-          //   $ColorMarketingName
-          // }) => {
-          //   var $SwatchImageURL = Get_TervisAdobeScene7SwatchImageURL({$ColorCode})
-          //   return html`
-          //     <li>
-          //       <label>
-          //         <input type="radio" name="${$AccessoryCode}Radio" id="${$ColorCode}" value="${$ColorCode}">
-          //         <img 
-          //           src="${$SwatchImageURL}"
-          //           title="${$ColorMarketingName}"
-          //           class="tip-trigger"
-          //           data-tooltip-content=".${$ColorCode}-preview"
-          //         >
-          //         <div class="tooltip_templates">
-          //           <span class="${$ColorCode}-preview">${$ColorMarketingName}</span> 
-          //         </div>
-          //       </label>
-          //     </li>
-          //   `
-          // }
-
-
-          // const $LidSwatchListItem = ({
-          //   $ColorCode,
-          //   $ColorMarketingName
-          // }) => html`
-          //   <li>
-          //     <label>
-          //       <input type="radio" name="lidRadio" id="${$ColorCode}" value="&obj=MAIN/ACCESSORIES/LIDTRV/${$ColorCode}&show">
-          //       <img 
-          //         src="//imagegenerator.tervis.com/is/image/tervis/${$ColorCode}?$SWATCH$" 
-          //         title="${$ColorMarketingName} - ${$ColorCode}"
-          //         class="tip-trigger"
-          //         data-tooltip-content=".${$ColorCode}-preview"
-          //       >
-          //       <div class="tooltip_templates">
-          //         <span class="${$ColorCode}-preview">${$ColorMarketingName} - ${$ColorCode}</span>
-          //       </div>
-          //     </label>
-          //   </li>
-          // `
+                for ( var [$GroupCode, $ThingWithColorCodeObject] of $DefaultSettings) {
+                  Object.entries($ThingWithColorCodeObject)
+                  .forEach(
+                    ([$Code, $ColorCode]) =>
+                    document.querySelector(
+                      `.${$GroupCode} .${$Code} input[value='${$ColorCode}']`
+                    ).checked = true
+                  )
+                }
+              }
+            )
+          }// End Radio select
 
           
 
-          // var $ProductSizeAndFormTypeImageGeneratorFrontEndMetaData = [
-          //   {
-          //     Size: 10,
-          //     FormType: "DWT",
-          //     TracelLidCarouselID = "travellid10"
-          //   }
-          // ]
+          window.Receive_ProductSelectionEvent = Receive_ProductSelectionEvent
+          // $("input[name='tumblerRadio']").on("input change", Receive_ProductSelectionEvent);
+          // $("input[name='tumblerRadio']").ready(Receive_ProductSelectionEvent);
 
-          // const New_Carousel = ({
-          //   $CarouselID,
-          //   $CarouselItems
-          // }) => {
-
-          //   return html`
-          //     <div class="CarouselContainerStyle" id="${$CarouselID}Container" style="display:block">
-          //       <br>
-          //       <a class="prev" href="#" />
-          //       <div class="CarouselItemsContainerStyle">
-          //         <ul id="${$CarouselID}">
-          //           ${$CarouselItems}
-          //         </ul>
-          //       </div>
-          //       <a class="next" href="#" />
-          //     </div>
-          //   `
-          // }
-
-          
-
+          // $("input[name='tumblerRadio']").on("input change", window.Receive_ProductSelectionEvent);
+          $("input[name='tumblerRadio']").on("change", window.Receive_ProductSelectionEvent);
+          // $("input[name='tumblerRadio']").ready(window.Receive_ProductSelectionEvent);
 
         })// End of window on load
       </script>
-      <!-- <x-carofredsel /> -->
-      <div id="togglediv">
-        <div class="selected-type">Select a Product:</div>
-        <div class="carousel1" id="select-product"></div>
-        <!-- <div class="carousel1">
-          <br>
-          <a id="prev2" class="prev" href="#"></a>
-          <div class="list_carousel">
-            <ul id="product_carousel">
-            </ul>
-          </div>
-          <a id="next2" class="next" href="#"></a>
-        </div> -->
 
-        <div class="selected-type">Select Decoration</div>
+      <div id="togglediv">
+        <div class="selected-type">Product</div>
+        <div class="carousel1" id="select-product"></div>
+        <div class="selected-type">Decoration</div>
         <select id="codetype" class="menupad">
           <option value="choose" selected="selected" class="menupad">Code Type &nbsp;&or;</option>
 
@@ -1134,13 +1149,7 @@
 
         <br />
 
-        <div class="selected-type" id="select-outer" style="display:none">Select an Outer Color </div>
-        
-        <div class="selected-type" id="select-inner">Select an Inner Color </div>
-        
-
-        <div class="selected-type">Choose Accessories:</div>
-        <div id="select-accessories"></div>
+        <div id="select-vignette-object-color-options"></div>
       </div>
 
       
@@ -1167,51 +1176,6 @@
         src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.ba-throttle-debounce.min.js"></script>
 
       <script type="text/javascript" language="javascript">
-        $(function () {
-          //	Scrolled by user interaction 
-          $('#lid_carousel16').carouFredSel({
-            auto: false,
-            circular: false,
-            prev: '#lidprev',
-            next: '#lidnext',
-            pagination: "#pager2",
-            mousewheel: true,
-            swipe: {
-              onMouse: true,
-              onTouch: true
-            }
-          });
-
-          //	Scrolled by user interaction 
-          $('#WBlid_carousel').carouFredSel({
-            auto: false,
-            circular: false,
-            prev: '#WBlidprev',
-            next: '#WBlidnext',
-            pagination: "#pager2",
-            mousewheel: true,
-            swipe: {
-              onMouse: true,
-              onTouch: true
-            }
-          });
-
-          //	Scrolled by user interaction 
-          $('#lid_carousel10').carouFredSel({
-            auto: false,
-            circular: false,
-            prev: '#lid10prev',
-            next: '#lid10next',
-            pagination: "#pager2",
-            mousewheel: true,
-            swipe: {
-              onMouse: true,
-              onTouch: true
-            }
-          });
-
-
-        });
 
         $(function () {
           $('.tip-trigger').tooltipster({
@@ -1746,566 +1710,7 @@
 
         // SHOW ACCESSORIES PER PRODUCT
         // $(function () {
-          function radioSelect() {
-
-
-            var tumbler = $("input[name='tumblerRadio']:checked").val();
-            var lidColor = $("input[name='lidRadio']:checked").val();
-            var codetype = $("#codetype").val();
-
-            if (tumbler == "10WAV") {
-              $('#travellid10:hidden').show("#travellid10");
-              $(".decoWrap:hidden").show(".decoWrap");
-              $(".decoEmblem:hidden").show(".decoEmblem");
-              $(".decoConfetti:visible").hide(".decoConfetti");
-              $(".decoDirect:visible").hide(".decoDirect");
-              //$("#decorationtype").val("choose");
-              $("#innerform").val("LINED");
-              $("#outerform").val("WAVY");
-              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
-              $('#travellid:visible').hide("#travellid");
-              $('#wblid:visible').hide("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $('#title-lid:hidden').show("#title-lid");
-              $("input[name='lidRadio']:checked").val("&");
-              $('#handle:visible').hide("#handle");
-              $('#title-handle:visible').hide("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerclear:hidden').show("#innerclear");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:visible').hide("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerwine:visible').hide("#innerwine");
-              $('#innerent:visible').hide("#innerent");
-              $("input[name='innerRadio'][value='CL1']").prop('checked', true)
-              $('#sstravellid:visible').hide("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              $('#innerSS:visible').hide("#innerSS");
-              $('#outerSS:visible').hide("#outerSS");
-              $('#select-outer:visible').hide("#select-outer");
-              $('#select-inner:hidden').show("#select-inner");
-
-
-
-            } else if (tumbler == "2SHO") {
-              $(".decoWrap:hidden").show(".decoWrap");
-              $(".decoEmblem:visible").hide(".decoEmblem");
-              $(".decoConfetti:visible").hide(".decoConfetti");
-              $(".decoDirect:visible").hide(".decoDirect");
-              $("#decorationtype").val("-WRA");
-              $("#innerform").val("SMOOTH");
-              $("#outerform").val("RIPPLE");
-              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
-              $('#travellid:visible').hide("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:visible').hide("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $('#title-lid:visible').hide("#title-lid");
-              $("input[name='lidRadio']:checked").val("&");
-              $('#handle:visible').hide("#handle");
-              $('#title-handle:visible').hide("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerclear:hidden').show("#innerclear");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:visible').hide("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerwine:visible').hide("#innerwine");
-              $('#innerent:visible').hide("#innerent");
-              $("input[name='innerRadio'][value='CL1']").prop('checked', true);
-              $('#sstravellid:visible').hide("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              $('#innerSS:visible').hide("#innerSS");
-              $('#outerSS:visible').hide("#outerSS");
-              $('#select-outer:visible').hide("#select-outer");
-              $('#select-inner:hidden').show("#select-inner");
-
-            } else if (tumbler == "6SIP") {
-              $(".decoWrap:hidden").show(".decoWrap");
-              $(".decoEmblem:visible").hide(".decoEmblem");
-              $(".decoConfetti:visible").hide(".decoConfetti");
-              $(".decoDirect:visible").hide(".decoDirect");
-              $("#decorationtype").val("-WRA");
-              $("#innerform").val("LINED");
-              $("#outerform").val("SMOOTH");
-              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
-              $('#travellid:visible').hide("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:visible').hide("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:hidden').show("#sippylid");
-              $('#title-lid:hidden').show("#title-lid");
-              $("input[name='lidRadio']:checked").val("&obj=MAIN/ACCESSORIES/LIDSIP/GY3&show");
-              $('#handle:visible').hide("#handle");
-              $('#title-handle:visible').hide("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerclear:hidden').show("#innerclear");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:visible').hide("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerwine:visible').hide("#innerwine");
-              $('#innerent:visible').hide("#innerent");
-              $('#sstravellid:visible').hide("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              $('#innerSS:visible').hide("#innerSS");
-              $('#outerSS:visible').hide("#outerSS");
-              $('#select-outer:visible').hide("#select-outer");
-              $('#select-inner:hidden').show("#select-inner");
-
-
-
-            } else if (tumbler == "12DWT") {
-              $(".decoWrap:visible").hide(".decoWrap");
-              $(".decoEmblem:hidden").show(".decoEmblem");
-              $(".decoConfetti:hidden").show(".decoConfetti");
-              $(".decoDirect:visible").hide(".decoDirect");
-              $("#decorationtype").val("-EMB");
-              $("#innerform").val("LINED");
-              $("#outerform").val("SMOOTH");
-              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
-              $('#travellid:visible').hide("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:visible').hide("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $('#title-lid:visible').hide("#title-lid");
-              $("input[name='lidRadio']:checked").val("&");
-              $('#handle:visible').hide("#handle");
-              $('#title-handle:visible').hide("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerclear:hidden').show("#innerclear");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:visible').hide("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerwine:visible').hide("#innerwine");
-              $('#innerent:visible').hide("#innerent");
-              $("input[name='innerRadio'][value='CL1']").prop('checked', true);
-              $('#sstravellid:visible').hide("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              $('#innerSS:visible').hide("#innerSS");
-              $('#outerSS:visible').hide("#outerSS");
-              $('#select-outer:visible').hide("#select-outer");
-              $('#select-inner:hidden').show("#select-inner");
-
-            } else if (tumbler == "87ICE") {
-              $(".decoWrap:visible").hide(".decoWrap");
-              $(".decoEmblem:hidden").show(".decoEmblem");
-              $(".decoConfetti:visible").hide(".decoConfetti");
-              $(".decoDirect:visible").hide(".decoDirect");
-              $("#decorationtype").val("-EMB");
-              $("#innerform").val("LINED");
-              $("#outerform").val("SMOOTH");
-              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
-              $('#travellid:visible').hide("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:visible').hide("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $('#title-lid:visible').hide("#title-lid");
-              $("input[name='lidRadio']:checked").val("&");
-              $('#handle:visible').hide("#handle");
-              $('#title-handle:visible').hide("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerclear:hidden').show("#innerclear");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:visible').hide("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerwine:visible').hide("#innerwine");
-              $('#innerent:visible').hide("#innerent");
-              $("input[name='innerRadio'][value='CL1']").prop('checked', true);
-              $('#sstravellid:visible').hide("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              $('#innerSS:visible').hide("#innerSS");
-              $('#outerSS:visible').hide("#outerSS");
-              $('#select-outer:visible').hide("#select-outer");
-              $('#select-inner:hidden').show("#select-inner");
-
-            } else if (tumbler == "9WINE" || tumbler == "9SWG") {
-              $(".decoWrap:hidden").show(".decoWrap");
-              $(".decoEmblem:visible").hide(".decoEmblem");
-              $(".decoConfetti:visible").hide(".decoConfetti");
-              $(".decoDirect:visible").hide(".decoDirect");
-              $("#decorationtype").val("-WRA");
-              $("#innerform").val("LINED");
-              $("#outerform").val("SMOOTH");
-              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
-              $('#travellid:visible').hide("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:visible').hide("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $('#title-lid:visible').hide("#title-lid");
-              $("input[name='lidRadio']:checked").val("&");
-              $('#handle:visible').hide("#handle");
-              $('#title-handle:visible').hide("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerwine:hidden').show("#innerwine");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:visible').hide("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerclear:visible').hide("#innerclear");
-              $('#innerent:visible').hide("#innerent");
-              $("input[name='innerRadio'][value='CL1']").prop('checked', true);
-              $('#sstravellid:visible').hide("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              $('#innerSS:visible').hide("#innerSS");
-              $('#outerSS:visible').hide("#outerSS");
-              $('#select-outer:visible').hide("#select-outer");
-              $('#select-inner:hidden').show("#select-inner");
-
-            } else if (tumbler == "16BEER") {
-              $("input[name='lidRadio'][value='&']").prop('checked', true);
-              $(".decoWrap:hidden").show(".decoWrap");
-              $(".decoEmblem:hidden").show(".decoEmblem");
-              $(".decoConfetti:hidden").show(".decoConfetti");
-              $(".decoDirect:visible").hide(".decoDirect");
-              //$("#decorationtype").val("choose");
-              $("#innerform").val("LINED");
-              $("#outerform").val("SMOOTH");
-              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
-              $('#travellid:hidden').show("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:visible').hide("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $('#title-lid:hidden').show("#title-lid");
-              $("input[name='lidRadio']:checked").val("&");
-              $('#handle:visible').hide("#handle");
-              $('#title-handle:visible').hide("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerBeer:hidden').show("#innerBeer");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:visible').hide("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerclear:visible').hide("#innerclear");
-              $('#innerwine:visible').hide("#innerwine");
-              $('#innerent:visible').hide("#innerent");
-              $("input[name='innerRadio'][value='CL1']").prop('checked', true);
-              $('#sstravellid:visible').hide("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              $('#innerSS:visible').hide("#innerSS");
-              $('#outerSS:visible').hide("#outerSS");
-              $('#select-outer:visible').hide("#select-outer");
-              $('#select-inner:hidden').show("#select-inner");
-
-            } else if (tumbler == "16DWT") {
-              $("input[name='lidRadio'][value='&']").prop('checked', true);
-              $(".decoWrap:hidden").show(".decoWrap");
-              $(".decoEmblem:hidden").show(".decoEmblem");
-              $(".decoConfetti:hidden").show(".decoConfetti");
-              $(".decoDirect:visible").hide(".decoDirect");
-              //$("#decorationtype").val("choose");
-              $("#innerform").val("LINED");
-              $("#outerform").val("SMOOTH");
-              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
-              $('#travellid:hidden').show("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:visible').hide("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $('#title-lid:hidden').show("#title-lid");
-              $("input[name='lidRadio']:checked").val("&");
-              $('#handle:hidden').show("#handle");
-              $('#title-handle:hidden').show("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#inner16:hidden').show("#inner16");
-              $('#inner24:visible').hide("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerclear:visible').hide("#innerclear");
-              $('#innerwine:visible').hide("#innerwine");
-              $('#innerent:visible').hide("#innerent");
-              $("input[name='innerRadio'][value='CL1']").prop('checked', true);
-              $('#sstravellid:visible').hide("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              $('#innerSS:visible').hide("#innerSS");
-              $('#outerSS:visible').hide("#outerSS");
-              $('#select-outer:visible').hide("#select-outer");
-              $('#select-inner:hidden').show("#select-inner");
-
-            } else if (tumbler == "24DWT") {
-              $("input[name='lidRadio'][value='&']").prop('checked', true);
-              $(".decoWrap:hidden").show(".decoWrap");
-              $(".decoEmblem:hidden").show(".decoEmblem");
-              $(".decoConfetti:hidden").show(".decoConfetti");
-              $(".decoDirect:visible").hide(".decoDirect");
-              //$("#decorationtype").val("choose");
-              $("#innerform").val("LINED");
-              $("#outerform").val("SMOOTH");
-              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
-              $('#travellid:hidden').show("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:visible').hide("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $('#title-lid:hidden').show("#title-lid");
-              $("input[name='lidRadio']:checked").val("&");
-              $('#handle:hidden').show("#handle");
-              $('#title-handle:hidden').show("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:hidden').show("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerclear:visible').hide("#innerclear");
-              $('#innerwine:visible').hide("#innerwine");
-              $('#innerent:visible').hide("#innerent");
-              $("input[name='innerRadio'][value='CL1']").prop('checked', true);
-              $('#sstravellid:visible').hide("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              $('#innerSS:visible').hide("#innerSS");
-              $('#outerSS:visible').hide("#outerSS");
-              $('#select-outer:visible').hide("#select-outer");
-              $('#select-inner:hidden').show("#select-inner");
-
-
-
-            } else if (tumbler == "16MUG") {
-              $(".decoWrap:visible").hide(".decoWrap");
-              $(".decoEmblem:hidden").show(".decoEmblem");
-              $(".decoConfetti:hidden").show(".decoConfetti");
-              $(".decoDirect:visible").hide(".decoDirect");
-              //$("#decorationtype").val("choose");
-              $("#innerform").val("LINED");
-              $("#outerform").val("SMOOTH");
-              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
-              $('#travellid:hidden').show("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:visible').hide("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $('#title-lid:hidden').show("#title-lid");
-              $("input[name='lidRadio']:checked").val("&");
-              $('#handle:visible').hide("#handle");
-              $('#title-handle:visible').hide("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:hidden').show("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerclear:visible').hide("#innerclear");
-              $('#innerwine:visible').hide("#innerwine");
-              $('#innerent:visible').hide("#innerent");
-              $("input[name='innerRadio'][value='CL1']").prop('checked', true);
-              $('#sstravellid:visible').hide("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              $('#innerSS:visible').hide("#innerSS");
-              $('#outerSS:visible').hide("#outerSS");
-              $('#select-outer:visible').hide("#select-outer");
-              $('#select-inner:hidden').show("#select-inner");
-
-            } else if (tumbler == "24WB") {
-              $(".decoWrap:hidden").show(".decoWrap");
-              $(".decoEmblem:hidden").show(".decoEmblem");
-              $(".decoConfetti:visible").hide(".decoConfetti");
-              $(".decoDirect:visible").hide(".decoDirect");
-              //$("#decorationtype").val("choose");
-              $("#innerform").val("LINED");
-              $("#outerform").val("SMOOTH");
-              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
-              $('#travellid:visible').hide("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:hidden').show("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $('#title-lid:hidden').show("#title-lid");
-              $("input[name='lidRadio']:checked").val("&obj=MAIN/ACCESSORIES/LIDWB/GY1&show");
-              $('#handle:visible').hide("#handle");
-              $('#title-handle:visible').hide("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#innerwb:hidden').show("#innerwb");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:visible').hide("#inner24");
-              $('#innerclear:visible').hide("#innerclear");
-              $('#innerwine:visible').hide("#innerwine");
-              $('#innerent:visible').hide("#innerent");
-              $("input[name='innerRadio'][value='CL1']").prop('checked', true);
-              $('#sstravellid:visible').hide("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              $('#innerSS:visible').hide("#innerSS");
-              $('#outerSS:visible').hide("#outerSS");
-              $('#select-outer:visible').hide("#select-outer");
-              $('#select-inner:hidden').show("#select-inner");
-            } else if (tumbler == "16TALL" || tumbler == "8STO") {
-              $(".decoWrap:visible").hide(".decoWrap");
-              $(".decoEmblem:hidden").show(".decoEmblem");
-              $(".decoConfetti:visible").hide(".decoConfetti");
-              $(".decoDirect:visible").hide(".decoDirect");
-              $("#decorationtype").val("-EMB");
-              $("#innerform").val("SMOOTH");
-              $("#outerform").val("RIPPLE");
-              $("input[name='outerRadio'][value='CL1']").prop('checked', true)
-              $('#travellid:visible').hide("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:visible').hide("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $("input[name='lidRadio']:checked").val("&");
-              $('#handle:visible').hide("#handle");
-              $('#title-handle:visible').hide("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#innerent:hidden').show("#innerent");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:visible').hide("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerclear:visible').hide("#innerclear");
-              $('#innerwine:visible').hide("#innerwine");
-              $("input[name='innerRadio'][value='CL1']").prop('checked', true);
-              $('#sstravellid:visible').hide("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              $('#innerSS:visible').hide("#innerSS");
-              $('#outerSS:visible').hide("#outerSS");
-              $('#select-outer:visible').hide("#select-outer");
-              $('#select-inner:hidden').show("#select-inner");
-            } else if (tumbler == "30SS" || tumbler == "20SS") {
-              $("input[name='lidRadio'][value='&']").prop('checked', true);
-              $(".decoWrap:visible").hide(".decoWrap");
-              $(".decoEmblem:visible").hide(".decoEmblem");
-              $(".decoConfetti:visible").hide(".decoConfetti");
-              $(".decoDirect:hidden").show(".decoDirect");
-              $("#decorationtype").val("-DPT");
-              $("#innerform").val("SMOOTH");
-              $("#outerform").val("SMOOTH");
-              $("input[name='outerRadio'][value='SS1']").prop('checked', true)
-              $('#travellid:visible').hide("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:visible').hide("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $("input[name='lidRadio']:checked").val("&");
-              $('#handle:visible').hide("#handle");
-              $('#title-handle:visible').hide("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#innerent:visible').hide("#innerent");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:visible').hide("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerclear:visible').hide("#innerclear");
-              $('#innerwine:visible').hide("#innerwine");
-              $("input[name='innerRadio'][value='SS1']").prop('checked', true)
-              $('#sstravellid:hidden').show("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              //$('#innerSS:hidden').show("#innerSS");
-              $('#outerSS:hidden').show("#outerSS");
-              $('#select-outer:hidden').show("#select-outer");
-              $('#select-inner:visible').hide("#select-inner");
-            } else if (tumbler == "17SS") {
-              $("input[name='lidRadio'][value='&']").prop('checked', true);
-              $(".decoWrap:visible").hide(".decoWrap");
-              $(".decoEmblem:visible").hide(".decoEmblem");
-              $(".decoConfetti:visible").hide(".decoConfetti");
-              $(".decoDirect:hidden").show(".decoDirect");
-              $("#decorationtype").val("-DPT");
-              $("#innerform").val("SMOOTH");
-              $("#outerform").val("SMOOTH");
-              $("input[name='outerRadio'][value='SS1']").prop('checked', true)
-              $('#travellid:visible').hide("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:visible').hide("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $("input[name='lidRadio']:checked").val("&");
-              $('#handle:visible').hide("#handle");
-              $('#title-handle:visible').hide("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#innerent:visible').hide("#innerent");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:visible').hide("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerclear:visible').hide("#innerclear");
-              $('#innerwine:visible').hide("#innerwine");
-              $("input[name='innerRadio'][value='SS1']").prop('checked', true)
-              $('#sstravellid:visible').hide("#sstravellid");
-              $('#sswblid:hidden').show("#sswblid");
-              //$('#innerSS:hidden').show("#innerSS");
-              $('#outerSS:hidden').show("#outerSS");
-              $('#select-outer:hidden').show("#select-outer");
-              $('#select-inner:visible').hide("#select-inner");
-            } else if (tumbler == "24SS") {
-              $("input[name='lidRadio'][value='&']").prop('checked', true);
-              $(".decoWrap:visible").hide(".decoWrap");
-              $(".decoEmblem:visible").hide(".decoEmblem");
-              $(".decoConfetti:visible").hide(".decoConfetti");
-              $(".decoDirect:hidden").show(".decoDirect");
-              $("#decorationtype").val("-DPT");
-              $("#innerform").val("SMOOTH");
-              $("#outerform").val("SMOOTH");
-              $("input[name='outerRadio'][value='SS1']").prop('checked', true)
-              $('#travellid:visible').hide("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:hidden').show("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $("input[name='lidRadio']:checked").val("&");
-              $('#handle:visible').hide("#handle");
-              $('#title-handle:visible').hide("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#innerent:visible').hide("#innerent");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:visible').hide("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerclear:visible').hide("#innerclear");
-              $('#innerwine:visible').hide("#innerwine");
-              $("input[name='innerRadio'][value='SS1']").prop('checked', true)
-              $('#sstravellid:visible').hide("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              //$('#innerSS:hidden').show("#innerSS");
-              $('#outerSS:hidden').show("#outerSS");
-              $('#select-outer:hidden').show("#select-outer");
-              $('#select-inner:visible').hide("#select-inner");
-
-
-            } else if (tumbler == "12SS") {
-              $("input[name='lidRadio'][value='&']").prop('checked', true);
-              $(".decoWrap:visible").hide(".decoWrap");
-              $(".decoEmblem:visible").hide(".decoEmblem");
-              $(".decoConfetti:visible").hide(".decoConfetti");
-              $(".decoDirect:hidden").show(".decoDirect");
-              $("#decorationtype").val("-DPT");
-              $("#innerform").val("SMOOTH");
-              $("#outerform").val("SMOOTH");
-              $("input[name='outerRadio'][value='SS1']").prop('checked', true)
-              $('#travellid:visible').hide("#travellid");
-              $('#travellid10:visible').hide("#travellid10");
-              $('#wblid:visible').hide("#wblid");
-              $('#hotlid:visible').hide("#hotlid");
-              $('#sippylid:visible').hide("#sippylid");
-              $("input[name='lidRadio']:checked").val("&");
-              $('#handle:visible').hide("#handle");
-              $('#title-handle:visible').hide("#title-handle");
-              $("input[name='handleRadio']:checked").val("&");
-              $('#innerBeer:visible').hide("#innerBeer");
-              $('#innerent:visible').hide("#innerent");
-              $('#inner16:visible').hide("#inner16");
-              $('#inner24:visible').hide("#inner24");
-              $('#innerwb:visible').hide("#innerwb");
-              $('#innerclear:visible').hide("#innerclear");
-              $('#innerwine:visible').hide("#innerwine");
-              $("input[name='innerRadio'][value='SS1']").prop('checked', true)
-              $('#sstravellid:hidden').show("#sstravellid");
-              $('#sswblid:visible').hide("#sswblid");
-              //$('#innerSS:hidden').show("#innerSS");
-              $('#outerSS:hidden').show("#outerSS");
-              $('#select-outer:hidden').show("#select-outer");
-              $('#select-inner:visible').hide("#select-inner");
-            }
-
-          };
-          window.radioSelect = radioSelect
-          $("input[name='tumblerRadio']").on("input change", radioSelect);
-          $("input[name='tumblerRadio']").ready(radioSelect);
+          
         // });
         //Image Upload Section
 
