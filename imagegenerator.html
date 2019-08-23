@@ -448,12 +448,10 @@
       border-width: 1px;
     }
   </style>
-  <link rel='stylesheet prefetch' href='https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css'>
-  <link rel="stylesheet" href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/tooltipster.bundle.min.css">
-  <link rel="stylesheet" href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/tooltipster-sideTip-light.min.css">
-  <link type="text/javascript" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/tooltipster.bundle.js">
-  <link type="text/javascript" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/tooltipster.bundle.min.js">
-  
+  <link rel='stylesheet prefetch' href='https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css'>  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/tooltipster.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/themes/tooltipster-light.min.css">
+
   <div id="center">
     <div id="container">
       <div>
@@ -644,12 +642,9 @@
             return html`
               <div class="${$CarouselGroupCode}">
                 <div 
-                  class="selected-type tip-trigger" 
-                  data-tooltip-content=".${$CarouselGroupCode}-preview"
+                  class="selected-type tip-trigger"
+                  title="${$CarouselGroupCode}"
                 >${$CarouselGroupTitle}</div>
-                <div class="tooltip_templates">
-                  <span class="${$CarouselGroupCode}-preview">${$CarouselGroupCode}</span> 
-                </div>
                 ${$Carousels}
               </div>
             `
@@ -672,11 +667,8 @@
                   html`
                     <div 
                       class="selected-type-sub tip-trigger"
-                      data-tooltip-content=".${$CarouselID}-preview"
+                      title="${$CarouselID}"
                     >${$CarouselTitle}</div>
-                    <div class="tooltip_templates">
-                      <span class="${$CarouselID}-preview">${$CarouselID}</span> 
-                    </div>
                   ` :
                   ""
                 }
@@ -715,14 +707,10 @@
                 />
                 <img 
                   src="${$CarouselItemImageURL}"
-                  title="${$CarouselItemTitle}"
+                  title="${$CarouselItemToolTip}"
                   class="tip-trigger"
-                  data-tooltip-content=".${$CarouselItemValue}-preview"
                 >
                 ${$ShowTitleAsSpan ? html`<span class="swatch-label">${$CarouselItemTitle}</span>` : ""}
-                <div class="tooltip_templates">
-                  <span class="${$CarouselItemValue}-preview">${$CarouselItemToolTip}</span> 
-                </div>
               </label>
             </li>
             `
@@ -977,7 +965,7 @@
 
             var $CarouselGroups = []
             var $CarouFredSelOptions = []
-            
+
             for (var $VignetteObjectWithColorOption of $VignetteObjectsWithColorOption ){
               var $Carousels = []
               for (var $ThingWithAvailableColorCode of $VignetteObjectWithColorOption.Options) {
@@ -1048,14 +1036,36 @@
                 }
               })
             )
-            
-            $('.tip-trigger:not(.tooltipstered)').tooltipster({
-              animation: 'grow',
-              speed: 300,
-              theme: 'tooltipster-light',
-              maxWidth: 320,
-              delay: 10,
-            });
+
+            // $('body').on('mouseenter', '.tip-trigger:not(.tooltipstered)', function(){
+            //   // $(this)
+            //   //   .tooltipster('destroy')
+              
+            //   $(this)
+            //     .tooltipster({ 
+            //       animation: 'grow',
+            //       speed: 300,
+            //       theme: 'tooltipster-light',
+            //       maxWidth: 320,
+            //       contentCloning: false,
+            //       delay: 10,
+            //       restoration: "previous"
+            //     })
+            //     .tooltipster('show');
+            //   });
+                      
+                      // var $ToolTipsteredElements = $('.tip-trigger.tooltipstered')
+            // $ToolTipsteredElements.removeClass("tooltipstered")
+            // $ToolTipsteredElements.tooltipster('destroy')
+            // $('.tip-trigger:not(.tooltipstered)').tooltipster({
+            //   animation: 'grow',
+            //   speed: 300,
+            //   theme: 'tooltipster-light',
+            //   maxWidth: 320,
+            //   contentCloning: false,
+            //   delay: 10,
+            //   restoration: "previous"
+            // });
             
             $ProductVignetteDefaultSettings.filter(
               ({Size: $Size, FormType: $FormType}) =>
@@ -1134,7 +1144,8 @@
       <script src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script>
       <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js'></script>
       <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script>
-      <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/tooltipster.bundle.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/js/jquery.tooltipster.min.js"></script>
+      
       <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery_cookie.js"></script>
       <script src="https://unpkg.com/gifshot@0.4.5/dist/gifshot.js"></script>
       <script src="https://unpkg.com/file-saver@2.0.2/dist/FileSaver.js"></script>
