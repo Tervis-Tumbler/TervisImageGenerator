@@ -546,8 +546,8 @@
           Get_TervisProductColorMarketingNameUsingIndex
         } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.14?module'
         import { 
-          // html, 
-          render } from 'https://unpkg.com/lit-html?module'
+          html, 
+          render, directive } from 'https://unpkg.com/lit-html?module'
         
         import { 
           Get_TervisAdobeScene7Silhouette,
@@ -555,7 +555,7 @@
           Get_TervisAdobeScene7SwatchImageURL
         } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.73/TervisAdobeScene7JS.js?module'
 
-        import {LitElement, html, css} from 'https://unpkg.com/@polymer/lit-element@latest/lit-element.js?module'
+        // import {LitElement, html, css} from 'https://unpkg.com/@polymer/lit-element@latest/lit-element.js?module'
 
 
         var $ProductOrderInCarousel = [
@@ -687,6 +687,10 @@
 
             function Receive_RadioButtonChanged() {}
 
+            const forceWrite = directive((value) => (part) => {
+              part.setValue(value);
+            });
+
             const New_CrouselItem = ({
               $CarouselName,
               $CarouselItemValue,
@@ -701,8 +705,8 @@
                 <input 
                   type="radio"
                   name="${$CarouselName}"
-                  value="${$CarouselItemValue}"
-                  ?checked=${$IsChecked}
+                  .value="${$CarouselItemValue}"
+                  .checked=${forceWrite($IsChecked)}
                   @click=${Receive_RadioButtonChanged}
                 />
                 <img 
@@ -855,6 +859,13 @@
                 ACCESSORIES: {
                   LIDWB: "GY1" 
                 }
+              },
+              {
+                Size: 17,
+                FormType: "SS",
+                ACCESSORIES: {
+                  SSWBLID: "SS1" 
+                }
               }
             ]
            
@@ -984,13 +995,19 @@
                     $ThingWithAvailableColorCode.Code :
                     $VignetteObjectWithColorOption.Code
 
+                  var $IsChecked = $ThingWithAvailableColorCode.AvailableColorCodes.length === 1 && (
+                    $VignetteObjectWithColorOption.Code === "INNER" || 
+                    $VignetteObjectWithColorOption.Code === "OUTER"
+                  )
+
                   $CarouselItems.push(
                     New_CrouselItem({
                       $CarouselName,
                       $CarouselItemValue: `${$ColorCode}`, 
                       $CarouselItemImageURL,
                       $CarouselItemTitle: `${$ColorMarketingName} - ${$ColorCode}`,
-                      $CarouselItemToolTip: `${$ColorMarketingName} - ${$ColorCode}`
+                      $CarouselItemToolTip: `${$ColorMarketingName} - ${$ColorCode}`,
+                      $IsChecked
                     })
                   )
                 }
