@@ -6,6 +6,11 @@
       border: 0px;
     }
 
+    .product_carousel img {
+      width: 58px;
+      height: 58px;
+    }
+
     ::-webkit-scrollbar {
       -webkit-appearance: none;
       width: 4px;
@@ -530,11 +535,7 @@
           <br />
           <br />
           <br />
-          <button type="button" class="buttonblue" id="updateTumbler" style="display:none;">Update Tumbler</button>
-          <button type="button" class="buttonblue" id="print">Download Hi-Res</button>
-          <button type="button" class="buttonblue" id="downloadFourSides">Download 4 Sides</button>
-          <button type="button" class="buttonblue" id="downloadOneSidedVirtual">1 Sided Virtual</button>
-          <button type="button" class="buttonblue" id="downloadFourSidedVirtual">4 Sided Virtual</button>
+          <!-- <div class="menupad DownloadForm" /> -->
         </div>
       </div>
 
@@ -555,8 +556,39 @@
           Get_TervisAdobeScene7SwatchImageURL
         } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.73/TervisAdobeScene7JS.js?module'
 
-        // import {LitElement, html, css} from 'https://unpkg.com/@polymer/lit-element@latest/lit-element.js?module'
+        var $DownloadOptions = [
+          {
+            Name: "Hi-Res tif",
+            Function: () => {
+              var finalURL = ($('#vignetteUrl').val());
+              var replacePreset = ($('#preset').val());
+              var printURL = (finalURL).replace(replacePreset, "PRINT")
 
+              if ($('#vignetteUrl').val() == "") {
+                alert("Please Update Tumbler First!");
+              } else {
+                alert("Preparing to Download");
+                open(printURL, "_blank");
+              }
+            }
+          },
+          {
+            Name: "Hi-Res jpg"
+          },
+          {
+            Name: "1 Sided Virtual",
+            // Function: Invoke_OneSidedVirtualDownload
+          },
+          {
+            Name: "4 Sided Virtual",
+            // Function: Invoke_FourSidedVirtualDownload
+
+          },
+          {
+            Name: "4 Sides",
+            // Function: Invoke_DownloadFourSides
+          },
+        ]
 
         var $ProductOrderInCarousel = [
           {
@@ -637,10 +669,11 @@
           const New_CarouselGroup = ({
             $CarouselGroupTitle,
             $CarouselGroupCode,
-            $Carousels
+            $Carousels,
+            $DisplayNone
           }) => {
             return html`
-              <div class="${$CarouselGroupCode}">
+              <div class="${$CarouselGroupCode}" style="${$DisplayNone ? "display: none;" : "" }">
                 <div 
                   class="selected-type tip-trigger"
                   title="${$CarouselGroupCode}"
@@ -1031,7 +1064,8 @@
                 New_CarouselGroup({ 
                   $CarouselGroupTitle: $VignetteCodeToMarketingName[$VignetteObjectWithColorOption.Code],
                   $CarouselGroupCode: $VignetteObjectWithColorOption.Code,
-                  $Carousels
+                  $Carousels,
+                  $DisplayNone: $IsChecked
                 })
               )
             }
@@ -1071,7 +1105,7 @@
             //     .tooltipster('show');
             //   });
                       
-                      // var $ToolTipsteredElements = $('.tip-trigger.tooltipstered')
+            // var $ToolTipsteredElements = $('.tip-trigger.tooltipstered')
             // $ToolTipsteredElements.removeClass("tooltipstered")
             // $ToolTipsteredElements.tooltipster('destroy')
             // $('.tip-trigger:not(.tooltipstered)').tooltipster({
@@ -1164,12 +1198,11 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/js/jquery.tooltipster.min.js"></script>
       
       <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery_cookie.js"></script>
-      <script src="https://unpkg.com/gifshot@0.4.5/dist/gifshot.js"></script>
-      <script src="https://unpkg.com/file-saver@2.0.2/dist/FileSaver.js"></script>
-      <script src="https://unpkg.com/gif.js@0.2.0/dist/gif.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
 
-      <script type="text/javascript" language="javascript"
-        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.carouFredSel-6.2.1-packed.js"></script>
+      <script type="text/javascript" language="javascript" 
+        src="https://cdn.jsdelivr.net/npm/caroufredsel@6.2.1/jquery.carouFredSel-6.2.1-packed.min.js"></script>
 
       <script type="text/javascript" language="javascript"
         src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.mousewheel.min.js"></script>
@@ -1180,19 +1213,6 @@
       <script type="text/javascript" language="javascript"
         src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.ba-throttle-debounce.min.js"></script>
 
-      <script type="text/javascript" language="javascript">
-
-        $(function () {
-          $('.tip-trigger').tooltipster({
-            animation: 'grow',
-            speed: 300,
-            theme: 'tooltipster-light',
-            maxWidth: 320,
-            delay: 10,
-
-          });
-        });
-      </script>
       <script type="module">
         import { 
           New_TervisAdobeScene7PrintSingleURL,
@@ -1286,35 +1306,7 @@
           } else {
             $("#itemcode").prop('placeholder', $.cookie("itemcode"));
           }
-          //SET COOKIE FOR USERNAME
-          /*
-           if ($.cookie("username") === null || $.cookie("username") == " ") {
-             prompt("Please enter a Username", "Tervis Employee");
-             $.cookie("username", "Tervis Employee", {path: "/", expiry: 5});
-              var user = "Tervis Employee";
-           } else if ($.cookie("username") == "Tervis Employee") {
-             var user = prompt("Please enter a Username", "Tervis Employee");
-             if ($.cookie("username") == "Richard" || $.cookie("username") == "rpaul"){
-                $.cookie("username", user, {path: "/", expiry: 365});
-             } else {
-             $.cookie("username", user, {path: "/", expiry: 3}); 
-             }; 
-           } else {
-             var user = $.cookie("username");
-             $.cookie("username", user, {path: "/", expiry: 1}); 
-           };
-             $("#greeting").val("Hello " + user + " ∨");
-         
-             $("#greeting").click(function() {
-               if (confirm('Do you want to change your username?')) {
-                 var userUpdate = prompt("Enter a new username:", user);
-                 $.cookie("username", userUpdate, {path: "/", expiry: 3});
-                 $("#greeting").val("Hello " + userUpdate + " ∨");
-               } else {
-                 alert('You canceled? Your name will not be changed');
-               };
-             });
-           */
+
           function update() {
             $("#tumblerimage").prop('src', "//imagegenerator.tervis.com/is/content/tervis/loading540x475.gif");
 
@@ -1443,17 +1435,6 @@
               $('#wraptypediv:hidden').show("#wraptypediv");
 
             } else if (codetype == "ugcCode") {
-              // var $SrcValueForUGCCodeType = New_TervisAdobeScene7URL({
-              //   $AsScene7SrcValue: true, 
-              //   $ExternalURL: `${itemcode}?fmt=png-alpha`
-              // })
-
-              // var codetypeURL = New_TervisAdobeScene7WrapDecoration3TimesURL({
-              //   ...$SizeAndFormType,
-              //   $AsScene7SrcValue: true,
-              //   $DecorationType: $DecorationTypeWithoutLeadingDash,
-              //   $RepeatedImageSource: $SrcValueForUGCCodeType
-              // })
               
               // In what scenario is this code executed?
               var codetypeURL = `
@@ -1621,22 +1602,8 @@
           }
           $('input').on("input change", update);
           $('#decorationtype').on("change", update);
-          $('#updateTumbler').on("click", update);
           $('#itemcode').on("change", update);
 
-          // DOWNLOAD HIGH RES TIF FILE BUTTON FUNCTION	
-          $('#print').on("click", function () {
-            var finalURL = ($('#vignetteUrl').val());
-            var replacePreset = ($('#preset').val());
-            var printURL = (finalURL).replace(replacePreset, "PRINT")
-
-            if ($('#vignetteUrl').val() == "") {
-              alert("Please Update Tumbler First!");
-            } else {
-              alert("Preparing to Download");
-              open(printURL, "_blank");
-            }
-          });
 
           $('#pdp-zm-alpha').on("click", function () {
             var finalURL = ($('#vignetteUrl').val());
@@ -1651,12 +1618,6 @@
             }
           });
         });
-
-
-
-
-
-
 
         // SHOW CODETYPE OPTIONS ON SELECT
         $("#codetype").on("input change", function () {
@@ -1713,10 +1674,6 @@
 
         });
 
-        // SHOW ACCESSORIES PER PRODUCT
-        // $(function () {
-          
-        // });
         //Image Upload Section
 
         var sharedSecret = '9f91ce08-1501-459f-ab09-3d2ddc103344';
@@ -1881,8 +1838,6 @@
           New_TervisAdobeScene7ArcedImageURL
         } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.59/TervisAdobeScene7JS.js?module'
 
-        // import gifshot from 'https://unpkg.com/gifshot@0.4.5/dist/gifshot.js?module'
-
         async function Get_URLSFourSides() {
           var $URLs = []
           var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
@@ -1907,7 +1862,6 @@
 
           return ($URLs)
         }
-        document.querySelector('#downloadFourSides').addEventListener('click', Invoke_DownloadFourSides)
 
         async function downloadAll(urls) {
           for (var i = 0; i < urls.length; i++) {
@@ -2031,8 +1985,6 @@
           })
         }
 
-        document.querySelector('#downloadOneSidedVirtual').addEventListener('click', Invoke_OneSidedVirtualDownload)
-
         async function Invoke_FourSidedVirtualDownload () {
           var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
           var {$Size, $FormType} = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
@@ -2097,6 +2049,5 @@
           )
         }
 
-        document.querySelector('#downloadFourSidedVirtual').addEventListener('click', Invoke_FourSidedVirtualDownload)
       </script>
     </div>
