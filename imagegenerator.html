@@ -599,76 +599,76 @@
 
         var $ProductOrderInCarousel = [
           {
-            $Size: 16,
-            $FormType: "DWT"
+            $ProductSize: 16,
+            $ProductFormType: "DWT"
           },
           {
-            $Size: 24,
-            $FormType: "DWT"
+            $ProductSize: 24,
+            $ProductFormType: "DWT"
           },
           {
-            $Size: 24,
-            $FormType: "WB"
+            $ProductSize: 24,
+            $ProductFormType: "WB"
           },
           {
-            $Size: 16,
-            $FormType: "BEER"
+            $ProductSize: 16,
+            $ProductFormType: "BEER"
           },
           {
-            $Size: 16,
-            $FormType: "MUG"
+            $ProductSize: 16,
+            $ProductFormType: "MUG"
           },
           {
-            $Size: 12,
-            $FormType: "DWT"
+            $ProductSize: 12,
+            $ProductFormType: "DWT"
           },
           {
-            $Size: 10,
-            $FormType: "WAV"
+            $ProductSize: 10,
+            $ProductFormType: "WAV"
           },
           {
-            $Size: 6,
-            $FormType: "SIP"
+            $ProductSize: 6,
+            $ProductFormType: "SIP"
           },
           {
-            $Size: 87,
-            $FormType: "ICE"
+            $ProductSize: 87,
+            $ProductFormType: "ICE"
           },
           {
-            $Size: 2,
-            $FormType: "SHO"
+            $ProductSize: 2,
+            $ProductFormType: "SHO"
           },
           {
-            $Size: 9,
-            $FormType: "WINE"
+            $ProductSize: 9,
+            $ProductFormType: "WINE"
           },
           {
-            $Size: 9,
-            $FormType: "SWG"
+            $ProductSize: 9,
+            $ProductFormType: "SWG"
           },
           {
-            $Size: 16,
-            $FormType: "TALL"
+            $ProductSize: 16,
+            $ProductFormType: "TALL"
           },
           {
-            $Size: 20,
-            $FormType: "SS"
+            $ProductSize: 20,
+            $ProductFormType: "SS"
           },
           {
-            $Size: 30,
-            $FormType: "SS"
+            $ProductSize: 30,
+            $ProductFormType: "SS"
           },
           {
-            $Size: 17,
-            $FormType: "SS"
+            $ProductSize: 17,
+            $ProductFormType: "SS"
           },
           {
-            $Size: 24,
-            $FormType: "SS"
+            $ProductSize: 24,
+            $ProductFormType: "SS"
           },
           {
-            $Size: 12,
-            $FormType: "SS"
+            $ProductSize: 12,
+            $ProductFormType: "SS"
           }
         ]
 
@@ -761,17 +761,17 @@
 
           var $CarouselItems = []
           var $IsFirstProduct = true
-          for (var {$Size, $FormType} of $ProductOrderInCarousel) {
-            var $Product = await Get_TervisProductMetaDataUsingIndex({$Size, $FormType})
-            var $CarouselItemImageURL = await Get_TervisAdobeScene7Silhouette({$Size, $FormType})
+          for (var {$ProductSize, $ProductFormType} of $ProductOrderInCarousel) {
+            var $Product = await Get_TervisProductMetaDataUsingIndex({$ProductSize, $ProductFormType})
+            var $CarouselItemImageURL = await Get_TervisAdobeScene7Silhouette({$ProductSize, $ProductFormType})
             $CarouselItemImageURL += "&$ICO-SIL-BA$"
             $CarouselItems.push(
               New_CrouselItem({
                 $CarouselName: "tumblerRadio",
-                $CarouselItemValue: `${$Size}${$FormType}`,
+                $CarouselItemValue: `${$ProductSize}${$ProductFormType}`,
                 $CarouselItemImageURL,
                 $CarouselItemTitle: $Product.MarketingName,
-                $CarouselItemToolTip: `${$Product.MarketingName} - ${$Size}${$FormType}`,
+                $CarouselItemToolTip: `${$Product.MarketingName} - ${$ProductSize}${$ProductFormType}`,
                 $IsChecked: $IsFirstProduct,
                 $ShowTitleAsSpan: true
               })
@@ -1089,8 +1089,8 @@
             // });
             
             $ProductVignetteDefaultSettings.filter(
-              ({Size: $Size, FormType: $FormType}) =>
-              $Size === parseInt($SizeAndFormType.$Size) && $FormType === $SizeAndFormType.$FormType
+              ({Size: $ProductSize, FormType: $ProductFormType}) =>
+              $ProductSize === parseInt($SizeAndFormType.$ProductSize) && $ProductFormType === $SizeAndFormType.$ProductFormType
             )
             .forEach(
               $DefaultSettingEntry => {
@@ -1754,13 +1754,13 @@
 
         async function Invoke_OneSidedVirtualDownload () {
           var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
-          var {$Size, $FormType} = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
+          var {$ProductSize, $ProductFormType} = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
           
-          var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$Size, $FormType})
+          var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$ProductSize, $ProductFormType})
           var $ProductVignetteImageURLAsSourceValue = New_ImageGeneratorProductVignetteImageURLAsSourceValue()
           var $VirtualImageURL = await New_TervisAdobeScene7VirtualImageURL({
-            $Size,
-            $FormType,
+            $ProductSize,
+            $ProductFormType,
             $DecorationProofImageURLAsSourceValue,
             $ProductVignetteImageURLAsSourceValue: $ProductVignetteImageURLAsSourceValue
           })
@@ -1769,13 +1769,13 @@
         }
 
         async function New_ImageGeneratorDecorationProofImageURLAsSourceValue ({
-          $Size,
-          $FormType
+          $ProductSize,
+          $ProductFormType
         }) {
           var {
             DecorationProofWidthOnVirtual: $DecorationProofWidthOnVirtual,
             DecorationProofHeightOnVirtual: $DecorationProofHeightOnVirtual
-          } = await Get_TervisProductMetaDataUsingIndex({$Size, $FormType})
+          } = await Get_TervisProductMetaDataUsingIndex({$ProductSize, $ProductFormType})
 
           var $DecorationTypeDropDownValue = document.querySelector('#decorationtype').value
           
@@ -1784,8 +1784,8 @@
           
           if ($DecorationTypeDropDownValue === "customyzer") {
             $URLOfDecoration = await New_TervisAdobeScene7ArcedImageURL({
-              $Size,
-              $FormType,
+              $ProductSize,
+              $ProductFormType,
               $AsScene7SrcValue: true,
               $DecalSourceValue: $URLOfDecoration
             })
@@ -1812,8 +1812,8 @@
             $DecorationImageURLAsSourceValue,
             $ArcedDecoration: $ArcedDecorationAndIncludeDieCutterCalibrationLine,
             $IncludeDiecutterCalibrationLine: $ArcedDecorationAndIncludeDieCutterCalibrationLine,
-            $Size,
-            $FormType,
+            $ProductSize,
+            $ProductFormType,
             $Width: $DecorationProofWidthOnVirtual,
             $Height: $DecorationProofHeightOnVirtual,
             $AsScene7SrcValue: true
@@ -1858,17 +1858,17 @@
 
         async function Invoke_FourSidedVirtualDownload () {
           var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
-          var {$Size, $FormType} = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
+          var {$ProductSize, $ProductFormType} = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
           
-          var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$Size, $FormType})
+          var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$ProductSize, $ProductFormType})
 
           var $ProductVignetteImageURLAsSourceValuesArrayForFourSides = await New_ImageGeneratorProductVignetteImageURLAsSourceValuesArrayForFourSides()
           
           var $VirtualImageURLsPromises = $ProductVignetteImageURLAsSourceValuesArrayForFourSides.map(
             async $ProductVignetteImageURLAsSourceValue =>
             await New_TervisAdobeScene7VirtualImageURL({
-              $Size,
-              $FormType,
+              $ProductSize,
+              $ProductFormType,
               $DecorationProofImageURLAsSourceValue,
               $ProductVignetteImageURLAsSourceValue
             })
