@@ -97,7 +97,11 @@
       float: left;
     }
 
-    #DegreesSlider {
+    #ProductVignetteRotationDegrees {
+      width: 40px;
+    }
+
+    #ProductVignetteRotationDegreesSlider {
       width: 60%;
       margin: 0px auto;
     }
@@ -166,10 +170,6 @@
     #vignetteUrl {
       width: 300px;
       text-align: center;
-    }
-
-    #Degrees {
-      width: 40px;
     }
 
     #txtUploadFile {}
@@ -503,18 +503,29 @@
           </div>
           <div>
             Degrees:
-            <input type="text" id="Degrees" maxlength="5" 
-              onchange="document.querySelector('#DegreesSlider').value = this.value" >
+            <input 
+              type="text"
+              id="ProductVignetteRotationDegrees"
+              maxlength="5"
+              value="0"
+              onchange="document.querySelector('#ProductVignetteRotationDegreesSlider').value = this.value" >
             
             Snap to:
-            <select id="SnapTo" onchange="document.querySelector('#DegreesSlider').step = this.value">
+            <select id="SnapTo" onchange="document.querySelector('#ProductVignetteRotationDegreesSlider').step = this.value">
               <option selected>90</option>
               <option>45</option>
               <option>11.25</option>
             </select>
           </div>
-          <input type="range" id="DegreesSlider" value="0" min="-180" max="180" step="90" 
-            onchange="document.querySelector('#Degrees').value = this.value" />
+          <input 
+            type="range"
+            id="ProductVignetteRotationDegreesSlider"
+            value="0"
+            min="-180"
+            max="180"
+            step="90"
+            onchange="document.querySelector('#ProductVignetteRotationDegrees').value = this.value"
+          />
 
           
           <br />
@@ -1137,10 +1148,16 @@
                   `
                 ) 
               }
+
+              $ConditionallyAddedInput.push(
+                html`
+
+                `
+              )
             }
 
             var $MenuGroup = New_MenuGroup({
-              $GroupTitle: "Decoration",
+              $GroupTitle: "Decoration Image Source",
               $InnerContent: html`
                 <select id="DecorationSource" class="menupad" @change=${Receive_DecorationSourceSelectionEvent}>
                   <option value= "" selected disabled class="menupad">Select Decoration Source</option>
@@ -1180,6 +1197,14 @@
           <option value= "" selected disabled class="menupad">Decoration Type</option>
           <option>Wrap</option>
           <option>Emblem</option>
+          <option>Direct Print</option>
+          <!-- <option>Customyzer Wrap</option> -->
+        </select>
+
+        <select id="DecorationSourceArced" class="menupad">
+          <option value= "" selected disabled class="menupad">Decoration Source Arced</option>
+          <option>Arced</option>
+          <option>UnArced</option>
           <option>Direct Print</option>
           <!-- <option>Customyzer Wrap</option> -->
         </select>
@@ -1278,11 +1303,11 @@
             var poshold = $("#poshold").val();
             var precision = $("#precision").val();
 
+
+
             var imageName = "tervis";
+            var $ProductVignetteRotationDegrees = document.querySelector("#ProductVignetteRotationDegrees")
 
-
-            // SLIDER
-            $('#slider').prop('step', precision);
 
             // IMAGE SOURCE
             var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
