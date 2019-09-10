@@ -785,30 +785,10 @@
             $ShiftArrowsDown: true
           })
 
-          var $ProductDecorationTypes = {
-            WRA: "Wrap",
-            EMB: "Emblem",
-            DPT: "Direct Print"
-          }
-
-          var $ProductDecorationTypePicker = html`
-            <select id="ProductDecorationType" class="menupad">
-              <option value= "" selected disabled class="menupad">Decoration Type</option>
-              ${
-                Object                
-                .entries($ProductDecorationTypes)
-                .map(
-                  ([$ProductDecorationTypeCode, $ProductDecorationTypeName]) =>
-                  html`<option value="${$ProductDecorationTypeCode}">${$ProductDecorationTypeName}</option>`
-                )
-              }
-            </select>
-          `
-
           var $ProductCarouselContainer = document.querySelector('#select-product')
 
           render(
-            [$ProductCarousel, $ProductDecorationTypePicker],
+            $ProductCarousel,
             $ProductCarouselContainer
           )
 
@@ -923,29 +903,6 @@
                 }
               }
             ]
-           
-            var tumbler = $("input[name='tumblerRadio']:checked").val();
-            if (tumbler == "2SHO") {
-              $("#decorationtype").val("-WRA");
-            } else if (tumbler == "6SIP") {
-              $("#decorationtype").val("-WRA");
-            } else if (tumbler == "12DWT") {
-              $("#decorationtype").val("-EMB");
-            } else if (tumbler == "87ICE") {
-              $("#decorationtype").val("-EMB");
-            } else if (tumbler == "9WINE" || tumbler == "9SWG") {
-              $("#decorationtype").val("-WRA");
-            } else if (tumbler == "16TALL") {
-              $("#decorationtype").val("-EMB");
-            } else if (tumbler == "30SS" || tumbler == "20SS") {
-              $("#decorationtype").val("-DPT");
-            } else if (tumbler == "17SS") {
-              $("#decorationtype").val("-DPT");
-            } else if (tumbler == "24SS") {
-              $("#decorationtype").val("-DPT");
-            } else if (tumbler == "12SS") {
-              $("#decorationtype").val("-DPT");
-            }
 
             var $VignetteCodeToMarketingName = {
               INNER: "Product Inner",
@@ -969,6 +926,48 @@
             
             var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
             var $ProductSizeAndProducFormType = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
+            var {$ProductSize, $ProductFormType} = $ProductSizeAndProducFormType
+
+            var $ProductDecorationTypes = {
+              WRA: "Wrap",
+              EMB: "Emblem",
+              DPT: "Direct Print"
+            }
+
+            var $ProductDecorationTypePicker = html`
+              <select 
+                id="ProductDecorationType" 
+                class="menupad"
+                style="${ifDefined($ProductFormType === "SS" ? "display: none;" : undefined) }"
+              >
+                <option value= "" selected disabled class="menupad">Decoration Type</option>
+                ${
+                  Object                
+                  .entries($ProductDecorationTypes)
+                  .map(
+                    ([$ProductDecorationTypeCode, $ProductDecorationTypeName]) =>
+                    html`
+                      <option 
+                        value="${$ProductDecorationTypeCode}"
+                        ?selected=${
+                            $ProductFormType === "SS" && $ProductDecorationTypeCode === "DPT" ||
+                            $ProductFormType === "ICE" && $ProductDecorationTypeCode === "EMB" ||
+                            !["ICE","SS"].includes($ProductFormType) && $ProductDecorationTypeCode === "WRA"
+                        }
+                      >
+                        ${$ProductDecorationTypeName}
+                      </option>`
+                  )
+                }
+              </select>
+            `
+            var $ProductDecorationTypePickerContainer = document.querySelector('#ProductDecorationTypePickerContainer')
+
+            render(
+              $ProductDecorationTypePicker,
+              $ProductDecorationTypePickerContainer
+            )
+
             var $VignetteSuffix = $("input[name='thmbRadio']:checked").val();
 
             var $VignetteObjectsWithColorOption = await Get_TervisAdobeScene7VignetteObjectWithColorOption({
@@ -1144,17 +1143,17 @@
               // "Finished Good Item Number"
             ]
 
-            var $DecorationSourceImageTypeElementID = "DecorationImageSourceType"
-            var $DecorationSourceImageTypeSelector = `#${$DecorationSourceImageTypeElementID}`
+            var $DecorationImageSourceTypeElementID = "DecorationImageSourceType"
+            var $DecorationImageSourceTypeSelector = `#${$DecorationImageSourceTypeElementID}`
 
             if (
-              document.querySelector($DecorationSourceImageTypeSelector) &&
-              document.querySelector($DecorationSourceImageTypeSelector).value
+              document.querySelector($DecorationImageSourceTypeSelector) &&
+              document.querySelector($DecorationImageSourceTypeSelector).value
             ) {
-              var $DecorationImageSourceType = document.querySelector($DecorationSourceImageTypeSelector).value
+              var $DecorationImageSourceType = document.querySelector($DecorationImageSourceTypeSelector).value
               var $ConditionallyAddedInput = [html`
                 <input
-                  id="DecorationSourceImageValue"
+                  id="DecorationImageSourceValue"
                   type="text"
                   placeholder="${$DecorationImageSourceType}" 
                   disabled="${ifDefined($DecorationImageSourceType === "UGC Upload" ? "" : undefined)}"
@@ -1176,7 +1175,7 @@
             var $MenuGroup = New_MenuGroup({
               $GroupTitle: "Decoration Image",
               $InnerContent: html`
-                <select id="${$DecorationSourceImageTypeElementID}" class="menupad" @change=${Receive_DecorationSourceSelectionEvent}>
+                <select id="${$DecorationImageSourceTypeElementID}" class="menupad" @change=${Receive_DecorationSourceSelectionEvent}>
                   <option value= "" selected disabled class="menupad">Source Type</option>
                   ${$DecorationSourceOptions.map(
                     $DecorationSourceOption => html`
@@ -1202,21 +1201,13 @@
       <div id="togglediv">
 
         <div id="DecorationSourceMenuGroup"></div>
-        <label for="DecorationSourceImageArced">Is source imagbe arced?</label>
-        <input type="checkbox" id="DecorationSourceImageArced" checked>
-        <!-- <select id="DecorationSourceArced" class="menupad">
-          <option value= "" selected disabled class="menupad">Arced or Un Arched</option>
-          <option>Arced</option>
-          <option>UnArced</option>
-        </select> -->
+        <label for="DecorationImageSourceArced">Is source image arced?</label>
+        <input type="checkbox" id="DecorationImageSourceArced" checked>
 
 
         <div class="selected-type">Product</div>
         <div class="carousel1" id="select-product"></div>
-
-        
-        
-  
+        <div id="ProductDecorationTypePickerContainer"></div>
 
         <div id="select-vignette-object-color-options"></div>
       </div>
@@ -1249,8 +1240,9 @@
           New_TervisAdobeScene7PrintSingleURL,
           New_TervisAdobeScene7WrapDecoration3TimesURL,
           New_TervisAdobeScene7URL,
-          New_TervisAdobeScene7ProductVignetteImageURL
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.74/TervisAdobeScene7JS.js?module'
+          New_TervisAdobeScene7ProductVignetteImageURL,
+          ConvertTo_TervisAdobeScene7VignettePosition
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.77/TervisAdobeScene7JS.js?module'
 
         import {
           Get_TervisProductSizeAndFormTypeFromString          
@@ -1267,19 +1259,23 @@
           return $UGCURLObject.pathname.split("/").slice(-3).join("/")
         }
 
-        async function Get_ImageGeneratorDecorationImageSourceURLAsScene7SrcValue () {
+        async function Get_ImageGeneratorDecorationImageSourceURL (
+          $AsScene7SrcValue
+        ) {
           var $DecorationImageSourceType = document.querySelector("#DecorationImageSourceType").value
-          var $DecorationImageSourceValue = document.querySelector("#DecorationImageSourceValue").value
+          var $DecorationImageSourceValue = document.querySelector("#DecorationImageSourceValue")
+            ? document.querySelector("#DecorationImageSourceValue").value
+            : ""
     
           if ($DecorationImageSourceType === "UGC Upload" ) {
             return New_TervisAdobeScene7URL({
-              $AsScene7SrcValue: true,
+              $AsScene7SrcValue,
               $Type: "ImageServer",
               $RelativeURL: New_UGCRelativeURLFromURL({$URL: $DecorationImageSourceValue})
             })
           } else if ($DecorationImageSourceType === "Deocoration Image URL") {
             return New_TervisAdobeScene7URL({
-              $AsScene7SrcValue: true,
+              $AsScene7SrcValue,
               $Type: "ImageServer",
               $ExternalURL: $DecorationImageSourceValue
             })
@@ -1289,10 +1285,16 @@
               $ProductSize,
               $ProductFormType
             } = await Get_TervisCustomyzerProjectProductSizeAndProductFormType({$ProjectID})
-            return New_TervisAdobeScene7CustomyzerDecorationImageURL({$ProjectID, $ProductSize, $ProductFormType, $AsScene7SrcValue: true})
+            
+            return New_TervisAdobeScene7CustomyzerDecorationImageURL({
+              $ProjectID,
+              $ProductSize,
+              $ProductFormType,
+              $AsScene7SrcValue
+            })
           } else if ($DecorationImageSourceType === "Raw Material Item Number") {
             return New_TervisAdobeScene7URL({
-              $AsScene7SrcValue: true,
+              $AsScene7SrcValue,
               $Type: "ImageServer",
               $RelativeURL: `tervis/${$DecorationImageSourceValue}`
             })
@@ -1319,178 +1321,86 @@
           return $ElementPathsToShow
         }
 
+        function Get_DecorationPositionXValueFromDegrees({
+          $ProductSize,
+          $ProductFormType,
+          $Degrees
+        }) {
+
+        }
+
         $(window).on("load", function () {
           async function update() {
             var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
             var $ProductSizeAndProductFormType = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
-            var $ImageSourceURLAsScene7SrcValue = await Get_ImageGeneratorDecorationImageSourceURLAsScene7SrcValue()
+            var $ImageSourceURLAsScene7SrcValue = await Get_ImageGeneratorDecorationImageSourceURL({
+              $AsScene7SrcValue: true
+            })
             var $VignetteElementPathToShow = Get_ImageGeneratorProductVignetteElementPathToShow()
-            var $DecorationSourceIsArced = document.querySelector("#DecorationSourceImageArced").checked
-            var $ProductDecorationType = document.querySelector("#ProductDecorationType").value
+            var $DecorationSourceIsArced = document.querySelector("#DecorationImageSourceArced").checked
             var $ProductVignetteNameSuffix = document.querySelector("input[name='thmbRadio']:checked").value
-            var $ProductVignetteRotationDegrees = document.querySelector("#ProductVignetteRotationDegrees").vlaue
+            var $ProductVignetteRotationDegrees = document.querySelector("#ProductVignetteRotationDegrees").value
             var $ProductDecorationTypeCode = document.querySelector("#ProductDecorationType").value
-            var $DecorationTypeWithoutLeadingDash = $ProductDecorationTypeCode
             
+            var $DecorationPositionXValue = await ConvertTo_TervisAdobeScene7VignettePosition({
+              ...$ProductSizeAndProductFormType,
+              $Degrees: $ProductVignetteRotationDegrees
+            })
+
+            if (
+              !$ImageSourceURLAsScene7SrcValue ||
+              !$VignetteElementPathToShow ||
+              !$ProductDecorationTypeCode
+            ) { return }
+
+            $("#previewImage").prop('src', await Get_ImageGeneratorDecorationImageSourceURL());
+
             var imageName = "tervis";
 
             var $SrcValue = $ImageSourceURLAsScene7SrcValue
 
-            
-
-            if (codetype == "ugcCode" && decorationtype == "-WRA") {
-              var $WrapPrintSingleScene7RelativeURL = New_TervisAdobeScene7PrintSingleURL({
+            if ($DecorationSourceIsArced) {
+              $ImageSourceURLAsScene7SrcValue = New_TervisAdobeScene7PrintSingleURL({
                   ...$ProductSizeAndProductFormType,
                   $DecorationType: $ProductDecorationTypeCode,
                   $AsScene7SrcValue: true,
                   $ImageSrcValue: $SrcValue
               })
-
-              var codetypeURL = New_TervisAdobeScene7WrapDecoration3TimesURL({
-                ...$ProductSizeAndProductFormType,
-                $AsScene7SrcValue: true,
-                $DecorationType: $ProductDecorationTypeCode,
-                $RepeatedImageSource: $WrapPrintSingleScene7RelativeURL
-              })
-            } else if (codetype == "ugcCode" && (decorationtype == "-EMB" || decorationtype == "-DPT")) {
-              var codetypeURL = New_TervisAdobeScene7WrapDecoration3TimesURL({
-                ...$ProductSizeAndProductFormType,
-                $AsScene7SrcValue: true,
-                $DecorationType: $ProductDecorationTypeCode,
-                $RepeatedImageSource: $SrcValue
-              })
-            } else if (codetype == "ugcCode" && decorationtype == "customyzer") {
-              var codetypeURL = New_TervisAdobeScene7WrapDecoration3TimesURL({
-                ...$ProductSizeAndProductFormType,
-                $AsScene7SrcValue: true,
-                $DecorationType: "WRA",
-                $RepeatedImageSource: $SrcValue
-              })
-            } else if (codetype == "ugcCode") {
-              
-              // In what scenario is this code executed?
-              var codetypeURL = `
-                is{
-                  tervis/${tumbler}${decorationtype}-DECO3?
-                  $img-src=(
-                    ${itemcode}?
-                    fmt=png-alpha
-                  )
-                  &res=300
-                  &show
-                  &obj=DECO
-                  &req=object
-                }
-              `.replace(/\s/g, "")
-            } else if (codetype == "rmCode" || codetype == "choose") {
-              var codetypeURL = `
-                is{
-                  tervis/${tumbler}${decorationtype}-DECO3?
-                  &$img-src=${itemcode}
-                }
-              `.replace(/\s/g, "")
             }
-
-            // FINAL IMAGE URL
             
+            var codetypeURL = New_TervisAdobeScene7WrapDecoration3TimesURL({
+              ...$ProductSizeAndProductFormType,
+              $AsScene7SrcValue: true,
+              $DecorationType: $ProductDecorationTypeCode,
+              $RepeatedImageSource: $SrcValue
+            })  
             
             var $ProductVignetteImageURL = New_TervisAdobeScene7ProductVignetteImageURL({
               ...$ProductSizeAndProductFormType,
-              $VignetteSuffix: iteration,
+              $VignetteSuffix: $ProductVignetteNameSuffix,
               $DecorationType: $ProductDecorationTypeCode,
               $DecorationSrc: codetypeURL,
-              $DecorationPositionXValue: slider,
-              $ElementPathsToShow,
+              $DecorationPositionXValue,
+              $ElementPathsToShow: $VignetteElementPathToShow,
               $AsScene7SrcValue: true
             })
 
+            var preset = ""
             var finalURL = `
-                //imagegenerator.tervis.com/is/image/tervis/${imageName}?
-                layer=0
-                &src=${$ProductVignetteImageURL}
-                ${preset}
-              `.replace(/\s/g, "")
+              //imagegenerator.tervis.com/is/image/tervis/${imageName}?
+              layer=0
+              &src=${$ProductVignetteImageURL}
+              ${preset}
+            `.replace(/\s/g, "")
             
-
-            // SHOW DECORATION AS MAIN IMAGE
-            if (codetype == "ugcCode" && iteration == "RM") {
-              var finalURL = `${itemcode}?${preset}`;
-              $('#slider:visible').hide("#slider");
-              $('.menupad:visible').hide(".menupad");
-            } else if (codetype != "ugcCode" && iteration == "RM") {
-              var finalURL = `//imagegenerator.tervis.com/is/image/tervis/${itemcode}?${preset}`;
-              $('#slider:visible').hide("#slider");
-              $('.menupad:visible').hide(".menupad");
-            } else {
-              $('#slider:hidden').show("#slider");
-              $('.menupad:hidden').show(".menupad");
-            }
-            // MAKE THUMBNAIL FOR DECORATION
-            if (codetype == "ugcCode") {
-              var thumbnailDecoration = `${itemcode}?$PDP-ALT-THMB$`;
-            } else {
-              var thumbnailDecoration = `//imagegenerator.tervis.com/is/image/tervis/${itemcode}?$PDP-ALT-THMB$`;
-            };
-            // DEFAULT MAIN IMAGE
-            if (codetype == "choose") {
-              var finalURL = `
-                //imagegenerator.tervis.com/is/image/tervis/${imageName}?
-                layer=0
-                &src=ir{
-                  tervisRender/${tumbler}${iteration}?
-                  &obj=MAIN/GLARE
-                  &show
-                  &obj=MAIN/OUTER/${outerform}/${outercolor}
-                  &show
-                  &obj=MAIN/INNER/${innerform}/${innercolor}
-                  &show
-                  ${lidColor}
-                  ${handle}
-                  &obj=MAIN
-                  &req=object
-                }
-                ${preset}
-              `.replace(/\s/g, "")
-            }
-            if (itemcode == null || itemcode == "") {
-              var finalURL = `
-                //imagegenerator.tervis.com/is/image/tervis/${imageName}?
-                layer=0
-                &src=ir{
-                  tervisRender/${tumbler}${iteration}?
-                  &obj=MAIN/GLARE&show
-                  &obj=MAIN/OUTER/${outerform}/${outercolor}
-                  &show
-                  &obj=MAIN/INNER/${innerform}/${innercolor}
-                  &show
-                  ${lidColor}
-                  ${handle}
-                  &obj=MAIN
-                  &req=object
-                }
-                ${preset}
-              `.replace(/\s/g, "")
-            }
-
             $("#vignetteUrl").val(finalURL);
-            $('#poshold').val(slider);
             $('#tumblerimage').css('margin-left', '0px');
-            $("#previewImage").prop('src', thumbnailDecoration);
             $("#tumblerimage").prop('src', finalURL);
 
             var replacePreset = ($('#preset').val());
             $("#tumblerimagelink").prop('href', (finalURL).replace(replacePreset, "PDP-ZM-ALPHA"));
-          };
-          // IMAGE ZOOM
+          } // END FUNCTION (UPDATE)
 
-          // END FUNCTION (UPDATE)
-
-          // UPDATE ON SLIDER CHANGE	
-          $('#poshold').on("input change", function () {
-            var poshold = ($('#poshold').val());
-            $('#slider').val(poshold);
-            update;
-          });
 
           // UPDATE TUMBLER BUTTON FUNCTION
           if ($('#decorationtype') != ("choose")) {
@@ -1500,73 +1410,6 @@
           $('#decorationtype').on("change", update);
           $('#itemcode').on("change", update);
 
-
-          $('#pdp-zm-alpha').on("click", function () {
-            var finalURL = ($('#vignetteUrl').val());
-            var replacePreset = ($('#preset').val());
-            var printURL = (finalURL).replace(replacePreset, "PDP-ZM-ALPHA")
-
-            if ($('#vignetteUrl').val() == "") {
-              alert("Please Update Tumbler First!");
-            } else {
-              alert("Preparing to Download");
-              open(printURL, "_blank");
-            }
-          });
-        });
-
-        // SHOW CODETYPE OPTIONS ON SELECT
-        $("#codetype").on("input change", function () {
-          var codetype = $("#codetype").val();
-
-          if (codetype == "rmCode") {
-            $("#itemcode").val("");
-            $("#itemcode").prop('placeholder', "Enter RM Code");
-            $("#itemcode").attr('disabled', false);
-            $('#decorationtype:hidden').show("#decorationtype");
-            $('#itemcode:hidden').show("#itemcode");
-            $('#txtUploadFile:visible').hide("#txtUploadFile");
-          } else if (codetype == "ugcCode") {
-            $("#itemcode").val("");
-            $("#itemcode").prop('placeholder', "Upload File");
-            $("#itemcode").attr('disabled', true);
-            $('#decorationtype:hidden').show("#decorationtype");
-            $('#txtUploadFile:hidden').show("#txtUploadFile");
-            $('#itemcode:hidden').show("#itemcode");
-          } else {
-            $("#itemcode").val("");
-            $('#decorationtype:visible').hide("#decorationtype");
-            $('#itemcode:visible').hide("#itemcode");
-            $('#txtUploadFile:visible').hide("#txtUploadFile");
-          }
-
-        });
-
-        // SHOW DECORATION THUMBNAIL WHEN DECORATION TYPE AND CODE TYPE ARE AVAILABLE
-        $("#decorationtype").on("input change", function () {
-          var decorationtype = $("#decorationtype").val()
-          var codetype = $("#codetype").val()
-
-          if (decorationtype == "choose" || codetype == "choose") {
-            $('#thumbnailDecoration:visible').hide("#thumbnailDecoration");
-            $('#previewImage:visible').hide("#previewImage");
-          } else {
-            $('#thumbnailDecoration:hidden').show("#thumbnailDecoration");
-            $('#previewImage:hidden').show("#previewImage");
-          }
-
-        });
-        $("#codetype").on("input change", function () {
-          var decorationtype = $("#decorationtype").val()
-          var codetype = $("#codetype").val()
-
-          if (decorationtype == "choose" || codetype == "choose") {
-            $('#thumbnailDecoration:visible').hide("#thumbnailDecoration");
-            $('#previewImage:visible').hide("#previewImage");
-          } else {
-            $('#thumbnailDecoration:hidden').show("#thumbnailDecoration");
-            $('#previewImage:hidden').show("#previewImage");
-          }
 
         });
 
@@ -1578,7 +1421,6 @@
           var el = document.getElementById("txtUploadFile");
 
           if (el) {
-            // el.click();
             el.addEventListener('change', AddImageFromDevice, false);
           }
         });
@@ -1592,7 +1434,7 @@
           var validFileTypes = ".bmp .jpg, .jpeg, .png";
           if (FileTypeValidate("txtUploadFile", validFileTypes, "lblFileImageType", "lblFileSelect")) {
             console.log("validated");
-            ShowLoader();
+            // ShowLoader();
 
             var UploadToken = '';
             var vXMLResponse = '';
@@ -1645,22 +1487,11 @@
                     if ($ugcStatus.text() != "SUCCESS") {
                       alert("ERROR UPLOADING IMAGE: " + $ugcStatusDetail.text());
                     } else {
-                      var $ugcUrl = $xml.find('url');
-                      var $ugcPath = $xml.find('path');
+                      // var $ugcUrl = $xml.find('url');
+                      // var $ugcPath = $xml.find('path');
                       var $ugcFullUrl = $xml.find('fullurl');
 
-                      $('#previewImageUrl').attr('value', $ugcUrl.text());
-                      $('#itemcode').prop('value', $ugcFullUrl.text());
-                      $('#previewImagePath').attr('value', $ugcFullUrl.text());
-                      $('#previewImageXml').val(xmlstr);
-                      $('#previewImage').attr('src', $ugcFullUrl.text() + "?$PDP-ALT-THMB$");
-
-                      $('#thumbnailDecoration').show();
-                      $('#codetype').prop('value', "ugcCode");
-                      $("#updateTumbler").click()
-                      //$('#previewImage').on("load",
-                      //$('#tumblerimage').attr('src', $('#vignetteUrl').val() + "?$PDP-ZM-ALPHA$"));
-
+                      document.querySelector("#DecorationImageSourceValue").value = $ugcFullUrl.text()
                     }
 
                     var percentVal = '100%';
@@ -1670,7 +1501,7 @@
                   complete: function (xhr) {
                     console.log("complete");
 
-                    HideLoader();
+                    // HideLoader();
 
                   },
                   cache: false
@@ -1680,7 +1511,7 @@
                 $("#frmFileUpload").ajaxSubmit(options);
               },
               error: function (err) {
-                HideLoader();
+                // HideLoader();
                 console.log(err);
               }
             });
@@ -1705,14 +1536,6 @@
             $("#" + lblFileTypes).attr("style", "display:none;");
           }
           return false;
-        }
-
-        function ShowLoader() {
-          $("#loader").show();
-        }
-
-        function HideLoader() {
-          $("#loader").hide();
         }
       </script>
       <script type="module">
