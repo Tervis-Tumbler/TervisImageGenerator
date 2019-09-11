@@ -445,41 +445,48 @@
     }
   </style>
   <link rel='stylesheet prefetch' href='https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css'>  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/tooltipster.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/themes/tooltipster-light.min.css">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/tooltipster.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/themes/tooltipster-light.min.css"> -->
 
   <div id="center">
     <div id="container">
       <div>
         <div class="thumbnailPreview">
           <label>
-            <input type="radio" name="thmbRadio" value="1" checked="checked" />
-            <img id="thumbnailVirtual"
+            <input type="radio" name="thmbRadio" value="1" checked />
+            <img 
+              id="thumbnailVirtual"
               src="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$"
-              alt="tumbler images" alt="tumbler images" class="tip-trigger" data-tooltip-content="#virtualPreview" />
-            <div class="tooltip_templates"> <span id="virtualPreview"> Virtual View </span> </div>
+              class="tip-trigger" 
+              title="Virtual View" 
+            />
           </label>
           <label>
             <input type="radio" name="thmbRadio" value="1-HERO2" />
-            <img id="thumbnailHero"
+            <img 
+              id="thumbnailHero"
               src="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1-HERO2?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$"
-              alt="tumbler images" class="tip-trigger" data-tooltip-content="#heroPreview" />
-            <div class="tooltip_templates"> <span id="heroPreview"> Hero View </span> </div>
+              class="tip-trigger"
+              title="Hero View" 
+            />
           </label>
           <label>
             <input type="radio" name="thmbRadio" value="RM" />
             <div class="loader" id="loader" style="display: none;"> 
-              <img 
+              <img
                 src="//imagegenerator.tervis.com/is/content/tervis/loading93x93.gif"
-                style="max-height: 93px; max-width:93px; margin:0px auto; display:block;" />
+                style="max-height: 93px; max-width:93px; margin:0px auto; display:block;"
+              />
             </div>
             <div id="thumbnailDecoration">
-              <img id="previewImage"
+              <img 
+                id="previewImage"
                 style="max-height: 93px; max-width:93px; margin:0px auto;"
                 src="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$"
                 onerror="this.src='//imagegenerator.tervis.com/is/content/tervis/loading93x93.gif';"
                 class="tip-trigger"
-                title="Decoration View" />
+                title="Decoration View" 
+              />
             </div>
           </label>
       </div>
@@ -540,6 +547,39 @@
         </div>
       </div>
 
+      <div id="togglediv">
+
+        <div id="DecorationSourceMenuGroup"></div>
+        <div id="DecorationImageSourceIsArcedContainer"></div>
+
+        <div class="selected-type">Product</div>
+        <div class="carousel1" id="select-product"></div>
+        <div id="ProductDecorationTypePickerContainer"></div>
+
+        <div id="select-vignette-object-color-options"></div>
+      </div>
+
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+      <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js'></script> -->
+      <!-- <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script> -->
+      <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/js/jquery.tooltipster.min.js"></script> -->
+      <!-- <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery_cookie.js"></script> -->
+      <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+
+      <script type="text/javascript" language="javascript" 
+        src="https://cdn.jsdelivr.net/npm/caroufredsel@6.2.1/jquery.carouFredSel-6.2.1-packed.min.js"></script>
+
+      <script type="text/javascript" language="javascript"
+        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" language="javascript"
+        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.touchSwipe.min.js"></script>
+      <script type="text/javascript" language="javascript"
+        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.transit.min.js"></script>
+      <script type="text/javascript" language="javascript"
+        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.ba-throttle-debounce.min.js"></script>
+
       <script type="module">
         import {
           Get_TervisProductMetaDataUsingIndex,
@@ -558,10 +598,20 @@
         } from 'https://unpkg.com/lit-html@1.1.2/directives/if-defined.js?module'
         
         import { 
+          New_TervisAdobeScene7PrintSingleURL,
+          New_TervisAdobeScene7WrapDecoration3TimesURL,
+          New_TervisAdobeScene7URL,
+          New_TervisAdobeScene7ProductVignetteImageURL,
+          ConvertTo_TervisAdobeScene7VignettePosition,
           Get_TervisAdobeScene7Silhouette,
           Get_TervisAdobeScene7VignetteObjectWithColorOption,
           Get_TervisAdobeScene7SwatchImageURL
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.74/TervisAdobeScene7JS.js?module'
+        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.77/TervisAdobeScene7JS.js?module'
+
+        import {
+          New_TervisAdobeScene7CustomyzerDecorationImageURL
+        } from 'https://unpkg.com/@tervis/tervisadobescene7customyzerjs?module'
+
 
         var $DownloadOptions = [
           {
@@ -672,8 +722,7 @@
           }
         ]
 
-        $(window).on("load", async function () {
-          const New_MenuGroup = ({
+        const New_MenuGroup = ({
             $GroupTitle,
             $GroupCode,
             $InnerContent,
@@ -756,6 +805,7 @@
             </li>
             `
 
+        async function Update_ImageGeneratorProductCarousel () {
           var $CarouselItems = []
           for (var {$ProductSize, $ProductFormType} of $ProductOrderInCarousel) {
             var $IsFirstProduct = 
@@ -803,454 +853,398 @@
               onTouch: true
             }
           });
+        }
 
-          Receive_ProductSelectionEvent()
-          
-          async function Receive_ProductSelectionEvent() {
-            var $ProductVignetteDefaultSettings = [
-              {
-                Size: 16,
-                FormType: "DWT",
-                INNER: {
-                  LINED: "CL1" 
-                }
-              },
-              {
-                Size: 24,
-                FormType: "DWT",
-                INNER: {
-                  LINED: "CL1" 
-                }
-              },
-              {
-                Size: 24,
-                FormType: "WB",
-                INNER: {
-                  LINED: "CL1" 
-                },
-                ACCESSORIES: {
-                  LIDWB: "GY1"
-                }
-              },
-              {
-                Size: 16,
-                FormType: "BEER",
-                INNER: {
-                  LINED: "CL1" 
-                }
-              },
-              {
-                Size: 16,
-                FormType: "MUG",
-                INNER: {
-                  LINED: "CL1" 
-                }
-              },
-              {
-                Size: 6,
-                FormType: "SIP",
-                ACCESSORIES: {
-                  LIDSIP: "GY3"
-                }
-              },
-              {
-                Size: 9,
-                FormType: "WINE",
-                INNER: {
-                  LINED: "CL1" 
-                }
-              },
-              {
-                Size: 9,
-                FormType: "SWG",
-                INNER: {
-                  LINED: "CL1" 
-                }
-              },
-              {
-                Size: 16,
-                FormType: "TALL",
-                INNER: {
-                  SMOOTH: "CL1" 
-                }
-              },
-              {
-                Size: 20,
-                FormType: "SS",
-                OUTER: {
-                  SMOOTH: "SS1" 
-                }
-              },
-              {
-                Size: 30,
-                FormType: "SS",
-                OUTER: {
-                  SMOOTH: "SS1" 
-                }
-              },
-              {
-                Size: 24,
-                FormType: "SS",
-                ACCESSORIES: {
-                  LIDWB: "GY1" 
-                }
-              },
-              {
-                Size: 17,
-                FormType: "SS",
-                ACCESSORIES: {
-                  SSWBLID: "SS1" 
-                }
-              }
-            ]
+        function Update_ImageGeneratorDecorationSourceImageArcedSelect () {
+          var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
+          var $DecorationImageSourceType = Get_ImageGeneratorSelectedDecorationImageSourceType()
+          var $DisplayNoneAndNotArced = 
+            $ProductFormType === "SS" || 
+            $DecorationImageSourceType === "Customyzer Project ID" ||
+            $DecorationImageSourceType === "Raw Material Item Number"
 
-            var $VignetteCodeToMarketingName = {
-              INNER: "Product Inner",
-              LINED: "Lined",
-              SMOOTH: "Smooth",
-              OUTER: "Product Outer",
-              RIPPLE: "Ripple",
-              ACCESSORIES: "Accessories",
-              HAND: "Handle",
-              LIDTRV: "Travel Lid",
-              TOPSHK: "Shacker Top Lid",
-              LIDSTW: "Straw Lid",
-              LIDHOT: "Hot Lid",
-              LIDSIP: "Sippy Lid",
-              LIDWB: "Water Bottle Lid",
-              SSLIDTRV: "Slider Lid",
-              SSLIDHMR: "Hammer Lid",
-              LIDWIN: "Wine Lid",
-              SSWBLID: "Stainless Lid"
-            }
-            
-            var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
-            var $ProductSizeAndProducFormType = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
-            var {$ProductSize, $ProductFormType} = $ProductSizeAndProducFormType
-
-            var $ProductDecorationTypes = {
-              WRA: "Wrap",
-              EMB: "Emblem",
-              DPT: "Direct Print"
-            }
-
-            var $ProductDecorationTypePicker = html`
-              <select 
-                id="ProductDecorationType" 
+          render(
+            html`
+              <select
+                id="DecorationImageSourceArced"
                 class="menupad"
-                style="${ifDefined($ProductFormType === "SS" ? "display: none;" : undefined) }"
+                style="${ifDefined( $DisplayNoneAndNotArced ? "display: none;" : undefined) }"
               >
-                <option value= "" selected disabled class="menupad">Decoration Type</option>
-                ${
-                  Object                
-                  .entries($ProductDecorationTypes)
-                  .map(
-                    ([$ProductDecorationTypeCode, $ProductDecorationTypeName]) =>
-                    html`
-                      <option 
-                        value="${$ProductDecorationTypeCode}"
-                        ?selected=${
-                            $ProductFormType === "SS" && $ProductDecorationTypeCode === "DPT" ||
-                            $ProductFormType === "ICE" && $ProductDecorationTypeCode === "EMB" ||
-                            !["ICE","SS"].includes($ProductFormType) && $ProductDecorationTypeCode === "WRA"
-                        }
-                      >
-                        ${$ProductDecorationTypeName}
-                      </option>`
-                  )
-                }
+                <option disabled selected>Is source image arced?</option>
+                <option>Arced</option>
+                <option ?selected=${$DisplayNoneAndNotArced}>Not arced</option>
               </select>
-            `
-            var $ProductDecorationTypePickerContainer = document.querySelector('#ProductDecorationTypePickerContainer')
+            `,
+            document.querySelector("#DecorationImageSourceIsArcedContainer")
+          )
+        }
 
-            render(
-              $ProductDecorationTypePicker,
-              $ProductDecorationTypePickerContainer
-            )
+        function Get_ImageGeneratorSelectedProductSizeAndProductFormType() {
+          var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
+          return Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
+        }
 
-            var $VignetteSuffix = $("input[name='thmbRadio']:checked").val();
-
-            var $VignetteObjectsWithColorOption = await Get_TervisAdobeScene7VignetteObjectWithColorOption({
-              ...$ProductSizeAndProducFormType,
-              $VignetteSuffix
-            })
-
-            var $CarouselGroups = []
-            var $CarouFredSelOptions = []
-
-            for (var $VignetteObjectWithColorOption of $VignetteObjectsWithColorOption ){
-              var $Carousels = []
-              for (var $ThingWithAvailableColorCode of $VignetteObjectWithColorOption.Options) {
-                var $CarouselItems = []
-
-                var $CarouselName = $ThingWithAvailableColorCode.Code === "HAND" ?
-                  $ThingWithAvailableColorCode.Code :
-                  $VignetteObjectWithColorOption.Code
-
-                if (
-                  $VignetteObjectWithColorOption.Code !== "INNER" && 
-                  $VignetteObjectWithColorOption.Code !== "OUTER"
-                ) {
-                  $CarouselItems.push(
-                    New_CrouselItem({
-                      $CarouselName,
-                      $CarouselItemImageURL: "http://images.tervis.com/is/image/tervis/REMOVE?$SWATCH$",
-                      $CarouselItemTitle: `None`,
-                      $CarouselItemToolTip: `None`
-                    })
-                  )
-                }
-                
-                for (var $ColorCode of $ThingWithAvailableColorCode.AvailableColorCodes) {
-                  var $ColorMetaData = await Get_TervisProductColorMarketingNameUsingIndex({$ColorCode})
-                  
-                  if ($ColorMetaData) { 
-                    var { MarketingName: $ColorMarketingName } = $ColorMetaData
-                  } else {
-                    continue
-                  }
-                  
-                  var $CarouselItemImageURL = Get_TervisAdobeScene7SwatchImageURL({$ColorCode})
-
-                  var $IsChecked = $ThingWithAvailableColorCode.AvailableColorCodes.length === 1 && (
-                    $VignetteObjectWithColorOption.Code === "INNER" || 
-                    $VignetteObjectWithColorOption.Code === "OUTER"
-                  )
-
-                  $CarouselItems.push(
-                    New_CrouselItem({
-                      $CarouselName,
-                      $CarouselItemValue: `${$ColorCode}`, 
-                      $CarouselItemImageURL,
-                      $CarouselItemTitle: `${$ColorMarketingName} - ${$ColorCode}`,
-                      $CarouselItemToolTip: `${$ColorMarketingName} - ${$ColorCode}`,
-                      $IsChecked
-                    })
-                  )
-                }
-
-                var $CarouselID = $ThingWithAvailableColorCode.Code
-                $CarouFredSelOptions.push({
-                  CarouselContainerSelector: `.${$VignetteObjectWithColorOption.Code} .${$CarouselID}Container`,
-                  CaroFreDeslULSelector: `.${$VignetteObjectWithColorOption.Code} .${$CarouselID}Container .${$CarouselID}`
-                })
-                var $Carousel = New_Carousel({
-                  $CarouselTitle: $VignetteCodeToMarketingName[$ThingWithAvailableColorCode.Code],
-                  $CarouselID,
-                  $CarouselItems,
-                  $CarouselItemsContainerStyle: "list_carousel2"
-                })
-
-                $Carousels.push($Carousel)
-              }
-              
-              $CarouselGroups.push(
-                New_MenuGroup({ 
-                  $GroupTitle: $VignetteCodeToMarketingName[$VignetteObjectWithColorOption.Code],
-                  $GroupCode: $VignetteObjectWithColorOption.Code,
-                  $InnerContent: $Carousels,
-                  $DisplayNone: $IsChecked
-                })
-              )
-            }
-            
-            var $ThingsWithColorOptionsDiv = document.querySelector('#select-vignette-object-color-options')
-            render($CarouselGroups, $ThingsWithColorOptionsDiv)
-
-            $CarouFredSelOptions.forEach(
-              $CarouFredSelOption =>
-              $($CarouFredSelOption.CaroFreDeslULSelector).carouFredSel({
-                auto: false,
-                circular: false,
-                prev: `${$CarouFredSelOption.CarouselContainerSelector} .prev`,
-                next: `${$CarouFredSelOption.CarouselContainerSelector} .next`,
-                mousewheel: true,
-                swipe: {
-                  onMouse: true,
-                  onTouch: true
-                }
-              })
-            )
-
-            // $('body').on('mouseenter', '.tip-trigger:not(.tooltipstered)', function(){
-            //   // $(this)
-            //   //   .tooltipster('destroy')
-              
-            //   $(this)
-            //     .tooltipster({ 
-            //       animation: 'grow',
-            //       speed: 300,
-            //       theme: 'tooltipster-light',
-            //       maxWidth: 320,
-            //       contentCloning: false,
-            //       delay: 10,
-            //       restoration: "previous"
-            //     })
-            //     .tooltipster('show');
-            //   });
-                      
-            // var $ToolTipsteredElements = $('.tip-trigger.tooltipstered')
-            // $ToolTipsteredElements.removeClass("tooltipstered")
-            // $ToolTipsteredElements.tooltipster('destroy')
-            // $('.tip-trigger:not(.tooltipstered)').tooltipster({
-            //   animation: 'grow',
-            //   speed: 300,
-            //   theme: 'tooltipster-light',
-            //   maxWidth: 320,
-            //   contentCloning: false,
-            //   delay: 10,
-            //   restoration: "previous"
-            // });
-            
-            $ProductVignetteDefaultSettings.filter(
-              ({Size: $ProductSize, FormType: $ProductFormType}) =>
-              $ProductSize === parseInt($ProductSizeAndProducFormType.$ProductSize) && $ProductFormType === $ProductSizeAndProducFormType.$ProductFormType
-            )
-            .forEach(
-              $DefaultSettingEntry => {
-                var $DefaultSettings = Object.entries($DefaultSettingEntry)
-                  .filter(
-                    $Entry =>
-                    ["Size","FormType"].includes($Entry[0]) === false
-                  )
-                
-                for ( var [$GroupCode, $ThingWithColorCodeObject] of $DefaultSettings) {
-                  Object
-                  .entries($ThingWithColorCodeObject)
-                  .forEach(
-                    ([$Code, $ColorCode]) =>
-                    document.querySelector(
-                      `.${$GroupCode} .${$Code} input[value='${$ColorCode}']`
-                    ).checked = true
-                  )
-                }
-              }
-            )
-          }// End Radio select
-
+        function Get_ImageGeneratorSelectedDecorationImageSourceType () {
+          var $DecorationImageSourceTypeElementID = "DecorationImageSourceType"
+          var $DecorationImageSourceTypeSelector = `#${$DecorationImageSourceTypeElementID}`
           
+          if (document.querySelector($DecorationImageSourceTypeSelector)) {
+            return document.querySelector($DecorationImageSourceTypeSelector).value
+          }
+        }
 
-          window.Receive_ProductSelectionEvent = Receive_ProductSelectionEvent
-          $("input[name='tumblerRadio']").on("change", window.Receive_ProductSelectionEvent);
-
-          async function Receive_DecorationSourceSelectionEvent() {
-
-            var $DecorationSourceOptions = [
-              "Raw Material Item Number",
-              "UGC Upload",
-              "Customyzer Project ID",
-              "Deocoration Image URL",
-              // "Finished Good Item Number"
-            ]
-
-            var $DecorationImageSourceTypeElementID = "DecorationImageSourceType"
-            var $DecorationImageSourceTypeSelector = `#${$DecorationImageSourceTypeElementID}`
-
-            if (
-              document.querySelector($DecorationImageSourceTypeSelector) &&
-              document.querySelector($DecorationImageSourceTypeSelector).value
-            ) {
-              var $DecorationImageSourceType = document.querySelector($DecorationImageSourceTypeSelector).value
-              var $ConditionallyAddedInput = [html`
-                <input
-                  id="DecorationImageSourceValue"
-                  type="text"
-                  placeholder="${$DecorationImageSourceType}" 
-                  disabled="${ifDefined($DecorationImageSourceType === "UGC Upload" ? "" : undefined)}"
-                  class="menupad" />
-              `]
-
-              if ($DecorationImageSourceType === "UGC Upload") {
-                $ConditionallyAddedInput.push(
-                  html`
-                    <form name="frmFileUpload" id="frmFileUpload" method="post" enctype="multipart/form-data">
-                      <input name="txtUploadFile" type="file" id="txtUploadFile" multiple accept="image/*" class="btn btn-default"
-                        style="width: 210px; height:30px; vertical-align:bottom;" />
-                    </form>
-                  `
-                ) 
+        async function Receive_ProductSelectionEvent() {
+          var $ProductVignetteDefaultSettings = [
+            {
+              Size: 16,
+              FormType: "DWT",
+              INNER: {
+                LINED: "CL1" 
+              }
+            },
+            {
+              Size: 24,
+              FormType: "DWT",
+              INNER: {
+                LINED: "CL1" 
+              }
+            },
+            {
+              Size: 24,
+              FormType: "WB",
+              INNER: {
+                LINED: "CL1" 
+              },
+              ACCESSORIES: {
+                LIDWB: "GY1"
+              }
+            },
+            {
+              Size: 16,
+              FormType: "BEER",
+              INNER: {
+                LINED: "CL1" 
+              }
+            },
+            {
+              Size: 16,
+              FormType: "MUG",
+              INNER: {
+                LINED: "CL1" 
+              }
+            },
+            {
+              Size: 6,
+              FormType: "SIP",
+              ACCESSORIES: {
+                LIDSIP: "GY3"
+              }
+            },
+            {
+              Size: 9,
+              FormType: "WINE",
+              INNER: {
+                LINED: "CL1" 
+              }
+            },
+            {
+              Size: 9,
+              FormType: "SWG",
+              INNER: {
+                LINED: "CL1" 
+              }
+            },
+            {
+              Size: 16,
+              FormType: "TALL",
+              INNER: {
+                SMOOTH: "CL1" 
+              }
+            },
+            {
+              Size: 20,
+              FormType: "SS",
+              OUTER: {
+                SMOOTH: "SS1" 
+              }
+            },
+            {
+              Size: 30,
+              FormType: "SS",
+              OUTER: {
+                SMOOTH: "SS1" 
+              }
+            },
+            {
+              Size: 24,
+              FormType: "SS",
+              ACCESSORIES: {
+                LIDWB: "GY1" 
+              }
+            },
+            {
+              Size: 17,
+              FormType: "SS",
+              ACCESSORIES: {
+                SSWBLID: "SS1" 
               }
             }
+          ]
 
-            var $MenuGroup = New_MenuGroup({
-              $GroupTitle: "Decoration Image",
-              $InnerContent: html`
-                <select id="${$DecorationImageSourceTypeElementID}" class="menupad" @change=${Receive_DecorationSourceSelectionEvent}>
-                  <option value= "" selected disabled class="menupad">Source Type</option>
-                  ${$DecorationSourceOptions.map(
-                    $DecorationSourceOption => html`
-                      <option>${$DecorationSourceOption}</option>
-                    `
-                  )}
-                </select>
-                ${$ConditionallyAddedInput}
-              `
-            })
+          var $VignetteCodeToMarketingName = {
+            INNER: "Product Inner",
+            LINED: "Lined",
+            SMOOTH: "Smooth",
+            OUTER: "Product Outer",
+            RIPPLE: "Ripple",
+            ACCESSORIES: "Accessories",
+            HAND: "Handle",
+            LIDTRV: "Travel Lid",
+            TOPSHK: "Shacker Top Lid",
+            LIDSTW: "Straw Lid",
+            LIDHOT: "Hot Lid",
+            LIDSIP: "Sippy Lid",
+            LIDWB: "Water Bottle Lid",
+            SSLIDTRV: "Slider Lid",
+            SSLIDHMR: "Hammer Lid",
+            LIDWIN: "Wine Lid",
+            SSWBLID: "Stainless Lid"
+          }
+          
+          var $ProductSizeAndProducFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
+          var {$ProductSize, $ProductFormType} = $ProductSizeAndProducFormType
 
-            
-            var $DecorationSourceMenuGroup = document.querySelector('#DecorationSourceMenuGroup')
-            render($MenuGroup, $DecorationSourceMenuGroup)
+          Update_ImageGeneratorDecorationSourceImageArcedSelect({$ProductSize, $ProductFormType})
 
+          var $ProductDecorationTypes = {
+            WRA: "Wrap",
+            EMB: "Emblem",
+            DPT: "Direct Print Outer"
           }
 
-          Receive_DecorationSourceSelectionEvent()
+          var $ProductDecorationTypePicker = html`
+            <select 
+              id="ProductDecorationType" 
+              class="menupad"
+              style="${ifDefined($ProductFormType === "SS" ? "display: none;" : undefined) }"
+            >
+              <option value= "" selected disabled class="menupad">Decoration Type</option>
+              ${
+                Object                
+                .entries($ProductDecorationTypes)
+                .map(
+                  ([$ProductDecorationTypeCode, $ProductDecorationTypeName]) =>
+                  html`
+                    <option 
+                      value="${$ProductDecorationTypeCode}"
+                      ?selected=${
+                          $ProductFormType === "SS" && $ProductDecorationTypeCode === "DPT" ||
+                          $ProductFormType === "ICE" && $ProductDecorationTypeCode === "EMB" ||
+                          !["ICE","SS"].includes($ProductFormType) && $ProductDecorationTypeCode === "WRA"
+                      }
+                    >
+                      ${$ProductDecorationTypeName}
+                    </option>`
+                )
+              }
+            </select>
+          `
+          var $ProductDecorationTypePickerContainer = document.querySelector('#ProductDecorationTypePickerContainer')
 
-        })// End of window on load
-      </script>
+          render(
+            $ProductDecorationTypePicker,
+            $ProductDecorationTypePickerContainer
+          )
 
-      <div id="togglediv">
+          var $VignetteSuffix = $("input[name='thmbRadio']:checked").val();
 
-        <div id="DecorationSourceMenuGroup"></div>
-        <label for="DecorationImageSourceArced">Is source image arced?</label>
-        <input type="checkbox" id="DecorationImageSourceArced" checked>
+          var $VignetteObjectsWithColorOption = await Get_TervisAdobeScene7VignetteObjectWithColorOption({
+            ...$ProductSizeAndProducFormType,
+            $VignetteSuffix
+          })
 
+          var $CarouselGroups = []
+          var $CarouFredSelOptions = []
 
-        <div class="selected-type">Product</div>
-        <div class="carousel1" id="select-product"></div>
-        <div id="ProductDecorationTypePickerContainer"></div>
+          for (var $VignetteObjectWithColorOption of $VignetteObjectsWithColorOption ){
+            var $Carousels = []
+            for (var $ThingWithAvailableColorCode of $VignetteObjectWithColorOption.Options) {
+              var $CarouselItems = []
 
-        <div id="select-vignette-object-color-options"></div>
-      </div>
+              var $CarouselName = $ThingWithAvailableColorCode.Code === "HAND" ?
+                $ThingWithAvailableColorCode.Code :
+                $VignetteObjectWithColorOption.Code
 
-      
-      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-      <script src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script>
-      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js'></script>
-      <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/js/jquery.tooltipster.min.js"></script>
-      
-      <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery_cookie.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+              if (
+                $VignetteObjectWithColorOption.Code !== "INNER" && 
+                $VignetteObjectWithColorOption.Code !== "OUTER"
+              ) {
+                $CarouselItems.push(
+                  New_CrouselItem({
+                    $CarouselName,
+                    $CarouselItemImageURL: "http://images.tervis.com/is/image/tervis/REMOVE?$SWATCH$",
+                    $CarouselItemTitle: `None`,
+                    $CarouselItemToolTip: `None`
+                  })
+                )
+              }
+              
+              for (var $ColorCode of $ThingWithAvailableColorCode.AvailableColorCodes) {
+                var $ColorMetaData = await Get_TervisProductColorMarketingNameUsingIndex({$ColorCode})
+                
+                if ($ColorMetaData) { 
+                  var { MarketingName: $ColorMarketingName } = $ColorMetaData
+                } else {
+                  continue
+                }
+                
+                var $CarouselItemImageURL = Get_TervisAdobeScene7SwatchImageURL({$ColorCode})
 
-      <script type="text/javascript" language="javascript" 
-        src="https://cdn.jsdelivr.net/npm/caroufredsel@6.2.1/jquery.carouFredSel-6.2.1-packed.min.js"></script>
+                var $IsChecked = $ThingWithAvailableColorCode.AvailableColorCodes.length === 1 && (
+                  $VignetteObjectWithColorOption.Code === "INNER" || 
+                  $VignetteObjectWithColorOption.Code === "OUTER"
+                )
 
-      <script type="text/javascript" language="javascript"
-        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.mousewheel.min.js"></script>
-      <script type="text/javascript" language="javascript"
-        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.touchSwipe.min.js"></script>
-      <script type="text/javascript" language="javascript"
-        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.transit.min.js"></script>
-      <script type="text/javascript" language="javascript"
-        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.ba-throttle-debounce.min.js"></script>
+                $CarouselItems.push(
+                  New_CrouselItem({
+                    $CarouselName,
+                    $CarouselItemValue: `${$ColorCode}`, 
+                    $CarouselItemImageURL,
+                    $CarouselItemTitle: `${$ColorMarketingName} - ${$ColorCode}`,
+                    $CarouselItemToolTip: `${$ColorMarketingName} - ${$ColorCode}`,
+                    $IsChecked
+                  })
+                )
+              }
 
-      <script type="module">
-        import { 
-          New_TervisAdobeScene7PrintSingleURL,
-          New_TervisAdobeScene7WrapDecoration3TimesURL,
-          New_TervisAdobeScene7URL,
-          New_TervisAdobeScene7ProductVignetteImageURL,
-          ConvertTo_TervisAdobeScene7VignettePosition
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.77/TervisAdobeScene7JS.js?module'
+              var $CarouselID = $ThingWithAvailableColorCode.Code
+              $CarouFredSelOptions.push({
+                CarouselContainerSelector: `.${$VignetteObjectWithColorOption.Code} .${$CarouselID}Container`,
+                CaroFreDeslULSelector: `.${$VignetteObjectWithColorOption.Code} .${$CarouselID}Container .${$CarouselID}`
+              })
+              var $Carousel = New_Carousel({
+                $CarouselTitle: $VignetteCodeToMarketingName[$ThingWithAvailableColorCode.Code],
+                $CarouselID,
+                $CarouselItems,
+                $CarouselItemsContainerStyle: "list_carousel2"
+              })
 
-        import {
-          Get_TervisProductSizeAndFormTypeFromString          
-        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.16/TervisProductMetadata.js?module'
+              $Carousels.push($Carousel)
+            }
+            
+            $CarouselGroups.push(
+              New_MenuGroup({ 
+                $GroupTitle: $VignetteCodeToMarketingName[$VignetteObjectWithColorOption.Code],
+                $GroupCode: $VignetteObjectWithColorOption.Code,
+                $InnerContent: $Carousels,
+                $DisplayNone: $IsChecked
+              })
+            )
+          }
+          
+          var $ThingsWithColorOptionsDiv = document.querySelector('#select-vignette-object-color-options')
+          render($CarouselGroups, $ThingsWithColorOptionsDiv)
 
-        import {
-          New_TervisAdobeScene7CustomyzerDecorationImageURL
-        } from 'https://unpkg.com/@tervis/tervisadobescene7customyzerjs?module'
+          $CarouFredSelOptions.forEach(
+            $CarouFredSelOption =>
+            $($CarouFredSelOption.CaroFreDeslULSelector).carouFredSel({
+              auto: false,
+              circular: false,
+              prev: `${$CarouFredSelOption.CarouselContainerSelector} .prev`,
+              next: `${$CarouFredSelOption.CarouselContainerSelector} .next`,
+              mousewheel: true,
+              swipe: {
+                onMouse: true,
+                onTouch: true
+              }
+            })
+          )
+
+          $ProductVignetteDefaultSettings.filter(
+            ({Size: $ProductSize, FormType: $ProductFormType}) =>
+            $ProductSize === parseInt($ProductSizeAndProducFormType.$ProductSize) && $ProductFormType === $ProductSizeAndProducFormType.$ProductFormType
+          )
+          .forEach(
+            $DefaultSettingEntry => {
+              var $DefaultSettings = Object.entries($DefaultSettingEntry)
+                .filter(
+                  $Entry =>
+                  ["Size","FormType"].includes($Entry[0]) === false
+                )
+              
+              for ( var [$GroupCode, $ThingWithColorCodeObject] of $DefaultSettings) {
+                Object
+                .entries($ThingWithColorCodeObject)
+                .forEach(
+                  ([$Code, $ColorCode]) =>
+                  document.querySelector(
+                    `.${$GroupCode} .${$Code} input[value='${$ColorCode}']`
+                  ).checked = true
+                )
+              }
+            }
+          )
+        }// End Receive_ProductSelectionEvent
+        window.Receive_ProductSelectionEvent = Receive_ProductSelectionEvent
+
+        async function Receive_DecorationSourceSelectionEvent() {
+          var $DecorationSourceOptions = [
+            "Raw Material Item Number",
+            "UGC Upload",
+            "Customyzer Project ID",
+            "Deocoration Image URL",
+            // "Finished Good Item Number"
+          ]
+
+          var $DecorationImageSourceTypeElementID = "DecorationImageSourceType"
+          var $DecorationImageSourceType = Get_ImageGeneratorSelectedDecorationImageSourceType()
+
+          if ($DecorationImageSourceType) {
+            var $ConditionallyAddedInput = [html`
+              <input
+                id="DecorationImageSourceValue"
+                type="text"
+                placeholder="${$DecorationImageSourceType}" 
+                disabled="${ifDefined($DecorationImageSourceType === "UGC Upload" ? "" : undefined)}"
+                class="menupad" />
+            `]
+
+            if ($DecorationImageSourceType === "UGC Upload") {
+              $ConditionallyAddedInput.push(
+                html`
+                  <form name="frmFileUpload" id="frmFileUpload" method="post" enctype="multipart/form-data">
+                    <input name="txtUploadFile" type="file" id="txtUploadFile" multiple accept="image/*" class="btn btn-default"
+                      style="width: 210px; height:30px; vertical-align:bottom;" />
+                  </form>
+                `
+              ) 
+            }
+
+            Update_ImageGeneratorDecorationSourceImageArcedSelect()
+          }
+
+          var $MenuGroup = New_MenuGroup({
+            $GroupTitle: "Decoration Image",
+            $InnerContent: html`
+              <select 
+                id="${$DecorationImageSourceTypeElementID}"
+                class="menupad"
+                @change=${Receive_DecorationSourceSelectionEvent}
+              >
+                <option value= "" selected disabled class="menupad">Source Type</option>
+                ${$DecorationSourceOptions.map(
+                  $DecorationSourceOption => html`
+                    <option>${$DecorationSourceOption}</option>
+                  `
+                )}
+              </select>
+              ${$ConditionallyAddedInput}
+            `
+          })
+
+          var $DecorationSourceMenuGroup = document.querySelector('#DecorationSourceMenuGroup')
+          render($MenuGroup, $DecorationSourceMenuGroup)
+        }
         
         function New_UGCRelativeURLFromURL ({
           $URL
@@ -1321,18 +1315,8 @@
           return $ElementPathsToShow
         }
 
-        function Get_DecorationPositionXValueFromDegrees({
-          $ProductSize,
-          $ProductFormType,
-          $Degrees
-        }) {
-
-        }
-
-        $(window).on("load", function () {
-          async function update() {
-            var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
-            var $ProductSizeAndProductFormType = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
+        async function update() {
+            var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
             var $ImageSourceURLAsScene7SrcValue = await Get_ImageGeneratorDecorationImageSourceURL({
               $AsScene7SrcValue: true
             })
@@ -1402,19 +1386,17 @@
           } // END FUNCTION (UPDATE)
 
 
-          // UPDATE TUMBLER BUTTON FUNCTION
-          if ($('#decorationtype') != ("choose")) {
-            $('#codetype').on("change", update);
-          }
+        $(window).on("load", async function () {
+          await Update_ImageGeneratorProductCarousel()
+          Receive_ProductSelectionEvent()
+          Receive_DecorationSourceSelectionEvent()
+
+          $("input[name='tumblerRadio']").on("change", window.Receive_ProductSelectionEvent)
           $('input').on("input change", update);
-          $('#decorationtype').on("change", update);
-          $('#itemcode').on("change", update);
-
-
-        });
-
+        })
+      </script>
+      <script>
         //Image Upload Section
-
         var sharedSecret = '9f91ce08-1501-459f-ab09-3d2ddc103344';
 
         $(function () {
@@ -1538,9 +1520,8 @@
           return false;
         }
       </script>
-      <script type="module">
+      <!-- <script type="module">
         import {
-          Get_TervisProductSizeAndFormTypeFromString,
           Get_TervisProductMetaDataUsingIndex
         } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.16/TervisProductMetadata.js?module'
         
@@ -1557,8 +1538,7 @@
 
         async function Get_URLSFourSides() {
           var $URLs = []
-          var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
-          var $ProductSizeAndProductFormType = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
+          var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
           var $SizeAndFormTypeMetaData = await Get_TervisProductMetaDataUsingIndex({ ...$ProductSizeAndProducFormType })
           var $RotateValues = []
 
@@ -1599,8 +1579,7 @@
         }
 
         async function Invoke_OneSidedVirtualDownload () {
-          var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
-          var {$ProductSize, $ProductFormType} = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
+          var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedDecorationImageSourceType()
           
           var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$ProductSize, $ProductFormType})
           var $ProductVignetteImageURLAsSourceValue = New_ImageGeneratorProductVignetteImageURLAsSourceValue()
@@ -1703,8 +1682,7 @@
         }
 
         async function Invoke_FourSidedVirtualDownload () {
-          var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
-          var {$ProductSize, $ProductFormType} = Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
+          var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedDecorationImageSourceType()
           
           var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$ProductSize, $ProductFormType})
 
@@ -1766,5 +1744,5 @@
           )
         }
 
-      </script>
+      </script> -->
     </div>
