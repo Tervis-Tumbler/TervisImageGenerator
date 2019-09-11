@@ -794,6 +794,7 @@
                   name="${$CarouselName}"
                   .value="${$CarouselItemValue}"
                   .checked=${forceWrite($IsChecked)}
+                  @change=${Update_ImageGeneratorProductVignetteURL}
                 />
                 <img 
                   src="${$CarouselItemImageURL}"
@@ -988,6 +989,13 @@
               ACCESSORIES: {
                 SSWBLID: "SS1" 
               }
+            },
+            {
+              Size: 10,
+              FormType: "WAV",
+              OUTER: {
+                WAVY: "CL1" 
+              }
             }
           ]
 
@@ -1011,10 +1019,10 @@
             SSWBLID: "Stainless Lid"
           }
           
-          var $ProductSizeAndProducFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
-          var {$ProductSize, $ProductFormType} = $ProductSizeAndProducFormType
+          var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
+          var {$ProductSize, $ProductFormType} = $ProductSizeAndProductFormType
 
-          Update_ImageGeneratorDecorationSourceImageArcedSelect({$ProductSize, $ProductFormType})
+          // Update_ImageGeneratorDecorationSourceImageArcedSelect()
 
           var $ProductDecorationTypes = {
             WRA: "Wrap",
@@ -1047,6 +1055,7 @@
                     </option>`
                 )
               }
+              <option value= "" class="menupad">None</option>
             </select>
           `
           var $ProductDecorationTypePickerContainer = document.querySelector('#ProductDecorationTypePickerContainer')
@@ -1059,7 +1068,7 @@
           var $VignetteSuffix = $("input[name='thmbRadio']:checked").val();
 
           var $VignetteObjectsWithColorOption = await Get_TervisAdobeScene7VignetteObjectWithColorOption({
-            ...$ProductSizeAndProducFormType,
+            ...$ProductSizeAndProductFormType,
             $VignetteSuffix
           })
 
@@ -1162,7 +1171,7 @@
 
           $ProductVignetteDefaultSettings.filter(
             ({Size: $ProductSize, FormType: $ProductFormType}) =>
-            $ProductSize === parseInt($ProductSizeAndProducFormType.$ProductSize) && $ProductFormType === $ProductSizeAndProducFormType.$ProductFormType
+            $ProductSize === parseInt($ProductSizeAndProductFormType.$ProductSize) && $ProductFormType === $ProductSizeAndProductFormType.$ProductFormType
           )
           .forEach(
             $DefaultSettingEntry => {
@@ -1184,8 +1193,10 @@
               }
             }
           )
+
+          Update_ImageGeneratorProductVignetteURL()
         }// End Receive_ProductSelectionEvent
-        window.Receive_ProductSelectionEvent = Receive_ProductSelectionEvent
+        // window.Receive_ProductSelectionEvent = Receive_ProductSelectionEvent
 
         async function Receive_DecorationSourceSelectionEvent() {
           var $DecorationSourceOptions = [
@@ -1206,7 +1217,9 @@
                 type="text"
                 placeholder="${$DecorationImageSourceType}" 
                 disabled="${ifDefined($DecorationImageSourceType === "UGC Upload" ? "" : undefined)}"
-                class="menupad" />
+                class="menupad" 
+                @change=${Update_ImageGeneratorProductVignetteURL}
+              />
             `]
 
             if ($DecorationImageSourceType === "UGC Upload") {
@@ -1220,8 +1233,10 @@
               ) 
             }
 
-            Update_ImageGeneratorDecorationSourceImageArcedSelect()
+            // Update_ImageGeneratorDecorationSourceImageArcedSelect()
           }
+
+          var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
 
           var $MenuGroup = New_MenuGroup({
             $GroupTitle: "Decoration Image",
@@ -1230,6 +1245,7 @@
                 id="${$DecorationImageSourceTypeElementID}"
                 class="menupad"
                 @change=${Receive_DecorationSourceSelectionEvent}
+                style="${ifDefined($ProductFormType === "TALL" ? "display: none;" : undefined) }"
               >
                 <option value= "" selected disabled class="menupad">Source Type</option>
                 ${$DecorationSourceOptions.map(
@@ -1256,10 +1272,15 @@
         async function Get_ImageGeneratorDecorationImageSourceURL (
           $AsScene7SrcValue
         ) {
-          var $DecorationImageSourceType = document.querySelector("#DecorationImageSourceType").value
-          var $DecorationImageSourceValue = document.querySelector("#DecorationImageSourceValue")
-            ? document.querySelector("#DecorationImageSourceValue").value
-            : ""
+          var $DecorationImageSourceType =
+            document.querySelector("#DecorationImageSourceType") ?
+            document.querySelector("#DecorationImageSourceType").value :
+            undefined
+
+          var $DecorationImageSourceValue = 
+            document.querySelector("#DecorationImageSourceValue") ?
+            document.querySelector("#DecorationImageSourceValue").value :
+            undefined
     
           if ($DecorationImageSourceType === "UGC Upload" ) {
             return New_TervisAdobeScene7URL({
@@ -1315,34 +1336,46 @@
           return $ElementPathsToShow
         }
 
-        async function update() {
-            var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
-            var $ImageSourceURLAsScene7SrcValue = await Get_ImageGeneratorDecorationImageSourceURL({
-              $AsScene7SrcValue: true
-            })
-            var $VignetteElementPathToShow = Get_ImageGeneratorProductVignetteElementPathToShow()
-            var $DecorationSourceIsArced = document.querySelector("#DecorationImageSourceArced").checked
-            var $ProductVignetteNameSuffix = document.querySelector("input[name='thmbRadio']:checked").value
-            var $ProductVignetteRotationDegrees = document.querySelector("#ProductVignetteRotationDegrees").value
-            var $ProductDecorationTypeCode = document.querySelector("#ProductDecorationType").value
-            
-            var $DecorationPositionXValue = await ConvertTo_TervisAdobeScene7VignettePosition({
-              ...$ProductSizeAndProductFormType,
-              $Degrees: $ProductVignetteRotationDegrees
-            })
+        async function Update_ImageGeneratorAllTheThings() {
+          await Update_ImageGeneratorProductCarousel()
+          await Receive_ProductSelectionEvent()
+          await Receive_DecorationSourceSelectionEvent()
+          await Update_ImageGeneratorProductVignetteURL()
+          Update_ImageGeneratorDecorationSourceImageArcedSelect()
 
-            if (
-              !$ImageSourceURLAsScene7SrcValue ||
-              !$VignetteElementPathToShow ||
-              !$ProductDecorationTypeCode
-            ) { return }
+          $("input[name='tumblerRadio']").on("change", Update_ImageGeneratorAllTheThings)
+          $('input, select').on("input change", Update_ImageGeneratorAllTheThings)
+        }
 
-            $("#previewImage").prop('src', await Get_ImageGeneratorDecorationImageSourceURL());
+        async function Update_ImageGeneratorProductVignetteURL() {
+          var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
+          var $ImageSourceURLAsScene7SrcValue = await Get_ImageGeneratorDecorationImageSourceURL({
+            $AsScene7SrcValue: true
+          })
+          var $VignetteElementPathToShow = Get_ImageGeneratorProductVignetteElementPathToShow()
+          var $DecorationSourceIsArced // = document.querySelector("#DecorationImageSourceArced").checked
+          var $ProductVignetteNameSuffix = document.querySelector("input[name='thmbRadio']:checked").value
+          var $ProductVignetteRotationDegrees = document.querySelector("#ProductVignetteRotationDegrees").value
+          var $ProductDecorationTypeCode = document.querySelector("#ProductDecorationType").value
+          
+          var $DecorationPositionXValue = await ConvertTo_TervisAdobeScene7VignettePosition({
+            ...$ProductSizeAndProductFormType,
+            $Degrees: $ProductVignetteRotationDegrees
+          })
 
-            var imageName = "tervis";
+          if (
+            !$ImageSourceURLAsScene7SrcValue && $ProductDecorationTypeCode ||
+            !$VignetteElementPathToShow
+          ) { return }
 
-            var $SrcValue = $ImageSourceURLAsScene7SrcValue
+          $("#previewImage").prop('src', await Get_ImageGeneratorDecorationImageSourceURL());
 
+          var imageName = "tervis";
+
+          var $SrcValue = $ImageSourceURLAsScene7SrcValue
+
+          var $DecorationSrc
+          if ($ProductDecorationTypeCode) {
             if ($DecorationSourceIsArced) {
               $ImageSourceURLAsScene7SrcValue = New_TervisAdobeScene7PrintSingleURL({
                   ...$ProductSizeAndProductFormType,
@@ -1352,47 +1385,42 @@
               })
             }
             
-            var codetypeURL = New_TervisAdobeScene7WrapDecoration3TimesURL({
+            $DecorationSrc = New_TervisAdobeScene7WrapDecoration3TimesURL({
               ...$ProductSizeAndProductFormType,
               $AsScene7SrcValue: true,
               $DecorationType: $ProductDecorationTypeCode,
               $RepeatedImageSource: $SrcValue
             })  
-            
-            var $ProductVignetteImageURL = New_TervisAdobeScene7ProductVignetteImageURL({
-              ...$ProductSizeAndProductFormType,
-              $VignetteSuffix: $ProductVignetteNameSuffix,
-              $DecorationType: $ProductDecorationTypeCode,
-              $DecorationSrc: codetypeURL,
-              $DecorationPositionXValue,
-              $ElementPathsToShow: $VignetteElementPathToShow,
-              $AsScene7SrcValue: true
-            })
+          }
+          
+          var $ProductVignetteImageURL = New_TervisAdobeScene7ProductVignetteImageURL({
+            ...$ProductSizeAndProductFormType,
+            $VignetteSuffix: $ProductVignetteNameSuffix,
+            $DecorationSrc,
+            $DecorationPositionXValue,
+            $ElementPathsToShow: $VignetteElementPathToShow,
+            $AsScene7SrcValue: true
+          })
 
-            var preset = ""
-            var finalURL = `
-              //imagegenerator.tervis.com/is/image/tervis/${imageName}?
-              layer=0
-              &src=${$ProductVignetteImageURL}
-              ${preset}
-            `.replace(/\s/g, "")
-            
-            $("#vignetteUrl").val(finalURL);
-            $('#tumblerimage').css('margin-left', '0px');
-            $("#tumblerimage").prop('src', finalURL);
+          var preset = ""
+          var finalURL = `
+            //imagegenerator.tervis.com/is/image/tervis/${imageName}?
+            layer=0
+            &src=${$ProductVignetteImageURL}
+            ${preset}
+          `.replace(/\s/g, "")
+          
+          $("#vignetteUrl").val(finalURL);
+          $('#tumblerimage').css('margin-left', '0px');
+          $("#tumblerimage").prop('src', finalURL);
 
-            var replacePreset = ($('#preset').val());
-            $("#tumblerimagelink").prop('href', (finalURL).replace(replacePreset, "PDP-ZM-ALPHA"));
-          } // END FUNCTION (UPDATE)
-
+          var replacePreset = ($('#preset').val());
+          $("#tumblerimagelink").prop('href', (finalURL).replace(replacePreset, "PDP-ZM-ALPHA"));
+        } // END FUNCTION (UPDATE)
+        window.Update_ImageGeneratorProductVignetteURL = Update_ImageGeneratorProductVignetteURL
 
         $(window).on("load", async function () {
-          await Update_ImageGeneratorProductCarousel()
-          Receive_ProductSelectionEvent()
-          Receive_DecorationSourceSelectionEvent()
-
-          $("input[name='tumblerRadio']").on("change", window.Receive_ProductSelectionEvent)
-          $('input').on("input change", update);
+          await Update_ImageGeneratorAllTheThings()
         })
       </script>
       <script>
@@ -1539,7 +1567,7 @@
         async function Get_URLSFourSides() {
           var $URLs = []
           var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
-          var $SizeAndFormTypeMetaData = await Get_TervisProductMetaDataUsingIndex({ ...$ProductSizeAndProducFormType })
+          var $SizeAndFormTypeMetaData = await Get_TervisProductMetaDataUsingIndex({ ...$ProductSizeAndProductFormType })
           var $RotateValues = []
 
           $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfFront)
