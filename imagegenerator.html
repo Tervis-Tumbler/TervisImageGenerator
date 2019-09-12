@@ -794,7 +794,6 @@
                   name="${$CarouselName}"
                   .value="${$CarouselItemValue}"
                   .checked=${forceWrite($IsChecked)}
-                  @change=${Update_ImageGeneratorProductVignetteURL}
                 />
                 <img 
                   src="${$CarouselItemImageURL}"
@@ -853,10 +852,10 @@
               onMouse: true,
               onTouch: true
             }
-          });
+          }) 
         }
 
-        function Update_ImageGeneratorDecorationSourceImageArcedSelect () {
+        function Update_ImageGeneratorDecorationImageSourceFormArcedSelect () {
           var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
           var $DecorationImageSourceType = Get_ImageGeneratorSelectedDecorationImageSourceType()
           var $DisplayNoneAndNotArced = 
@@ -894,7 +893,55 @@
           }
         }
 
-        async function Receive_ProductSelectionEvent() {
+        function Update_ImageGeneratorProductDecorationTypeSelect () {
+          var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
+          var {$ProductSize, $ProductFormType} = $ProductSizeAndProductFormType
+
+          // Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
+
+          var $ProductDecorationTypes = {
+            WRA: "Wrap",
+            EMB: "Emblem",
+            DPT: "Direct Print Outer"
+          }
+
+          var $ProductDecorationTypePicker = html`
+            <select 
+              id="ProductDecorationType" 
+              class="menupad"
+              style="${ifDefined($ProductFormType === "SS" ? "display: none;" : undefined) }"
+            >
+              <option value= "" selected disabled class="menupad">Decoration Type</option>
+              ${
+                Object                
+                .entries($ProductDecorationTypes)
+                .map(
+                  ([$ProductDecorationTypeCode, $ProductDecorationTypeName]) =>
+                  html`
+                    <option 
+                      value="${$ProductDecorationTypeCode}"
+                      ?selected=${
+                          $ProductFormType === "SS" && $ProductDecorationTypeCode === "DPT" ||
+                          $ProductFormType === "ICE" && $ProductDecorationTypeCode === "EMB" ||
+                          !["ICE","SS"].includes($ProductFormType) && $ProductDecorationTypeCode === "WRA"
+                      }
+                    >
+                      ${$ProductDecorationTypeName}
+                    </option>`
+                )
+              }
+              <option value= "" class="menupad">None</option>
+            </select>
+          `
+          var $ProductDecorationTypePickerContainer = document.querySelector('#ProductDecorationTypePickerContainer')
+
+          render(
+            $ProductDecorationTypePicker,
+            $ProductDecorationTypePickerContainer
+          )
+        }
+
+        async function Update_ImageGeneratorThingsWithColorOptionsCarousel() {
           var $ProductVignetteDefaultSettings = [
             {
               Size: 16,
@@ -1018,55 +1065,9 @@
             LIDWIN: "Wine Lid",
             SSWBLID: "Stainless Lid"
           }
-          
-          var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
-          var {$ProductSize, $ProductFormType} = $ProductSizeAndProductFormType
-
-          // Update_ImageGeneratorDecorationSourceImageArcedSelect()
-
-          var $ProductDecorationTypes = {
-            WRA: "Wrap",
-            EMB: "Emblem",
-            DPT: "Direct Print Outer"
-          }
-
-          var $ProductDecorationTypePicker = html`
-            <select 
-              id="ProductDecorationType" 
-              class="menupad"
-              style="${ifDefined($ProductFormType === "SS" ? "display: none;" : undefined) }"
-            >
-              <option value= "" selected disabled class="menupad">Decoration Type</option>
-              ${
-                Object                
-                .entries($ProductDecorationTypes)
-                .map(
-                  ([$ProductDecorationTypeCode, $ProductDecorationTypeName]) =>
-                  html`
-                    <option 
-                      value="${$ProductDecorationTypeCode}"
-                      ?selected=${
-                          $ProductFormType === "SS" && $ProductDecorationTypeCode === "DPT" ||
-                          $ProductFormType === "ICE" && $ProductDecorationTypeCode === "EMB" ||
-                          !["ICE","SS"].includes($ProductFormType) && $ProductDecorationTypeCode === "WRA"
-                      }
-                    >
-                      ${$ProductDecorationTypeName}
-                    </option>`
-                )
-              }
-              <option value= "" class="menupad">None</option>
-            </select>
-          `
-          var $ProductDecorationTypePickerContainer = document.querySelector('#ProductDecorationTypePickerContainer')
-
-          render(
-            $ProductDecorationTypePicker,
-            $ProductDecorationTypePickerContainer
-          )
 
           var $VignetteSuffix = $("input[name='thmbRadio']:checked").val();
-
+          var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
           var $VignetteObjectsWithColorOption = await Get_TervisAdobeScene7VignetteObjectWithColorOption({
             ...$ProductSizeAndProductFormType,
             $VignetteSuffix
@@ -1194,11 +1195,11 @@
             }
           )
 
-          Update_ImageGeneratorProductVignetteURL()
-        }// End Receive_ProductSelectionEvent
-        // window.Receive_ProductSelectionEvent = Receive_ProductSelectionEvent
+          // Update_ImageGeneratorProductVignetteURL()
+        }// End Update_ImageGeneratorThingsWithColorOptionsCarousel
+        // window.Update_ImageGeneratorThingsWithColorOptionsCarousel = Update_ImageGeneratorThingsWithColorOptionsCarousel
 
-        async function Receive_DecorationSourceSelectionEvent() {
+        async function Update_ImageGeneratorDecorationImageSourceForm() {
           var $DecorationSourceOptions = [
             "Raw Material Item Number",
             "UGC Upload",
@@ -1218,7 +1219,6 @@
                 placeholder="${$DecorationImageSourceType}" 
                 disabled="${ifDefined($DecorationImageSourceType === "UGC Upload" ? "" : undefined)}"
                 class="menupad" 
-                @change=${Update_ImageGeneratorProductVignetteURL}
               />
             `]
 
@@ -1233,7 +1233,7 @@
               ) 
             }
 
-            // Update_ImageGeneratorDecorationSourceImageArcedSelect()
+            // Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
           }
 
           var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
@@ -1244,7 +1244,6 @@
               <select 
                 id="${$DecorationImageSourceTypeElementID}"
                 class="menupad"
-                @change=${Receive_DecorationSourceSelectionEvent}
                 style="${ifDefined($ProductFormType === "TALL" ? "display: none;" : undefined) }"
               >
                 <option value= "" selected disabled class="menupad">Source Type</option>
@@ -1337,15 +1336,47 @@
         }
 
         async function Update_ImageGeneratorAllTheThings() {
-          await Update_ImageGeneratorProductCarousel()
-          await Receive_ProductSelectionEvent()
-          await Receive_DecorationSourceSelectionEvent()
-          await Update_ImageGeneratorProductVignetteURL()
-          Update_ImageGeneratorDecorationSourceImageArcedSelect()
+          // Update the Product selection Carousel only once on load
+          if (!window.OnlyExecuteThisOnceHasExecutedOnce) {
+            await Update_ImageGeneratorProductCarousel()
+            window.OnlyExecuteThisOnceHasExecutedOnce = true
+          }
 
-          $("input[name='tumblerRadio']").on("change", Update_ImageGeneratorAllTheThings)
-          $('input, select').on("input change", Update_ImageGeneratorAllTheThings)
+          // Product selected then update 
+            // ThingsWithColorOptions await Update_ImageGeneratorThingsWithColorOptionsCarousel()
+            // ArcedOrNotSelect Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
+            // ProductDecorationType Update_ImageGeneratorProductDecorationTypeSelect()
+            // PoductVignetteURL await Update_ImageGeneratorProductVignetteURL()
+
+
+          // ThingWithColorSelected then update
+            // PoductVignetteURL await Update_ImageGeneratorProductVignetteURL()
+          
+          // DecorationImageSourceTypeValue
+            // await Update_ImageGeneratorDecorationImageSourceForm()
+            // Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
+          
+          // Change DecorationImageSourceTypeValue and regen image
+          // Change Arced value regen image
+          // Change Decoration Type, regen image
+          // change Degrees or DegreesSlider regen image
+
+          
+          await Update_ImageGeneratorThingsWithColorOptionsCarousel()
+
+
+          // update to also support eliminating Decoration Types that are not valid combinations with a given product
+          // Change snap to do nothing as it is already handled inline on the element definition
+
+          Update_ImageGeneratorProductDecorationTypeSelect()
+          await Update_ImageGeneratorDecorationImageSourceForm()
+          await Update_ImageGeneratorProductVignetteURL()
+          Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
+
+          // $("input[name='tumblerRadio']").on("change", Update_ImageGeneratorAllTheThings)
+          // $('input, select').on("input change", Update_ImageGeneratorAllTheThings)
         }
+        window.Update_ImageGeneratorAllTheThings = Update_ImageGeneratorAllTheThings
 
         async function Update_ImageGeneratorProductVignetteURL() {
           var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
@@ -1410,12 +1441,10 @@
             ${preset}
           `.replace(/\s/g, "")
           
-          $("#vignetteUrl").val(finalURL);
+          // $("#vignetteUrl").val(finalURL);
           $('#tumblerimage').css('margin-left', '0px');
           $("#tumblerimage").prop('src', finalURL);
 
-          var replacePreset = ($('#preset').val());
-          $("#tumblerimagelink").prop('href', (finalURL).replace(replacePreset, "PDP-ZM-ALPHA"));
         } // END FUNCTION (UPDATE)
         window.Update_ImageGeneratorProductVignetteURL = Update_ImageGeneratorProductVignetteURL
 
