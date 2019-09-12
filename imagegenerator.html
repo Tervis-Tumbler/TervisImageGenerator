@@ -502,7 +502,7 @@
             >
               <img 
                 id="tumblerimage"
-                src="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$EML-PRD-FEED$"
+                src="https://imagegenerator.tervis.com/is/image/tervis/tervis?layer=0&src=ir{tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/INNER/LINED/CL1&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN&req=object}"
                 class="tip-trigger"
                 title="Click image to download larger file" 
               />
@@ -515,7 +515,8 @@
               id="ProductVignetteRotationDegrees"
               maxlength="5"
               value="0"
-              onchange="document.querySelector('#ProductVignetteRotationDegreesSlider').value = this.value" >
+              onchange="document.querySelector('#ProductVignetteRotationDegreesSlider').value = this.value; Update_ImageGeneratorProductVignetteURL()"
+            >
             
             Snap to:
             <select id="SnapTo" onchange="document.querySelector('#ProductVignetteRotationDegreesSlider').step = this.value">
@@ -531,7 +532,7 @@
             min="-180"
             max="180"
             step="90"
-            onchange="document.querySelector('#ProductVignetteRotationDegrees').value = this.value"
+            onchange="document.querySelector('#ProductVignetteRotationDegrees').value = this.value; Update_ImageGeneratorProductVignetteURL()"
           />
 
           
@@ -780,10 +781,11 @@
 
             const New_CrouselItem = ({
               $CarouselName,
-              $CarouselItemValue,
-              $CarouselItemImageURL,
-              $CarouselItemTitle,
-              $CarouselItemToolTip,
+              $Value,
+              $ImageURL,
+              $Title,
+              $ToolTip,
+              $OnChange,
               $IsChecked,
               $ShowTitleAsSpan
             }) => html`
@@ -792,18 +794,26 @@
                 <input 
                   type="radio"
                   name="${$CarouselName}"
-                  .value="${$CarouselItemValue}"
+                  .value="${$Value}"
                   .checked=${forceWrite($IsChecked)}
+                  @change=${$OnChange}
                 />
                 <img 
-                  src="${$CarouselItemImageURL}"
-                  title="${$CarouselItemToolTip}"
+                  src="${$ImageURL}"
+                  title="${$ToolTip}"
                   class="tip-trigger"
                 >
-                ${$ShowTitleAsSpan ? html`<span class="swatch-label">${$CarouselItemTitle}</span>` : ""}
+                ${$ShowTitleAsSpan ? html`<span class="swatch-label">${$Title}</span>` : ""}
               </label>
             </li>
             `
+
+        async function Receive_ImageGeneratorProductCarouselChange () {
+          await Update_ImageGeneratorThingsWithColorOptionsCarousel()
+          Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
+          Update_ImageGeneratorProductDecorationTypeSelect()
+          await Update_ImageGeneratorProductVignetteURL()
+        }
 
         async function Update_ImageGeneratorProductCarousel () {
           var $CarouselItems = []
@@ -813,17 +823,18 @@
               $ProductOrderInCarousel[0].$ProductFormType === $ProductFormType
 
             var $Product = await Get_TervisProductMetaDataUsingIndex({$ProductSize, $ProductFormType})
-            var $CarouselItemImageURL = await Get_TervisAdobeScene7Silhouette({$ProductSize, $ProductFormType})
-            $CarouselItemImageURL += "&$ICO-SIL-BA$"
+            var $ImageURL = await Get_TervisAdobeScene7Silhouette({$ProductSize, $ProductFormType})
+            $ImageURL += "&$ICO-SIL-BA$"
             $CarouselItems.push(
               New_CrouselItem({
                 $CarouselName: "tumblerRadio",
-                $CarouselItemValue: `${$ProductSize}${$ProductFormType}`,
-                $CarouselItemImageURL,
-                $CarouselItemTitle: $Product.MarketingName,
-                $CarouselItemToolTip: `${$Product.MarketingName} - ${$ProductSize}${$ProductFormType}`,
+                $Value: `${$ProductSize}${$ProductFormType}`,
+                $ImageURL,
+                $Title: $Product.MarketingName,
+                $ToolTip: `${$Product.MarketingName} - ${$ProductSize}${$ProductFormType}`,
                 $IsChecked: $IsFirstProduct,
-                $ShowTitleAsSpan: true
+                $ShowTitleAsSpan: true,
+                $OnChange: Receive_ImageGeneratorProductCarouselChange
               })
             )
           }
@@ -855,6 +866,10 @@
           }) 
         }
 
+        async function Receive_ImageGeneratorDecorationImageSourceArcedOnChange () {
+          await Update_ImageGeneratorProductVignetteURL()
+        }
+
         function Update_ImageGeneratorDecorationImageSourceFormArcedSelect () {
           var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
           var $DecorationImageSourceType = Get_ImageGeneratorSelectedDecorationImageSourceType()
@@ -869,6 +884,7 @@
                 id="DecorationImageSourceArced"
                 class="menupad"
                 style="${ifDefined( $DisplayNoneAndNotArced ? "display: none;" : undefined) }"
+                @change=${Receive_ImageGeneratorDecorationImageSourceArcedOnChange}
               >
                 <option disabled selected>Is source image arced?</option>
                 <option>Arced</option>
@@ -893,11 +909,13 @@
           }
         }
 
+        async function Recieve_ImageGeneratorProductDecorationTypeOnChange() {
+          await Update_ImageGeneratorProductVignetteURL()
+        }
+
         function Update_ImageGeneratorProductDecorationTypeSelect () {
           var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
           var {$ProductSize, $ProductFormType} = $ProductSizeAndProductFormType
-
-          // Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
 
           var $ProductDecorationTypes = {
             WRA: "Wrap",
@@ -910,6 +928,7 @@
               id="ProductDecorationType" 
               class="menupad"
               style="${ifDefined($ProductFormType === "SS" ? "display: none;" : undefined) }"
+              @change=${Recieve_ImageGeneratorProductDecorationTypeOnChange}
             >
               <option value= "" selected disabled class="menupad">Decoration Type</option>
               ${
@@ -922,7 +941,7 @@
                       value="${$ProductDecorationTypeCode}"
                       ?selected=${
                           $ProductFormType === "SS" && $ProductDecorationTypeCode === "DPT" ||
-                          $ProductFormType === "ICE" && $ProductDecorationTypeCode === "EMB" ||
+                          ["ICE","TALL"].includes($ProductFormType) && $ProductDecorationTypeCode === "EMB" ||
                           !["ICE","SS"].includes($ProductFormType) && $ProductDecorationTypeCode === "WRA"
                       }
                     >
@@ -939,6 +958,10 @@
             $ProductDecorationTypePicker,
             $ProductDecorationTypePickerContainer
           )
+        }
+
+        async function Recieve_ImageGeneratorThingWithColorCodeOnChange () {
+          await Update_ImageGeneratorProductVignetteURL()
         }
 
         async function Update_ImageGeneratorThingsWithColorOptionsCarousel() {
@@ -1092,9 +1115,10 @@
                 $CarouselItems.push(
                   New_CrouselItem({
                     $CarouselName,
-                    $CarouselItemImageURL: "http://images.tervis.com/is/image/tervis/REMOVE?$SWATCH$",
-                    $CarouselItemTitle: `None`,
-                    $CarouselItemToolTip: `None`
+                    $ImageURL: "http://images.tervis.com/is/image/tervis/REMOVE?$SWATCH$",
+                    $Title: `None`,
+                    $ToolTip: `None`,
+                    $OnChange: Recieve_ImageGeneratorThingWithColorCodeOnChange
                   })
                 )
               }
@@ -1118,11 +1142,12 @@
                 $CarouselItems.push(
                   New_CrouselItem({
                     $CarouselName,
-                    $CarouselItemValue: `${$ColorCode}`, 
-                    $CarouselItemImageURL,
-                    $CarouselItemTitle: `${$ColorMarketingName} - ${$ColorCode}`,
-                    $CarouselItemToolTip: `${$ColorMarketingName} - ${$ColorCode}`,
-                    $IsChecked
+                    $Value: `${$ColorCode}`, 
+                    $ImageURL: $CarouselItemImageURL,
+                    $Title: `${$ColorMarketingName} - ${$ColorCode}`,
+                    $ToolTip: `${$ColorMarketingName} - ${$ColorCode}`,
+                    $IsChecked,
+                    $OnChange: Recieve_ImageGeneratorThingWithColorCodeOnChange
                   })
                 )
               }
@@ -1199,6 +1224,15 @@
         }// End Update_ImageGeneratorThingsWithColorOptionsCarousel
         // window.Update_ImageGeneratorThingsWithColorOptionsCarousel = Update_ImageGeneratorThingsWithColorOptionsCarousel
 
+        async function Receive_ImageGeneartorDecorationImageSourceTypeOnChnage () {
+          await Update_ImageGeneratorDecorationImageSourceForm()
+          Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
+        }
+
+        async function Receive_ImageGeneartorDecorationImageSourceValueOnChange () {
+          await Update_ImageGeneratorProductVignetteURL()
+        }
+
         async function Update_ImageGeneratorDecorationImageSourceForm() {
           var $DecorationSourceOptions = [
             "Raw Material Item Number",
@@ -1218,7 +1252,9 @@
                 type="text"
                 placeholder="${$DecorationImageSourceType}" 
                 disabled="${ifDefined($DecorationImageSourceType === "UGC Upload" ? "" : undefined)}"
-                class="menupad" 
+                class="menupad"
+                .value=${forceWrite("")}
+                @change=${Receive_ImageGeneartorDecorationImageSourceValueOnChange}
               />
             `]
 
@@ -1232,8 +1268,6 @@
                 `
               ) 
             }
-
-            // Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
           }
 
           var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
@@ -1245,6 +1279,7 @@
                 id="${$DecorationImageSourceTypeElementID}"
                 class="menupad"
                 style="${ifDefined($ProductFormType === "TALL" ? "display: none;" : undefined) }"
+                @change=${Receive_ImageGeneartorDecorationImageSourceTypeOnChnage}
               >
                 <option value= "" selected disabled class="menupad">Source Type</option>
                 ${$DecorationSourceOptions.map(
@@ -1341,37 +1376,11 @@
             await Update_ImageGeneratorProductCarousel()
             window.OnlyExecuteThisOnceHasExecutedOnce = true
           }
-
-          // Product selected then update 
-            // ThingsWithColorOptions await Update_ImageGeneratorThingsWithColorOptionsCarousel()
-            // ArcedOrNotSelect Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
-            // ProductDecorationType Update_ImageGeneratorProductDecorationTypeSelect()
-            // PoductVignetteURL await Update_ImageGeneratorProductVignetteURL()
-
-
-          // ThingWithColorSelected then update
-            // PoductVignetteURL await Update_ImageGeneratorProductVignetteURL()
-          
-          // DecorationImageSourceTypeValue
-            // await Update_ImageGeneratorDecorationImageSourceForm()
-            // Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
-          
-          // Change DecorationImageSourceTypeValue and regen image
-          // Change Arced value regen image
-          // Change Decoration Type, regen image
-          // change Degrees or DegreesSlider regen image
-
-          
           await Update_ImageGeneratorThingsWithColorOptionsCarousel()
-
-
-          // update to also support eliminating Decoration Types that are not valid combinations with a given product
-          // Change snap to do nothing as it is already handled inline on the element definition
-
           Update_ImageGeneratorProductDecorationTypeSelect()
           await Update_ImageGeneratorDecorationImageSourceForm()
-          await Update_ImageGeneratorProductVignetteURL()
           Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
+          await Update_ImageGeneratorProductVignetteURL()
 
           // $("input[name='tumblerRadio']").on("change", Update_ImageGeneratorAllTheThings)
           // $('input, select').on("input change", Update_ImageGeneratorAllTheThings)
@@ -1394,11 +1403,6 @@
             $Degrees: $ProductVignetteRotationDegrees
           })
 
-          if (
-            !$ImageSourceURLAsScene7SrcValue && $ProductDecorationTypeCode ||
-            !$VignetteElementPathToShow
-          ) { return }
-
           $("#previewImage").prop('src', await Get_ImageGeneratorDecorationImageSourceURL());
 
           var imageName = "tervis";
@@ -1406,7 +1410,7 @@
           var $SrcValue = $ImageSourceURLAsScene7SrcValue
 
           var $DecorationSrc
-          if ($ProductDecorationTypeCode) {
+          if ($ProductDecorationTypeCode && $ImageSourceURLAsScene7SrcValue) {
             if ($DecorationSourceIsArced) {
               $ImageSourceURLAsScene7SrcValue = New_TervisAdobeScene7PrintSingleURL({
                   ...$ProductSizeAndProductFormType,
@@ -1433,7 +1437,7 @@
             $AsScene7SrcValue: true
           })
 
-          var preset = ""
+          var preset = "$PDP-LG$"
           var finalURL = `
             //imagegenerator.tervis.com/is/image/tervis/${imageName}?
             layer=0
