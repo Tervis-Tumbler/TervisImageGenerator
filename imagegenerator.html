@@ -1,1809 +1,1732 @@
 <!DOCTYPE html>
 <title>Image Generator</title>
+<style>
+  @import url(https://fonts.googleapis.com/css?family=Roboto);
+
+  body {
+    border: 0px;
+    background: none repeat scroll 0 0 #fff;
+    color: #58585b;
+    font-family: "Roboto", Arial, sans-serif;
+    font-size: 12px;
+    -webkit-font-smoothing: antialiased;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+  }
+
+  .content-asset {
+    display: grid;
+    grid-template-columns: 150px 550px 480px 1fr;
+  }
+
+  .product_carousel img {
+    width: 58px;
+    height: 58px;
+  }
+
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 0px rgba(255, 255, 255, .5);
+  }
+
+
+  .tooltip_templates {
+    display: none;
+  }
+
+  .buttonblue {
+    background-color: #e9aa12;
+    color: #fff;
+    border: none;
+    width: 175px;
+    height: 51px;
+    padding: 8px;
+    font-family: "", Arial, sans-serif;
+    font-size: 18px;
+  }
+
+  .buttonblue:hover {
+    background-color: #edbb41;
+    color: #fff;
+    border: none;
+    width: 175px;
+    height: 51px;
+    padding: 8px;
+    font-family: "Roboto", Arial, sans-serif;
+    font-size: 18px;
+  }
+
+  #content {
+    width: 550px;
+    margin: 0px 0px 0px 0px;
+    float: left;
+    grid-column: 2 / 2;
+  }
+
+  #ProductVignetteRotationDegrees {
+    width: 40px;
+  }
+
+  #ProductVignetteRotationDegreesSlider {
+    width: 60%;
+    margin: 0px auto;
+  }
+
+  #tumblerimage {
+    width: 100%;
+    float: left;
+  }
+
+  #togglediv {
+    padding: 5px 10px 5px;
+    min-width: 445px;
+    max-width: 70%;
+    margin: 0px 0px 0px 10px;
+    float: left;
+    vertical-align: middle;
+    grid-column: 3 / 3;
+  }
+
+  .menupad {
+    display: inline-block;
+    height: 30px;
+    margin: 10px 0px 0px 0px;
+    vertical-align: text-top;
+  }
+
+  #controls-submit {
+    text-align: center;
+    padding: 10px;
+  }
+
+  #vignetteUrl {
+    width: 300px;
+    text-align: center;
+  }
+
+  #previewImage {
+    max-height: 475px;
+    max-width: 540px;
+    margin: 10px auto;
+    display: block;
+  }
+
+  .thumbnailPreview {
+    float: left;
+    max-height: 90px;
+    max-width: 90px;
+    margin: 20px 0px 0px 50px;
+    display: block;
+  }
+
+  #thumbnailHero {
+    padding: 0px;
+  }
+
+  #thumbnailHero:hover {
+    padding: 0px;
+    border: thin solid #b1b4b6;
+  }
+
+  #thumbnailVirtual {
+    padding: 0px;
+  }
+
+  #thumbnailVirtual:hover {
+    padding: 0px;
+    border: thin solid #b1b4b6;
+  }
+
+  #thumbnailDecoration {
+    padding: 0px;
+    width: 95px !important;
+  }
+
+  #thumbnailDecoration:hover {
+    border: thin solid #b1b4b6;
+  }
+
+  select {
+    height: 25px;
+    color: #58585b;
+    background: white;
+    border: 1px solid #a7a9ab;
+    border-radius: 2px;
+    padding: 0 20px;
+    outline: 0;
+    text-indent: 0;
+    vertical-align: top;
+  }
+
+  .selected-type {
+    font-family: "Roboto", Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+    clear: both;
+    padding-top: 10px;
+    border-bottom: thin solid #b1b4b6;
+    opacity: .8;
+  }
+
+  .selected-type-sub {
+    font-style: italic;
+    font-size: 15px;
+    font-weight: 300;
+    clear: both;
+    padding-left: 25px;
+    padding-top: 10px;
+  }
+
+  .tumblerPreviewZoom {
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+    margin: 50px auto;
+    position: relative;
+    /*cursor: zoom-in;*/
+  }
+
+  .tumblerPreview {
+    margin: 0px auto;
+    text-align: center;
+    display: block;
+    padding-left: 5px;
+  }
+
+  /* START Carousel CSS */
+
+  /* START Form Carousel */
+
+  .list_carousel {
+    float: left;
+    width: 360px;
+  }
+
+  .list_carousel ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: block;
+  }
+
+  .list_carousel li {
+    width: 60px;
+    padding: 0;
+    display: block;
+    float: left;
+    text-align: center;
+  }
+
+  .list_carousel li img {
+    width: 58px;
+    padding-bottom: 8px;
+  }
+
+  .list_carousel.responsive {
+    width: auto;
+    margin-left: 0;
+  }
+
+  /* START Inner Carousel */
+
+  .list_carousel2 {
+    float: left;
+    width: 360px;
+  }
+
+  .list_carousel2 ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: block;
+  }
+
+  .list_carousel2 li {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    display: block;
+    float: left;
+    text-align: center;
+  }
+
+  .list_carousel2 li img {
+    width: 25px;
+    height: 25px;
+    padding: 1px;
+  }
+
+  .list_carousel2 li img:hover {
+    width: 25px;
+    height: 25px;
+    padding: 0px;
+  }
+
+  .list_carousel2.responsive {
+    width: auto;
+    margin-left: 0;
+  }
+
+  .prev {
+    display: block;
+    height: 26px;
+    width: 13px;
+    float: left;
+    background: transparent url('//imagegenerator.tervis.com/is/image/tervis/ui-caret-left') center top no-repeat;
+    top: auto;
+    bottom: auto;
+  }
+
+  .prev:hover {
+    display: block;
+    height: 26px;
+    width: 13px;
+    float: left;
+    background: transparent url('//imagegenerator.tervis.com/is/image/tervis/ui-caret-left-over') center top no-repeat;
+  }
+
+  .next {
+    display: block;
+    height: 26px;
+    width: 13px;
+    float: left;
+    background: transparent url('//imagegenerator.tervis.com/is/image/tervis/ui-caret-right') center top no-repeat;
+  }
+
+  .next:hover {
+    display: block;
+    height: 26px;
+    width: 13px;
+    float: left;
+    background: transparent url('//imagegenerator.tervis.com/is/image/tervis/ui-caret-right-over') center top no-repeat;
+  }
+
+  .swatch-label {
+    font-size: 10px;
+    font-style: italic;
+    text-align: center;
+    line-height: 15px;
+  }
+
+  .prev2,
+  .next2 {
+    margin-top: 30px;
+  }
+
+  /* END Carousel CSS */
+
+  label>input {
+    display: none;
+  }
+
+  label>input:checked+img {
+    padding: 1px;
+    border-color: #b1b4b6;
+    border-style: double;
+    border-width: 1px;
+  }
+</style>
+
 <div class="content-asset">
-  <style>
-    body {
-      border: 0px;
-    }
-
-    .product_carousel img {
-      width: 58px;
-      height: 58px;
-    }
-
-    ::-webkit-scrollbar {
-      -webkit-appearance: none;
-      width: 4px;
-      height: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      border-radius: 4px;
-      background-color: rgba(0, 0, 0, .5);
-      -webkit-box-shadow: 0 0 0px rgba(255, 255, 255, .5);
-    }
-
-    @import url(https://fonts.googleapis.com/css?family=Roboto);
-
-    body {
-      background: none repeat scroll 0 0 #fff;
-      color: #58585b;
-      font-family: "Roboto", Arial, sans-serif;
-      font-size: 12px;
-      -webkit-font-smoothing: antialiased;
-      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
-      /* padding-top: 100px; */
-    }
-
-    .tooltip_templates {
-      display: none;
-    }
-
-    .visually-hidden {
-      border: 0;
-      clip: rect(0 0 0 0);
-      height: 1px;
-      margin: -1px;
-      overflow: hidden;
-      padding: 0;
-      position: absolute;
-      width: 1px;
-    }
-
-    .primary-logo>a>img {
-      width: 100%;
-    }
-
-    .buttonblue {
-      background-color: #e9aa12;
-      color: #fff;
-      border: none;
-      width: 175px;
-      height: 51px;
-      padding: 8px;
-      font-family: "", Arial, sans-serif;
-      font-size: 18px;
-    }
-
-    .buttonblue:hover {
-      background-color: #edbb41;
-      color: #fff;
-      border: none;
-      width: 175px;
-      height: 51px;
-      padding: 8px;
-      font-family: "Roboto", Arial, sans-serif;
-      font-size: 18px;
-    }
-
-    #center {
-      width: 100%;
-      min-width: 600px;
-      max-width: 2000px;
-      height: 100%;
-      background-color: white;
-      margin: 0 auto;
-    }
-
-    #container {
-      /* margin-top: 80px; */
-      width: 100%;
-      min-height: 700px;
-    }
-
-    #content {
-      width: 550px;
-      margin: 0px 0px 0px 0px;
-      float: left;
-    }
-
-    #ProductVignetteRotationDegrees {
-      width: 40px;
-    }
-
-    #ProductVignetteRotationDegreesSlider {
-      width: 60%;
-      margin: 0px auto;
-    }
-
-    #tumblerimage {
-      width: 100%;
-      float: left;
-    }
-
-    #togglediv {
-      padding: 5px 10px 5px;
-      min-width: 445px;
-      max-width: 70%;
-      margin: 0px 0px 0px 10px;
-      float: left;
-      vertical-align: middle;
-    }
-
-    .controls1 {
-      width: 350px;
-      margin: 0px auto;
-    }
-
-    #controls2 {
-      width: 450px;
-      margin: 0px auto;
-    }
-
-    #controls-left {
-      float: left;
-      text-align: left;
-      padding: 5px;
-      width: 50%;
-    }
-
-    #controls-right {
-      text-align: right;
-      padding: 5px;
-    }
-
-    .menupad {
-      display: inline-block;
-      height: 30px;
-      margin: 10px 0px 0px 0px;
-      vertical-align: text-top;
-    }
-
-    /* .rm-menupad {
-      display: inline-block;
-      height: 30px;
-      margin: 10px 0px 0px 0px;
-      vertical-align: text-top;
-    } */
-
-    #warning {
-      height: 25px;
-      width: 100%;
-      background-color: #FF0000;
-    }
-
-    #controls-submit {
-      text-align: center;
-      padding: 10px;
-    }
-
-    #vignetteUrl {
-      width: 300px;
-      text-align: center;
-    }
-
-    #txtUploadFile {}
-
-    #previewImage {
-      max-height: 475px;
-      max-width: 540px;
-      margin: 10px auto;
-      display: block;
-    }
-
-    .thumbnailPreview {
-      float: left;
-      max-height: 90px;
-      max-width: 90px;
-      margin: 20px 0px 0px 50px;
-      display: block;
-    }
-
-    #thumbnailHero {
-      padding: 0px;
-    }
-
-    #thumbnailHero:hover {
-      padding: 0px;
-      border: thin solid #b1b4b6;
-    }
-
-    #thumbnailVirtual {
-      padding: 0px;
-    }
-
-    #thumbnailVirtual:hover {
-      padding: 0px;
-      border: thin solid #b1b4b6;
-    }
-
-    #thumbnailDecoration {
-      padding: 0px;
-      width: 95px !important;
-    }
-
-    #thumbnailDecoration:hover {
-      border: thin solid #b1b4b6;
-    }
-
-    #chooseDeco {
-      color: red;
-      padding: 15px;
-    }
-
-    .Options-Header {
-      font-family: "Roboto", Arial, sans-serif;
-      font-size: 30px;
-      font-weight: 400;
-      min-width: 445px;
-      max-width: 70%;
-      margin: 0px 0px 10px 0px;
-      float: left;
-    }
-
-    select {
-      height: 25px;
-      color: #58585b;
-      background: white;
-      border: 1px solid #a7a9ab;
-      border-radius: 2px;
-      padding: 0 20px;
-      outline: 0;
-      text-indent: 0;
-      vertical-align: top;
-    }
-
-    .selected-type {
-      font-family: "Roboto", Arial, sans-serif;
-      font-size: 20px;
-      font-weight: 300;
-      clear: both;
-      padding-top: 10px;
-      border-bottom: thin solid #b1b4b6;
-      opacity: .8;
-    }
-
-    .selected-type-sub {
-      font-style: italic;
-      font-size: 15px;
-      font-weight: 300;
-      clear: both;
-      padding-left: 25px;
-      padding-top: 10px;
-    }
-
-    .tumblerPreviewZoom {
-      box-sizing: border-box;
-      width: 100%;
-      overflow: hidden;
-      margin: 50px auto;
-      position: relative;
-      /*cursor: zoom-in;*/
-    }
-
-    .tumblerPreview {
-      margin: 0px auto;
-      text-align: center;
-      display: block;
-      padding-left: 5px;
-    }
-
-    #rotatePreview {
-      width: 40px;
-    }
-
-    /* START Carousel CSS */
-
-    /* START Form Carousel */
-
-    .list_carousel {
-      float: left;
-      width: 360px;
-    }
-
-    .list_carousel ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: block;
-    }
-
-    .list_carousel li {
-      width: 60px;
-      padding: 0;
-      display: block;
-      float: left;
-      text-align: center;
-    }
-
-    .list_carousel li img {
-      width: 58px;
-      padding-bottom: 8px;
-    }
-
-    .list_carousel.responsive {
-      width: auto;
-      margin-left: 0;
-    }
-
-    /* START Inner Carousel */
-
-    .list_carousel2 {
-      float: left;
-      width: 360px;
-    }
-
-    .list_carousel2 ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: block;
-    }
-
-    .list_carousel2 li {
-      width: 35px;
-      height: 35px;
-      padding: 0;
-      display: block;
-      float: left;
-      text-align: center;
-    }
-
-    .list_carousel2 li img {
-      width: 25px;
-      height: 25px;
-      padding: 1px;
-    }
-
-    .list_carousel2 li img:hover {
-      width: 25px;
-      height: 25px;
-      padding: 0px;
-    }
-
-    .list_carousel2.responsive {
-      width: auto;
-      margin-left: 0;
-    }
-
-
-    
-
-    .clearfix {
-      float: none;
-      clear: both;
-    }
-
-    .prev {
-      display: block;
-      height: 26px;
-      width: 13px;
-      float: left;
-      background: transparent url('//imagegenerator.tervis.com/is/image/tervis/ui-caret-left') center top no-repeat;
-      top: auto;
-      bottom: auto;
-    }
-
-    .prev:hover {
-      display: block;
-      height: 26px;
-      width: 13px;
-      float: left;
-      background: transparent url('//imagegenerator.tervis.com/is/image/tervis/ui-caret-left-over') center top no-repeat;
-    }
-
-    .next {
-      display: block;
-      height: 26px;
-      width: 13px;
-      float: left;
-      background: transparent url('//imagegenerator.tervis.com/is/image/tervis/ui-caret-right') center top no-repeat;
-    }
-
-    .next:hover {
-      display: block;
-      height: 26px;
-      width: 13px;
-      float: left;
-      background: transparent url('//imagegenerator.tervis.com/is/image/tervis/ui-caret-right-over') center top no-repeat;
-    }
-
-    .pager {
-      float: left;
-      width: 300px;
-      text-align: center;
-    }
-
-    .pager a {
-      margin: 0 5px;
-      text-decoration: none;
-    }
-
-    .pager a.selected {
-      text-decoration: underline;
-    }
-
-    .timer {
-      background-color: #999;
-      height: 6px;
-      width: 0px;
-    }
-
-    .swatch-label {
-      font-size: 10px;
-      font-style: italic;
-      text-align: center;
-      line-height: 15px;
-    }
-
-    .prev2,
-    .next2 {
-      margin-top: 30px;
-    }
-
-    /* END Carousel CSS */
-
-    label>input {
-      display: none;
-    }
-
-    label>input:checked+img {
-      padding: 1px;
-      border-color: #b1b4b6;
-      border-style: double;
-      border-width: 1px;
-    }
-  </style>
-  <link rel='stylesheet prefetch' href='https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css'>  
+  <link rel='stylesheet prefetch' href='https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css'>
   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/tooltipster.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/themes/tooltipster-light.min.css"> -->
-
-  <div id="center">
-    <div id="container">
-      <div>
-        <div class="thumbnailPreview">
-          <label>
-            <input type="radio" name="thmbRadio" value="1" checked />
-            <img 
-              id="thumbnailVirtual"
-              src="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$"
-              class="tip-trigger" 
-              title="Virtual View" 
-            />
-          </label>
-          <label>
-            <input type="radio" name="thmbRadio" value="1-HERO2" />
-            <img 
-              id="thumbnailHero"
-              src="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1-HERO2?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$"
-              class="tip-trigger"
-              title="Hero View" 
-            />
-          </label>
-          <label>
-            <input type="radio" name="thmbRadio" value="RM" />
-            <div class="loader" id="loader" style="display: none;"> 
-              <img
-                src="//imagegenerator.tervis.com/is/content/tervis/loading93x93.gif"
-                style="max-height: 93px; max-width:93px; margin:0px auto; display:block;"
-              />
-            </div>
-            <div id="thumbnailDecoration">
-              <img 
-                id="previewImage"
-                style="max-height: 93px; max-width:93px; margin:0px auto;"
-                src="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$"
-                onerror="this.src='//imagegenerator.tervis.com/is/content/tervis/loading93x93.gif';"
-                class="tip-trigger"
-                title="Decoration View" 
-              />
-            </div>
-          </label>
+  <div class="thumbnailPreview">
+    <label>
+      <input type="radio" name="thmbRadio" value="1" checked />
+      <img
+        id="thumbnailVirtual"
+        src="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$"
+        class="tip-trigger"
+        title="Virtual View"
+      />
+    </label>
+    <label>
+      <input type="radio" name="thmbRadio" value="1-HERO2" />
+      <img
+        id="thumbnailHero"
+        src="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1-HERO2?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$"
+        class="tip-trigger"
+        title="Hero View"
+      />
+    </label>
+    <label>
+      <input type="radio" name="thmbRadio" value="RM" />
+      <div class="loader" id="loader" style="display: none;">
+        <img
+          src="//imagegenerator.tervis.com/is/content/tervis/loading93x93.gif"
+          style="max-height: 93px; max-width:93px; margin:0px auto; display:block;"
+        />
       </div>
+      <div id="thumbnailDecoration">
+        <img
+          id="previewImage"
+          style="max-height: 93px; max-width:93px; margin:0px auto;"
+          src="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$"
+          onerror="this.src='//imagegenerator.tervis.com/is/content/tervis/loading93x93.gif';"
+          class="tip-trigger"
+          title="Decoration View"
+        />
+      </div>
+    </label>
+  </div>
 
-      
-      <div id="content">
-        <div class="tumblerPreview">
-          <div class="tumblerPreviewZoom">
-            <a 
-              id="tumblerimagelink"
-              href="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ZM-ALPHA$"
-              download
-            >
-              <img 
-                id="tumblerimage"
-                src="https://imagegenerator.tervis.com/is/image/tervis/tervis?layer=0&src=ir{tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/INNER/LINED/CL1&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN&req=object}"
-                class="tip-trigger"
-                title="Click image to download larger file" 
-              />
-            </a>
-          </div>
-          <div>
-            Degrees:
-            <input 
-              type="text"
-              id="ProductVignetteRotationDegrees"
-              maxlength="5"
-              value="0"
-              onchange="document.querySelector('#ProductVignetteRotationDegreesSlider').value = this.value; Update_ImageGeneratorProductVignetteURL()"
-            >
-            
-            Snap to:
-            <select id="SnapTo" onchange="document.querySelector('#ProductVignetteRotationDegreesSlider').step = this.value">
-              <option selected>90</option>
-              <option>45</option>
-              <option>11.25</option>
-            </select>
-          </div>
-          <input 
-            type="range"
-            id="ProductVignetteRotationDegreesSlider"
-            value="0"
-            min="-180"
-            max="180"
-            step="90"
-            onchange="document.querySelector('#ProductVignetteRotationDegrees').value = this.value; Update_ImageGeneratorProductVignetteURL()"
+  <div id="content">
+    <div class="tumblerPreview">
+      <div class="tumblerPreviewZoom">
+        <a
+          id="tumblerimagelink"
+          href="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ZM-ALPHA$"
+          download
+        >
+          <img
+            id="tumblerimage"
+            src="https://imagegenerator.tervis.com/is/image/tervis/tervis?layer=0&src=ir{tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/INNER/LINED/CL1&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN&req=object}"
+            class="tip-trigger"
+            title="Click image to download larger file"
           />
-
-          
-          <br />
-          <br />
-          <input type="text" id="vignetteUrl"
-            value="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PRINT$"
-            placeholder="Vignette URL" />
-          <br />
-          <br />
-          <br />
-          <!-- <div class="menupad DownloadForm" /> -->
-        </div>
+        </a>
       </div>
+      <div>
+        Degrees:
+        <input
+          type="text"
+          id="ProductVignetteRotationDegrees"
+          maxlength="5"
+          value="0"
+          onchange="document.querySelector('#ProductVignetteRotationDegreesSlider').value = this.value; Update_ImageGeneratorProductVignetteURL()"
+        >
 
-      <div id="togglediv">
-
-        <div id="DecorationSourceMenuGroup"></div>
-        <div id="DecorationImageSourceIsArcedContainer"></div>
-
-        <div class="selected-type">Product</div>
-        <div class="carousel1" id="select-product"></div>
-        <div id="ProductDecorationTypePickerContainer"></div>
-
-        <div id="select-vignette-object-color-options"></div>
+        Snap to:
+        <select id="SnapTo" onchange="document.querySelector('#ProductVignetteRotationDegreesSlider').step = this.value">
+          <option selected>90</option>
+          <option>45</option>
+          <option>11.25</option>
+        </select>
       </div>
+      <input
+        type="range"
+        id="ProductVignetteRotationDegreesSlider"
+        value="0"
+        min="-180"
+        max="180"
+        step="90"
+        onchange="document.querySelector('#ProductVignetteRotationDegrees').value = this.value; Update_ImageGeneratorProductVignetteURL()"
+      />
 
-      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-      <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script>
-      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js'></script> -->
-      <!-- <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script> -->
-      <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/js/jquery.tooltipster.min.js"></script> -->
-      <!-- <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery_cookie.js"></script> -->
-      <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+      <div class="menupad" id="DownloadButtonFormContainer"></div>
 
-      <script type="text/javascript" language="javascript" 
-        src="https://cdn.jsdelivr.net/npm/caroufredsel@6.2.1/jquery.carouFredSel-6.2.1-packed.min.js"></script>
-
-      <script type="text/javascript" language="javascript"
-        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.mousewheel.min.js"></script>
-      <script type="text/javascript" language="javascript"
-        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.touchSwipe.min.js"></script>
-      <script type="text/javascript" language="javascript"
-        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.transit.min.js"></script>
-      <script type="text/javascript" language="javascript"
-        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.ba-throttle-debounce.min.js"></script>
-
-      <script type="module">
-        import {
-          Get_TervisProductMetaDataUsingIndex,
-          Get_TervisProductSizeAndFormTypeFromString,
-          Get_TervisProductColorMarketingNameUsingIndex
-        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.16?module'
-        
-        import { 
-          html, 
-          render, 
-          directive
-        } from 'https://unpkg.com/lit-html?module'
-
-        import {
-          ifDefined
-        } from 'https://unpkg.com/lit-html@1.1.2/directives/if-defined.js?module'
-        
-        import { 
-          New_TervisAdobeScene7PrintSingleURL,
-          New_TervisAdobeScene7WrapDecoration3TimesURL,
-          New_TervisAdobeScene7URL,
-          New_TervisAdobeScene7ProductVignetteImageURL,
-          ConvertTo_TervisAdobeScene7VignettePosition,
-          Get_TervisAdobeScene7Silhouette,
-          Get_TervisAdobeScene7VignetteObjectWithColorOption,
-          Get_TervisAdobeScene7SwatchImageURL
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.77/TervisAdobeScene7JS.js?module'
-
-        import {
-          New_TervisAdobeScene7CustomyzerDecorationImageURL
-        } from 'https://unpkg.com/@tervis/tervisadobescene7customyzerjs?module'
+      <!-- <button type="button" class="buttonblue" id="print">Download Hi-Res</button> -->
+    </div>
+  </div>
 
 
-        var $DownloadOptions = [
-          {
-            Name: "Hi-Res tif",
-            Function: () => {
-              var finalURL = ($('#vignetteUrl').val());
-              var replacePreset = ($('#preset').val());
-              var printURL = (finalURL).replace(replacePreset, "PRINT")
+  <div id="togglediv">
 
-              if ($('#vignetteUrl').val() == "") {
-                alert("Please Update Tumbler First!");
-              } else {
-                alert("Preparing to Download");
-                open(printURL, "_blank");
-              }
-            }
-          },
-          {
-            Name: "Hi-Res jpg"
-          },
-          {
-            Name: "1 Sided Virtual",
-            // Function: Invoke_OneSidedVirtualDownload
-          },
-          {
-            Name: "4 Sided Virtual",
-            // Function: Invoke_FourSidedVirtualDownload
+    <div id="DecorationSourceMenuGroup"></div>
+    <div id="DecorationImageSourceIsArcedContainer"></div>
 
-          },
-          {
-            Name: "4 Sides",
-            // Function: Invoke_DownloadFourSides
-          },
-        ]
+    <div class="selected-type">Product</div>
+    <div class="carousel1" id="select-product"></div>
+    <div id="ProductDecorationTypePickerContainer"></div>
 
-        var $ProductOrderInCarousel = [
-          {
-            $ProductSize: 16,
-            $ProductFormType: "DWT"
-          },
-          {
-            $ProductSize: 24,
-            $ProductFormType: "DWT"
-          },
-          {
-            $ProductSize: 24,
-            $ProductFormType: "WB"
-          },
-          {
-            $ProductSize: 16,
-            $ProductFormType: "BEER"
-          },
-          {
-            $ProductSize: 16,
-            $ProductFormType: "MUG"
-          },
-          {
-            $ProductSize: 12,
-            $ProductFormType: "DWT"
-          },
-          {
-            $ProductSize: 10,
-            $ProductFormType: "WAV"
-          },
-          {
-            $ProductSize: 6,
-            $ProductFormType: "SIP"
-          },
-          {
-            $ProductSize: 87,
-            $ProductFormType: "ICE"
-          },
-          {
-            $ProductSize: 2,
-            $ProductFormType: "SHO"
-          },
-          {
-            $ProductSize: 9,
-            $ProductFormType: "WINE"
-          },
-          {
-            $ProductSize: 9,
-            $ProductFormType: "SWG"
-          },
-          {
-            $ProductSize: 16,
-            $ProductFormType: "TALL"
-          },
-          {
-            $ProductSize: 20,
-            $ProductFormType: "SS"
-          },
-          {
-            $ProductSize: 30,
-            $ProductFormType: "SS"
-          },
-          {
-            $ProductSize: 17,
-            $ProductFormType: "SS"
-          },
-          {
-            $ProductSize: 24,
-            $ProductFormType: "SS"
-          },
-          {
-            $ProductSize: 12,
-            $ProductFormType: "SS"
+    <div id="select-vignette-object-color-options"></div>
+  </div>
+
+  <div style="grid-column: 4 / 4">
+    <textarea
+      id="ProductVignetteURL"
+      style="width: 100%; height: 100%;"
+    ></textarea>
+  </div>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+  <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script> -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js'></script>
+  <!-- <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/js/jquery.tooltipster.min.js"></script> -->
+  <!-- <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery_cookie.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+
+  <script type="text/javascript" language="javascript"
+    src="https://cdn.jsdelivr.net/npm/caroufredsel@6.2.1/jquery.carouFredSel-6.2.1-packed.min.js"></script>
+
+  <script type="text/javascript" language="javascript"
+    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.mousewheel.min.js"></script>
+  <script type="text/javascript" language="javascript"
+    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.touchSwipe.min.js"></script>
+  <script type="text/javascript" language="javascript"
+    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.transit.min.js"></script>
+  <script type="text/javascript" language="javascript"
+    src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/316027/jquery.ba-throttle-debounce.min.js"></script>
+</div>
+
+<script type="module">
+    import {
+      Get_TervisProductMetaDataUsingIndex,
+      Get_TervisProductSizeAndFormTypeFromString,
+      Get_TervisProductColorMarketingNameUsingIndex
+    } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.16?module'
+
+    import {
+      html,
+      render,
+      directive
+    } from 'https://unpkg.com/lit-html?module'
+
+    import {
+      ifDefined
+    } from 'https://unpkg.com/lit-html@1.1.2/directives/if-defined.js?module'
+
+    import {
+      New_TervisAdobeScene7PrintSingleURL,
+      New_TervisAdobeScene7WrapDecoration3TimesURL,
+      New_TervisAdobeScene7URL,
+      New_TervisAdobeScene7ProductVignetteImageURL,
+      ConvertTo_TervisAdobeScene7VignettePosition,
+      Get_TervisAdobeScene7Silhouette,
+      Get_TervisAdobeScene7VignetteObjectWithColorOption,
+      Get_TervisAdobeScene7SwatchImageURL
+    } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.77/TervisAdobeScene7JS.js?module'
+
+    import {
+      New_TervisAdobeScene7CustomyzerDecorationImageURL
+    } from 'https://unpkg.com/@tervis/tervisadobescene7customyzerjs?module'
+
+    import {
+      Remove_ObjectKeyWithEmptyOrNullValue
+    } from 'https://unpkg.com/@tervis/tervisutilityjs?module'
+
+    import {
+      Get_TervisCustomyzerProjectProductSizeAndProductFormType
+    } from 'https://unpkg.com/@tervis/terviscustomyzerjs?module'
+
+    var $DownloadOptions = [
+      {
+        Name: "Hi-Res tif",
+        Function: () => {
+          var finalURL = ($('#vignetteUrl').val());
+          var replacePreset = ($('#preset').val());
+          var printURL = (finalURL).replace(replacePreset, "PRINT")
+
+          if ($('#vignetteUrl').val() == "") {
+            alert("Please Update Tumbler First!");
+          } else {
+            alert("Preparing to Download");
+            open(printURL, "_blank");
           }
-        ]
+        }
+      },
+      {
+        Name: "Hi-Res jpg"
+      },
+      {
+        Name: "1 Sided Virtual",
+        // Function: Invoke_OneSidedVirtualDownload
+      },
+      {
+        Name: "4 Sided Virtual",
+        // Function: Invoke_FourSidedVirtualDownload
 
-        const New_MenuGroup = ({
-            $GroupTitle,
-            $GroupCode,
-            $InnerContent,
-            $DisplayNone
-          }) => {
-            return html`
-              <div class="${ifDefined($GroupCode)}" style="${ifDefined($DisplayNone ? "display: none;" : undefined) }">
-                <div 
-                  class="selected-type tip-trigger"
-                  title="${ifDefined($GroupCode)}"
-                >${$GroupTitle}</div>
-                ${$InnerContent}
+      },
+      {
+        Name: "4 Sides",
+        // Function: Invoke_DownloadFourSides
+      },
+    ]
+
+    function Update_ImageGeneratorDownloadButtonForm () {
+      var $DownloadButtonForm = html`
+        <button
+          type="button"
+          class="buttonblue"
+        >Download
+        </button>
+        <select>
+          ${$DownloadOptions.map(
+            $DownloadOption => html`<option>${$DownloadOption.Name}</option>`
+          )}
+        </select>
+      `
+      var $DownloadButtonFormContainer = document.querySelector("#DownloadButtonFormContainer")
+      render($DownloadButtonForm, $DownloadButtonFormContainer)
+    }
+
+    var $ProductOrderInCarousel = [
+      {
+        $ProductSize: 16,
+        $ProductFormType: "DWT"
+      },
+      {
+        $ProductSize: 24,
+        $ProductFormType: "DWT"
+      },
+      {
+        $ProductSize: 24,
+        $ProductFormType: "WB"
+      },
+      {
+        $ProductSize: 16,
+        $ProductFormType: "BEER"
+      },
+      {
+        $ProductSize: 16,
+        $ProductFormType: "MUG"
+      },
+      {
+        $ProductSize: 12,
+        $ProductFormType: "DWT"
+      },
+      {
+        $ProductSize: 10,
+        $ProductFormType: "WAV"
+      },
+      {
+        $ProductSize: 6,
+        $ProductFormType: "SIP"
+      },
+      {
+        $ProductSize: 87,
+        $ProductFormType: "ICE"
+      },
+      {
+        $ProductSize: 2,
+        $ProductFormType: "SHO"
+      },
+      {
+        $ProductSize: 9,
+        $ProductFormType: "WINE"
+      },
+      {
+        $ProductSize: 9,
+        $ProductFormType: "SWG"
+      },
+      {
+        $ProductSize: 16,
+        $ProductFormType: "TALL"
+      },
+      {
+        $ProductSize: 20,
+        $ProductFormType: "SS"
+      },
+      {
+        $ProductSize: 30,
+        $ProductFormType: "SS"
+      },
+      {
+        $ProductSize: 17,
+        $ProductFormType: "SS"
+      },
+      {
+        $ProductSize: 24,
+        $ProductFormType: "SS"
+      },
+      {
+        $ProductSize: 12,
+        $ProductFormType: "SS"
+      }
+    ]
+
+    const New_MenuGroup = ({
+        $GroupTitle,
+        $GroupCode,
+        $InnerContent,
+        $DisplayNone
+      }) => {
+        return html`
+          <div class="${ifDefined($GroupCode)}" style="${ifDefined($DisplayNone ? "display: none;" : undefined) }">
+            <div
+              class="selected-type tip-trigger"
+              title="${ifDefined($GroupCode)}"
+            >${$GroupTitle}</div>
+            ${$InnerContent}
+          </div>
+        `
+      }
+
+      const New_Carousel = ({
+          $CarouselTitle,
+          $CarouselID,
+          $CarouselItems,
+          $CarouselItemsContainerStyle,
+          $ShiftArrowsDown
+        }) => {
+          var $PreviousArrowID
+          var $NextArrowID
+          var $ArrowClassSuffix = $ShiftArrowsDown ? "2" : ""
+
+          return html`
+            ${
+              $CarouselTitle ?
+              html`
+                <div
+                  class="selected-type-sub tip-trigger"
+                  title="${$CarouselID}"
+                >${$CarouselTitle}</div>
+              ` :
+              ""
+            }
+            <div class="${$CarouselID}Container" style="display:block">
+              <br>
+              <a class="prev prev${$ArrowClassSuffix}" href="#"></a>
+              <div class="${$CarouselItemsContainerStyle}">
+                <ul class="${$CarouselID}">
+                  ${$CarouselItems}
+                </ul>
               </div>
-            `
-          }
-
-          const New_Carousel = ({
-              $CarouselTitle,
-              $CarouselID,
-              $CarouselItems,
-              $CarouselItemsContainerStyle,
-              $ShiftArrowsDown
-            }) => {
-              var $PreviousArrowID
-              var $NextArrowID
-              var $ArrowClassSuffix = $ShiftArrowsDown ? "2" : ""
-
-              return html`
-                ${
-                  $CarouselTitle ?
-                  html`
-                    <div 
-                      class="selected-type-sub tip-trigger"
-                      title="${$CarouselID}"
-                    >${$CarouselTitle}</div>
-                  ` :
-                  ""
-                }
-                <div class="${$CarouselID}Container" style="display:block">
-                  <br>
-                  <a class="prev prev${$ArrowClassSuffix}" href="#"></a>
-                  <div class="${$CarouselItemsContainerStyle}">
-                    <ul class="${$CarouselID}">
-                      ${$CarouselItems}
-                    </ul>
-                  </div>
-                  <a class="next next${$ArrowClassSuffix}" href="#"></a>
-                </div>
-              `
-            }
-
-            const forceWrite = directive((value) => (part) => {
-              part.setValue(value);
-            });
-
-            const New_CrouselItem = ({
-              $CarouselName,
-              $Value,
-              $ImageURL,
-              $Title,
-              $ToolTip,
-              $OnChange,
-              $IsChecked,
-              $ShowTitleAsSpan
-            }) => html`
-            <li>
-              <label>
-                <input 
-                  type="radio"
-                  name="${$CarouselName}"
-                  .value="${$Value}"
-                  .checked=${forceWrite($IsChecked)}
-                  @change=${$OnChange}
-                />
-                <img 
-                  src="${$ImageURL}"
-                  title="${$ToolTip}"
-                  class="tip-trigger"
-                >
-                ${$ShowTitleAsSpan ? html`<span class="swatch-label">${$Title}</span>` : ""}
-              </label>
-            </li>
-            `
-
-        async function Receive_ImageGeneratorProductCarouselChange () {
-          await Update_ImageGeneratorThingsWithColorOptionsCarousel()
-          Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
-          Update_ImageGeneratorProductDecorationTypeSelect()
-          await Update_ImageGeneratorProductVignetteURL()
-        }
-
-        async function Update_ImageGeneratorProductCarousel () {
-          var $CarouselItems = []
-          for (var {$ProductSize, $ProductFormType} of $ProductOrderInCarousel) {
-            var $IsFirstProduct = 
-              $ProductOrderInCarousel[0].$ProductSize === $ProductSize &&
-              $ProductOrderInCarousel[0].$ProductFormType === $ProductFormType
-
-            var $Product = await Get_TervisProductMetaDataUsingIndex({$ProductSize, $ProductFormType})
-            var $ImageURL = await Get_TervisAdobeScene7Silhouette({$ProductSize, $ProductFormType})
-            $ImageURL += "&$ICO-SIL-BA$"
-            $CarouselItems.push(
-              New_CrouselItem({
-                $CarouselName: "tumblerRadio",
-                $Value: `${$ProductSize}${$ProductFormType}`,
-                $ImageURL,
-                $Title: $Product.MarketingName,
-                $ToolTip: `${$Product.MarketingName} - ${$ProductSize}${$ProductFormType}`,
-                $IsChecked: $IsFirstProduct,
-                $ShowTitleAsSpan: true,
-                $OnChange: Receive_ImageGeneratorProductCarouselChange
-              })
-            )
-          }
-          
-          var $ProductCarousel = New_Carousel({
-            $CarouselID: "product_carousel",
-            $CarouselItems,
-            $CarouselItemsContainerStyle: "list_carousel",
-            $ShiftArrowsDown: true
-          })
-
-          var $ProductCarouselContainer = document.querySelector('#select-product')
-
-          render(
-            $ProductCarousel,
-            $ProductCarouselContainer
-          )
-
-          $('.product_carousel').carouFredSel({
-            auto: false,
-            circular: false,
-            prev: '.prev2',
-            next: '.next2',
-            mousewheel: true,
-            swipe: {
-              onMouse: true,
-              onTouch: true
-            }
-          }) 
-        }
-
-        async function Receive_ImageGeneratorDecorationImageSourceArcedOnChange () {
-          await Update_ImageGeneratorProductVignetteURL()
-        }
-
-        function Update_ImageGeneratorDecorationImageSourceFormArcedSelect () {
-          var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
-          var $DecorationImageSourceType = Get_ImageGeneratorSelectedDecorationImageSourceType()
-          var $DisplayNoneAndNotArced = 
-            $ProductFormType === "SS" || 
-            $DecorationImageSourceType === "Customyzer Project ID" ||
-            $DecorationImageSourceType === "Raw Material Item Number"
-
-          render(
-            html`
-              <select
-                id="DecorationImageSourceArced"
-                class="menupad"
-                style="${ifDefined( $DisplayNoneAndNotArced ? "display: none;" : undefined) }"
-                @change=${Receive_ImageGeneratorDecorationImageSourceArcedOnChange}
-              >
-                <option disabled selected>Is source image arced?</option>
-                <option>Arced</option>
-                <option ?selected=${$DisplayNoneAndNotArced}>Not arced</option>
-              </select>
-            `,
-            document.querySelector("#DecorationImageSourceIsArcedContainer")
-          )
-        }
-
-        function Get_ImageGeneratorSelectedProductSizeAndProductFormType() {
-          var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
-          return Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
-        }
-
-        function Get_ImageGeneratorSelectedDecorationImageSourceType () {
-          var $DecorationImageSourceTypeElementID = "DecorationImageSourceType"
-          var $DecorationImageSourceTypeSelector = `#${$DecorationImageSourceTypeElementID}`
-          
-          if (document.querySelector($DecorationImageSourceTypeSelector)) {
-            return document.querySelector($DecorationImageSourceTypeSelector).value
-          }
-        }
-
-        async function Recieve_ImageGeneratorProductDecorationTypeOnChange() {
-          await Update_ImageGeneratorProductVignetteURL()
-        }
-
-        function Update_ImageGeneratorProductDecorationTypeSelect () {
-          var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
-          var {$ProductSize, $ProductFormType} = $ProductSizeAndProductFormType
-
-          var $ProductDecorationTypes = {
-            WRA: "Wrap",
-            EMB: "Emblem",
-            DPT: "Direct Print Outer"
-          }
-
-          var $ProductDecorationTypePicker = html`
-            <select 
-              id="ProductDecorationType" 
-              class="menupad"
-              style="${ifDefined($ProductFormType === "SS" ? "display: none;" : undefined) }"
-              @change=${Recieve_ImageGeneratorProductDecorationTypeOnChange}
-            >
-              <option value= "" selected disabled class="menupad">Decoration Type</option>
-              ${
-                Object                
-                .entries($ProductDecorationTypes)
-                .map(
-                  ([$ProductDecorationTypeCode, $ProductDecorationTypeName]) =>
-                  html`
-                    <option 
-                      value="${$ProductDecorationTypeCode}"
-                      ?selected=${
-                          $ProductFormType === "SS" && $ProductDecorationTypeCode === "DPT" ||
-                          ["ICE","TALL"].includes($ProductFormType) && $ProductDecorationTypeCode === "EMB" ||
-                          !["ICE","SS"].includes($ProductFormType) && $ProductDecorationTypeCode === "WRA"
-                      }
-                    >
-                      ${$ProductDecorationTypeName}
-                    </option>`
-                )
-              }
-              <option value= "" class="menupad">None</option>
-            </select>
+              <a class="next next${$ArrowClassSuffix}" href="#"></a>
+            </div>
           `
-          var $ProductDecorationTypePickerContainer = document.querySelector('#ProductDecorationTypePickerContainer')
-
-          render(
-            $ProductDecorationTypePicker,
-            $ProductDecorationTypePickerContainer
-          )
         }
 
-        async function Recieve_ImageGeneratorThingWithColorCodeOnChange () {
-          await Update_ImageGeneratorProductVignetteURL()
-        }
-
-        async function Update_ImageGeneratorThingsWithColorOptionsCarousel() {
-          var $ProductVignetteDefaultSettings = [
-            {
-              Size: 16,
-              FormType: "DWT",
-              INNER: {
-                LINED: "CL1" 
-              }
-            },
-            {
-              Size: 24,
-              FormType: "DWT",
-              INNER: {
-                LINED: "CL1" 
-              }
-            },
-            {
-              Size: 24,
-              FormType: "WB",
-              INNER: {
-                LINED: "CL1" 
-              },
-              ACCESSORIES: {
-                LIDWB: "GY1"
-              }
-            },
-            {
-              Size: 16,
-              FormType: "BEER",
-              INNER: {
-                LINED: "CL1" 
-              }
-            },
-            {
-              Size: 16,
-              FormType: "MUG",
-              INNER: {
-                LINED: "CL1" 
-              }
-            },
-            {
-              Size: 6,
-              FormType: "SIP",
-              ACCESSORIES: {
-                LIDSIP: "GY3"
-              }
-            },
-            {
-              Size: 9,
-              FormType: "WINE",
-              INNER: {
-                LINED: "CL1" 
-              }
-            },
-            {
-              Size: 9,
-              FormType: "SWG",
-              INNER: {
-                LINED: "CL1" 
-              }
-            },
-            {
-              Size: 16,
-              FormType: "TALL",
-              INNER: {
-                SMOOTH: "CL1" 
-              }
-            },
-            {
-              Size: 20,
-              FormType: "SS",
-              OUTER: {
-                SMOOTH: "SS1" 
-              }
-            },
-            {
-              Size: 30,
-              FormType: "SS",
-              OUTER: {
-                SMOOTH: "SS1" 
-              }
-            },
-            {
-              Size: 24,
-              FormType: "SS",
-              ACCESSORIES: {
-                LIDWB: "GY1" 
-              }
-            },
-            {
-              Size: 17,
-              FormType: "SS",
-              ACCESSORIES: {
-                SSWBLID: "SS1" 
-              }
-            },
-            {
-              Size: 10,
-              FormType: "WAV",
-              OUTER: {
-                WAVY: "CL1" 
-              }
-            }
-          ]
-
-          var $VignetteCodeToMarketingName = {
-            INNER: "Product Inner",
-            LINED: "Lined",
-            SMOOTH: "Smooth",
-            OUTER: "Product Outer",
-            RIPPLE: "Ripple",
-            ACCESSORIES: "Accessories",
-            HAND: "Handle",
-            LIDTRV: "Travel Lid",
-            TOPSHK: "Shacker Top Lid",
-            LIDSTW: "Straw Lid",
-            LIDHOT: "Hot Lid",
-            LIDSIP: "Sippy Lid",
-            LIDWB: "Water Bottle Lid",
-            SSLIDTRV: "Slider Lid",
-            SSLIDHMR: "Hammer Lid",
-            LIDWIN: "Wine Lid",
-            SSWBLID: "Stainless Lid"
-          }
-
-          var $VignetteSuffix = $("input[name='thmbRadio']:checked").val();
-          var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
-          var $VignetteObjectsWithColorOption = await Get_TervisAdobeScene7VignetteObjectWithColorOption({
-            ...$ProductSizeAndProductFormType,
-            $VignetteSuffix
-          })
-
-          var $CarouselGroups = []
-          var $CarouFredSelOptions = []
-
-          for (var $VignetteObjectWithColorOption of $VignetteObjectsWithColorOption ){
-            var $Carousels = []
-            for (var $ThingWithAvailableColorCode of $VignetteObjectWithColorOption.Options) {
-              var $CarouselItems = []
-
-              var $CarouselName = $ThingWithAvailableColorCode.Code === "HAND" ?
-                $ThingWithAvailableColorCode.Code :
-                $VignetteObjectWithColorOption.Code
-
-              if (
-                $VignetteObjectWithColorOption.Code !== "INNER" && 
-                $VignetteObjectWithColorOption.Code !== "OUTER"
-              ) {
-                $CarouselItems.push(
-                  New_CrouselItem({
-                    $CarouselName,
-                    $ImageURL: "http://images.tervis.com/is/image/tervis/REMOVE?$SWATCH$",
-                    $Title: `None`,
-                    $ToolTip: `None`,
-                    $OnChange: Recieve_ImageGeneratorThingWithColorCodeOnChange
-                  })
-                )
-              }
-              
-              for (var $ColorCode of $ThingWithAvailableColorCode.AvailableColorCodes) {
-                var $ColorMetaData = await Get_TervisProductColorMarketingNameUsingIndex({$ColorCode})
-                
-                if ($ColorMetaData) { 
-                  var { MarketingName: $ColorMarketingName } = $ColorMetaData
-                } else {
-                  continue
-                }
-                
-                var $CarouselItemImageURL = Get_TervisAdobeScene7SwatchImageURL({$ColorCode})
-
-                var $IsChecked = $ThingWithAvailableColorCode.AvailableColorCodes.length === 1 && (
-                  $VignetteObjectWithColorOption.Code === "INNER" || 
-                  $VignetteObjectWithColorOption.Code === "OUTER"
-                )
-
-                $CarouselItems.push(
-                  New_CrouselItem({
-                    $CarouselName,
-                    $Value: `${$ColorCode}`, 
-                    $ImageURL: $CarouselItemImageURL,
-                    $Title: `${$ColorMarketingName} - ${$ColorCode}`,
-                    $ToolTip: `${$ColorMarketingName} - ${$ColorCode}`,
-                    $IsChecked,
-                    $OnChange: Recieve_ImageGeneratorThingWithColorCodeOnChange
-                  })
-                )
-              }
-
-              var $CarouselID = $ThingWithAvailableColorCode.Code
-              $CarouFredSelOptions.push({
-                CarouselContainerSelector: `.${$VignetteObjectWithColorOption.Code} .${$CarouselID}Container`,
-                CaroFreDeslULSelector: `.${$VignetteObjectWithColorOption.Code} .${$CarouselID}Container .${$CarouselID}`
-              })
-              var $Carousel = New_Carousel({
-                $CarouselTitle: $VignetteCodeToMarketingName[$ThingWithAvailableColorCode.Code],
-                $CarouselID,
-                $CarouselItems,
-                $CarouselItemsContainerStyle: "list_carousel2"
-              })
-
-              $Carousels.push($Carousel)
-            }
-            
-            $CarouselGroups.push(
-              New_MenuGroup({ 
-                $GroupTitle: $VignetteCodeToMarketingName[$VignetteObjectWithColorOption.Code],
-                $GroupCode: $VignetteObjectWithColorOption.Code,
-                $InnerContent: $Carousels,
-                $DisplayNone: $IsChecked
-              })
-            )
-          }
-          
-          var $ThingsWithColorOptionsDiv = document.querySelector('#select-vignette-object-color-options')
-          render($CarouselGroups, $ThingsWithColorOptionsDiv)
-
-          $CarouFredSelOptions.forEach(
-            $CarouFredSelOption =>
-            $($CarouFredSelOption.CaroFreDeslULSelector).carouFredSel({
-              auto: false,
-              circular: false,
-              prev: `${$CarouFredSelOption.CarouselContainerSelector} .prev`,
-              next: `${$CarouFredSelOption.CarouselContainerSelector} .next`,
-              mousewheel: true,
-              swipe: {
-                onMouse: true,
-                onTouch: true
-              }
-            })
-          )
-
-          $ProductVignetteDefaultSettings.filter(
-            ({Size: $ProductSize, FormType: $ProductFormType}) =>
-            $ProductSize === parseInt($ProductSizeAndProductFormType.$ProductSize) && $ProductFormType === $ProductSizeAndProductFormType.$ProductFormType
-          )
-          .forEach(
-            $DefaultSettingEntry => {
-              var $DefaultSettings = Object.entries($DefaultSettingEntry)
-                .filter(
-                  $Entry =>
-                  ["Size","FormType"].includes($Entry[0]) === false
-                )
-              
-              for ( var [$GroupCode, $ThingWithColorCodeObject] of $DefaultSettings) {
-                Object
-                .entries($ThingWithColorCodeObject)
-                .forEach(
-                  ([$Code, $ColorCode]) =>
-                  document.querySelector(
-                    `.${$GroupCode} .${$Code} input[value='${$ColorCode}']`
-                  ).checked = true
-                )
-              }
-            }
-          )
-
-          // Update_ImageGeneratorProductVignetteURL()
-        }// End Update_ImageGeneratorThingsWithColorOptionsCarousel
-        // window.Update_ImageGeneratorThingsWithColorOptionsCarousel = Update_ImageGeneratorThingsWithColorOptionsCarousel
-
-        async function Receive_ImageGeneartorDecorationImageSourceTypeOnChnage () {
-          await Update_ImageGeneratorDecorationImageSourceForm()
-          Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
-        }
-
-        async function Receive_ImageGeneartorDecorationImageSourceValueOnChange () {
-          await Update_ImageGeneratorProductVignetteURL()
-        }
-
-        async function Update_ImageGeneratorDecorationImageSourceForm() {
-          var $DecorationSourceOptions = [
-            "Raw Material Item Number",
-            "UGC Upload",
-            "Customyzer Project ID",
-            "Deocoration Image URL",
-            // "Finished Good Item Number"
-          ]
-
-          var $DecorationImageSourceTypeElementID = "DecorationImageSourceType"
-          var $DecorationImageSourceType = Get_ImageGeneratorSelectedDecorationImageSourceType()
-
-          if ($DecorationImageSourceType) {
-            var $ConditionallyAddedInput = [html`
-              <input
-                id="DecorationImageSourceValue"
-                type="text"
-                placeholder="${$DecorationImageSourceType}" 
-                disabled="${ifDefined($DecorationImageSourceType === "UGC Upload" ? "" : undefined)}"
-                class="menupad"
-                .value=${forceWrite("")}
-                @change=${Receive_ImageGeneartorDecorationImageSourceValueOnChange}
-              />
-            `]
-
-            if ($DecorationImageSourceType === "UGC Upload") {
-              $ConditionallyAddedInput.push(
-                html`
-                  <form name="frmFileUpload" id="frmFileUpload" method="post" enctype="multipart/form-data">
-                    <input name="txtUploadFile" type="file" id="txtUploadFile" multiple accept="image/*" class="btn btn-default"
-                      style="width: 210px; height:30px; vertical-align:bottom;" />
-                  </form>
-                `
-              ) 
-            }
-          }
-
-          var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
-
-          var $MenuGroup = New_MenuGroup({
-            $GroupTitle: "Decoration Image",
-            $InnerContent: html`
-              <select 
-                id="${$DecorationImageSourceTypeElementID}"
-                class="menupad"
-                style="${ifDefined($ProductFormType === "TALL" ? "display: none;" : undefined) }"
-                @change=${Receive_ImageGeneartorDecorationImageSourceTypeOnChnage}
-              >
-                <option value= "" selected disabled class="menupad">Source Type</option>
-                ${$DecorationSourceOptions.map(
-                  $DecorationSourceOption => html`
-                    <option>${$DecorationSourceOption}</option>
-                  `
-                )}
-              </select>
-              ${$ConditionallyAddedInput}
-            `
-          })
-
-          var $DecorationSourceMenuGroup = document.querySelector('#DecorationSourceMenuGroup')
-          render($MenuGroup, $DecorationSourceMenuGroup)
-        }
-        
-        function New_UGCRelativeURLFromURL ({
-          $URL
-        }) {
-          var $UGCURLObject = new URL($URL)
-          return $UGCURLObject.pathname.split("/").slice(-3).join("/")
-        }
-
-        async function Get_ImageGeneratorDecorationImageSourceURL (
-          $AsScene7SrcValue
-        ) {
-          var $DecorationImageSourceType =
-            document.querySelector("#DecorationImageSourceType") ?
-            document.querySelector("#DecorationImageSourceType").value :
-            undefined
-
-          var $DecorationImageSourceValue = 
-            document.querySelector("#DecorationImageSourceValue") ?
-            document.querySelector("#DecorationImageSourceValue").value :
-            undefined
-    
-          if ($DecorationImageSourceType === "UGC Upload" ) {
-            return New_TervisAdobeScene7URL({
-              $AsScene7SrcValue,
-              $Type: "ImageServer",
-              $RelativeURL: New_UGCRelativeURLFromURL({$URL: $DecorationImageSourceValue})
-            })
-          } else if ($DecorationImageSourceType === "Deocoration Image URL") {
-            return New_TervisAdobeScene7URL({
-              $AsScene7SrcValue,
-              $Type: "ImageServer",
-              $ExternalURL: $DecorationImageSourceValue
-            })
-          } else if ($DecorationImageSourceType === "Customyzer Project ID") {
-            var $ProjectID = $DecorationImageSourceValue
-            var {
-              $ProductSize,
-              $ProductFormType
-            } = await Get_TervisCustomyzerProjectProductSizeAndProductFormType({$ProjectID})
-            
-            return New_TervisAdobeScene7CustomyzerDecorationImageURL({
-              $ProjectID,
-              $ProductSize,
-              $ProductFormType,
-              $AsScene7SrcValue
-            })
-          } else if ($DecorationImageSourceType === "Raw Material Item Number") {
-            return New_TervisAdobeScene7URL({
-              $AsScene7SrcValue,
-              $Type: "ImageServer",
-              $RelativeURL: `tervis/${$DecorationImageSourceValue}`
-            })
-          }
-        }
-
-        function Get_ImageGeneratorProductVignetteElementPathToShow () {
-          var $SelectedThingsWithColorCodes = document.querySelectorAll("#select-vignette-object-color-options :checked")
-          var $VignettePathOfObjectsToShow = [...$SelectedThingsWithColorCodes].map(
-            $SelectedThingWithColorCode => {
-              var $ParentCode = $SelectedThingWithColorCode.closest("ul").className
-              var $RootCode = $SelectedThingWithColorCode.closest('div.INNER, div.OUTER, div.ACCESSORIES').className
-              return `${$RootCode}/${$ParentCode}/${$SelectedThingWithColorCode.value}`
-            }
-          )
-
-          var $ElementPathsToShow = [
-            "MAIN/GLARE"
-          ]
-          $VignettePathOfObjectsToShow.forEach(
-            $Path =>
-            $ElementPathsToShow.push(`MAIN/${$Path}`)
-          )
-          return $ElementPathsToShow
-        }
-
-        async function Update_ImageGeneratorAllTheThings() {
-          // Update the Product selection Carousel only once on load
-          if (!window.OnlyExecuteThisOnceHasExecutedOnce) {
-            await Update_ImageGeneratorProductCarousel()
-            window.OnlyExecuteThisOnceHasExecutedOnce = true
-          }
-          await Update_ImageGeneratorThingsWithColorOptionsCarousel()
-          Update_ImageGeneratorProductDecorationTypeSelect()
-          await Update_ImageGeneratorDecorationImageSourceForm()
-          Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
-          await Update_ImageGeneratorProductVignetteURL()
-
-          // $("input[name='tumblerRadio']").on("change", Update_ImageGeneratorAllTheThings)
-          // $('input, select').on("input change", Update_ImageGeneratorAllTheThings)
-        }
-        window.Update_ImageGeneratorAllTheThings = Update_ImageGeneratorAllTheThings
-
-        async function Update_ImageGeneratorProductVignetteURL() {
-          var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
-          var $ImageSourceURLAsScene7SrcValue = await Get_ImageGeneratorDecorationImageSourceURL({
-            $AsScene7SrcValue: true
-          })
-          var $VignetteElementPathToShow = Get_ImageGeneratorProductVignetteElementPathToShow()
-          var $DecorationSourceIsArced // = document.querySelector("#DecorationImageSourceArced").checked
-          var $ProductVignetteNameSuffix = document.querySelector("input[name='thmbRadio']:checked").value
-          var $ProductVignetteRotationDegrees = document.querySelector("#ProductVignetteRotationDegrees").value
-          var $ProductDecorationTypeCode = document.querySelector("#ProductDecorationType").value
-          
-          var $DecorationPositionXValue = await ConvertTo_TervisAdobeScene7VignettePosition({
-            ...$ProductSizeAndProductFormType,
-            $Degrees: $ProductVignetteRotationDegrees
-          })
-
-          $("#previewImage").prop('src', await Get_ImageGeneratorDecorationImageSourceURL());
-
-          var imageName = "tervis";
-
-          var $SrcValue = $ImageSourceURLAsScene7SrcValue
-
-          var $DecorationSrc
-          if ($ProductDecorationTypeCode && $ImageSourceURLAsScene7SrcValue) {
-            if ($DecorationSourceIsArced) {
-              $ImageSourceURLAsScene7SrcValue = New_TervisAdobeScene7PrintSingleURL({
-                  ...$ProductSizeAndProductFormType,
-                  $DecorationType: $ProductDecorationTypeCode,
-                  $AsScene7SrcValue: true,
-                  $ImageSrcValue: $SrcValue
-              })
-            }
-            
-            $DecorationSrc = New_TervisAdobeScene7WrapDecoration3TimesURL({
-              ...$ProductSizeAndProductFormType,
-              $AsScene7SrcValue: true,
-              $DecorationType: $ProductDecorationTypeCode,
-              $RepeatedImageSource: $SrcValue
-            })  
-          }
-          
-          var $ProductVignetteImageURL = New_TervisAdobeScene7ProductVignetteImageURL({
-            ...$ProductSizeAndProductFormType,
-            $VignetteSuffix: $ProductVignetteNameSuffix,
-            $DecorationSrc,
-            $DecorationPositionXValue,
-            $ElementPathsToShow: $VignetteElementPathToShow,
-            $AsScene7SrcValue: true
-          })
-
-          var preset = "$PDP-LG$"
-          var finalURL = `
-            //imagegenerator.tervis.com/is/image/tervis/${imageName}?
-            layer=0
-            &src=${$ProductVignetteImageURL}
-            ${preset}
-          `.replace(/\s/g, "")
-          
-          // $("#vignetteUrl").val(finalURL);
-          $('#tumblerimage').css('margin-left', '0px');
-          $("#tumblerimage").prop('src', finalURL);
-
-        } // END FUNCTION (UPDATE)
-        window.Update_ImageGeneratorProductVignetteURL = Update_ImageGeneratorProductVignetteURL
-
-        $(window).on("load", async function () {
-          await Update_ImageGeneratorAllTheThings()
-        })
-      </script>
-      <script>
-        //Image Upload Section
-        var sharedSecret = '9f91ce08-1501-459f-ab09-3d2ddc103344';
-
-        $(function () {
-          var el = document.getElementById("txtUploadFile");
-
-          if (el) {
-            el.addEventListener('change', AddImageFromDevice, false);
-          }
+        const forceWrite = directive((value) => (part) => {
+          part.setValue(value);
         });
 
-        function AddImageFromDevice(e) {
-          var bar = $('.progress-bar');
-          var percent = $('.percent');
-          var status = $('#status');
-          console.log("called AddImageFromDevice");
+        const New_CrouselItem = ({
+          $CarouselName,
+          $Value,
+          $ImageURL,
+          $Title,
+          $ToolTip,
+          $OnChange,
+          $IsChecked,
+          $ShowTitleAsSpan
+        }) => html`
+        <li>
+          <label>
+            <input
+              type="radio"
+              name="${$CarouselName}"
+              .value="${$Value}"
+              .checked=${forceWrite($IsChecked)}
+              @change=${$OnChange}
+            />
+            <img
+              src="${$ImageURL}"
+              title="${$ToolTip}"
+              class="tip-trigger"
+            >
+            ${$ShowTitleAsSpan ? html`<span class="swatch-label">${$Title}</span>` : ""}
+          </label>
+        </li>
+        `
 
-          var validFileTypes = ".bmp .jpg, .jpeg, .png";
-          if (FileTypeValidate("txtUploadFile", validFileTypes, "lblFileImageType", "lblFileSelect")) {
-            console.log("validated");
-            // ShowLoader();
+    async function Receive_ImageGeneratorProductCarouselChange () {
+      await Update_ImageGeneratorThingsWithColorOptionsCarousel()
+      Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
+      Update_ImageGeneratorProductDecorationTypeSelect()
+      await Update_ImageGeneratorProductVignetteURL()
+    }
 
-            var UploadToken = '';
-            var vXMLResponse = '';
+    async function Update_ImageGeneratorProductCarousel () {
+      var $CarouselItems = []
+      for (var {$ProductSize, $ProductFormType} of $ProductOrderInCarousel) {
+        var $IsFirstProduct =
+          $ProductOrderInCarousel[0].$ProductSize === $ProductSize &&
+          $ProductOrderInCarousel[0].$ProductFormType === $ProductFormType
 
-            var urlScene7 = `https://s7ugc1.scene7.com/ugc/image?op=get_uploadtoken&shared_secret=${sharedSecret}&expires=1800`;
-            console.log("getting upload token from: " + urlScene7);
+        var $Product = await Get_TervisProductMetaDataUsingIndex({$ProductSize, $ProductFormType})
+        var $ImageURL = await Get_TervisAdobeScene7Silhouette({$ProductSize, $ProductFormType})
+        $ImageURL += "&$ICO-SIL-BA$"
+        $CarouselItems.push(
+          New_CrouselItem({
+            $CarouselName: "tumblerRadio",
+            $Value: `${$ProductSize}${$ProductFormType}`,
+            $ImageURL,
+            $Title: $Product.MarketingName,
+            $ToolTip: `${$Product.MarketingName} - ${$ProductSize}${$ProductFormType}`,
+            $IsChecked: $IsFirstProduct,
+            $ShowTitleAsSpan: true,
+            $OnChange: Receive_ImageGeneratorProductCarouselChange
+          })
+        )
+      }
 
-            $.ajax({
-              url: urlScene7,
-              timeout: 50000,
-              async: true,
-              dataType: "xml",
-              success: function (s7TokenXml) {
-                console.log(s7TokenXml)
+      var $ProductCarousel = New_Carousel({
+        $CarouselID: "product_carousel",
+        $CarouselItems,
+        $CarouselItemsContainerStyle: "list_carousel",
+        $ShiftArrowsDown: true
+      })
 
-                UploadToken = $(s7TokenXml).find('user_generated_content').find('response').find('message').find('uploadtoken').text();
-                console.log(UploadToken);
+      var $ProductCarouselContainer = document.querySelector('#select-product')
 
-                var urlUpload = 'https://s7ugc1.scene7.com/ugc/image?op=upload&upload_token=' + UploadToken + '&company_name=tervisRender&preserve_colorprofile=true';
-                console.log("calling upload URL: " + urlUpload);
+      render(
+        $ProductCarousel,
+        $ProductCarouselContainer
+      )
 
-                var options = {
-                  url: urlUpload,
-                  async: false,
-                  error: function (err) {
-                    console.log(err);
-                  },
-                  beforeSend: function () {
-                    console.log("beforeSend");
-                    status.empty();
-                    var percentVal = '0%';
-                    bar.width(percentVal)
-                    percent.html(percentVal);
-                  },
-                  uploadProgress: function (event, position, total, percentComplete) {
-                    console.log("uploadProgress");
-                    var percentVal = percentComplete + '%';
-                    bar.width(percentVal)
-                    percent.html(percentVal);
-                  },
-                  success: function (uploadImageXml) {
-                    console.log("uploadImageXml success");
+      $('.product_carousel').carouFredSel({
+        auto: false,
+        circular: false,
+        prev: '.prev2',
+        next: '.next2',
+        mousewheel: true,
+        swipe: {
+          onMouse: true,
+          onTouch: true
+        }
+      })
+    }
 
-                    var xmlstr = uploadImageXml.xml ? uploadImageXml.xml : (new XMLSerializer()).serializeToString(uploadImageXml);
+    async function Receive_ImageGeneratorDecorationImageSourceArcedOnChange () {
+      await Update_ImageGeneratorProductVignetteURL()
+    }
 
-                    var $xml = $(uploadImageXml);
-                    var $ugcStatus = $xml.find('serviceStatus');
-                    var $ugcStatusDetail = $xml.find('title');
+    function Update_ImageGeneratorDecorationImageSourceFormArcedSelect () {
+      var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
+      var $DecorationImageSourceType = Get_ImageGeneratorSelectedDecorationImageSourceType()
+      var $DisplayNoneAndNotArced =
+        $ProductFormType === "SS" ||
+        $DecorationImageSourceType === "Customyzer Project ID" ||
+        $DecorationImageSourceType === "Raw Material Item Number"
 
-                    if ($ugcStatus.text() != "SUCCESS") {
-                      alert("ERROR UPLOADING IMAGE: " + $ugcStatusDetail.text());
-                    } else {
-                      // var $ugcUrl = $xml.find('url');
-                      // var $ugcPath = $xml.find('path');
-                      var $ugcFullUrl = $xml.find('fullurl');
+      render(
+        html`
+          <select
+            id="DecorationImageSourceArced"
+            class="menupad"
+            style="${ifDefined( $DisplayNoneAndNotArced ? "display: none;" : undefined) }"
+            @change=${Receive_ImageGeneratorDecorationImageSourceArcedOnChange}
+          >
+            <option disabled selected>Is source image arced?</option>
+            <option>Arced</option>
+            <option ?selected=${$DisplayNoneAndNotArced}>Not arced</option>
+          </select>
+        `,
+        document.querySelector("#DecorationImageSourceIsArcedContainer")
+      )
+    }
 
-                      document.querySelector("#DecorationImageSourceValue").value = $ugcFullUrl.text()
-                    }
+    function Get_ImageGeneratorSelectedProductSizeAndProductFormType() {
+      var $RadioButtonValue = document.querySelector('input[name="tumblerRadio"]:checked').value
+      return Get_TervisProductSizeAndFormTypeFromString({ $String: $RadioButtonValue })
+    }
 
-                    var percentVal = '100%';
-                    bar.width(percentVal)
-                    percent.html(percentVal);
-                  },
-                  complete: function (xhr) {
-                    console.log("complete");
+    function Get_ImageGeneratorSelectedDecorationImageSourceType () {
+      var $DecorationImageSourceTypeElementID = "DecorationImageSourceType"
+      var $DecorationImageSourceTypeSelector = `#${$DecorationImageSourceTypeElementID}`
 
-                    // HideLoader();
+      if (document.querySelector($DecorationImageSourceTypeSelector)) {
+        return document.querySelector($DecorationImageSourceTypeSelector).value
+      }
+    }
 
-                  },
-                  cache: false
-                };
+    async function Recieve_ImageGeneratorProductDecorationTypeOnChange() {
+      await Update_ImageGeneratorProductVignetteURL()
+    }
 
-                console.log("Calling ajaxSubmit");
-                $("#frmFileUpload").ajaxSubmit(options);
-              },
-              error: function (err) {
-                // HideLoader();
-                console.log(err);
-              }
-            });
-          } else {
-            alert("Please upload valid image file");
+    function Update_ImageGeneratorProductDecorationTypeSelect () {
+      var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
+      var {$ProductSize, $ProductFormType} = $ProductSizeAndProductFormType
+
+      var $ProductDecorationTypes = {
+        WRA: "Wrap",
+        EMB: "Emblem",
+        DPT: "Direct Print Outer"
+      }
+
+      var $ProductDecorationTypePicker = html`
+        <select
+          id="ProductDecorationType"
+          class="menupad"
+          style="${ifDefined($ProductFormType === "SS" ? "display: none;" : undefined) }"
+          @change=${Recieve_ImageGeneratorProductDecorationTypeOnChange}
+        >
+          <option value= "" selected disabled class="menupad">Decoration Type</option>
+          ${
+            Object
+            .entries($ProductDecorationTypes)
+            .map(
+              ([$ProductDecorationTypeCode, $ProductDecorationTypeName]) =>
+              html`
+                <option
+                  value="${$ProductDecorationTypeCode}"
+                  ?selected=${
+                      $ProductFormType === "SS" && $ProductDecorationTypeCode === "DPT" ||
+                      ["ICE","TALL"].includes($ProductFormType) && $ProductDecorationTypeCode === "EMB" ||
+                      !["ICE","SS"].includes($ProductFormType) && $ProductDecorationTypeCode === "WRA"
+                  }
+                >
+                  ${$ProductDecorationTypeName}
+                </option>`
+            )
+          }
+          <option value= "" class="menupad">None</option>
+        </select>
+      `
+      var $ProductDecorationTypePickerContainer = document.querySelector('#ProductDecorationTypePickerContainer')
+
+      render(
+        $ProductDecorationTypePicker,
+        $ProductDecorationTypePickerContainer
+      )
+    }
+
+    async function Recieve_ImageGeneratorThingWithColorCodeOnChange () {
+      await Update_ImageGeneratorProductVignetteURL()
+    }
+
+    async function Update_ImageGeneratorThingsWithColorOptionsCarousel() {
+      var $ProductVignetteDefaultSettings = [
+        {
+          Size: 16,
+          FormType: "DWT",
+          INNER: {
+            LINED: "CL1"
+          }
+        },
+        {
+          Size: 24,
+          FormType: "DWT",
+          INNER: {
+            LINED: "CL1"
+          }
+        },
+        {
+          Size: 24,
+          FormType: "WB",
+          INNER: {
+            LINED: "CL1"
+          },
+          ACCESSORIES: {
+            LIDWB: "GY1"
+          }
+        },
+        {
+          Size: 16,
+          FormType: "BEER",
+          INNER: {
+            LINED: "CL1"
+          }
+        },
+        {
+          Size: 16,
+          FormType: "MUG",
+          INNER: {
+            LINED: "CL1"
+          }
+        },
+        {
+          Size: 6,
+          FormType: "SIP",
+          ACCESSORIES: {
+            LIDSIP: "GY3"
+          }
+        },
+        {
+          Size: 9,
+          FormType: "WINE",
+          INNER: {
+            LINED: "CL1"
+          }
+        },
+        {
+          Size: 9,
+          FormType: "SWG",
+          INNER: {
+            LINED: "CL1"
+          }
+        },
+        {
+          Size: 16,
+          FormType: "TALL",
+          INNER: {
+            SMOOTH: "CL1"
+          }
+        },
+        {
+          Size: 20,
+          FormType: "SS",
+          OUTER: {
+            SMOOTH: "SS1"
+          }
+        },
+        {
+          Size: 30,
+          FormType: "SS",
+          OUTER: {
+            SMOOTH: "SS1"
+          }
+        },
+        {
+          Size: 24,
+          FormType: "SS",
+          ACCESSORIES: {
+            LIDWB: "GY1"
+          }
+        },
+        {
+          Size: 17,
+          FormType: "SS",
+          ACCESSORIES: {
+            SSWBLID: "SS1"
+          }
+        },
+        {
+          Size: 10,
+          FormType: "WAV",
+          OUTER: {
+            WAVY: "CL1"
           }
         }
+      ]
 
-        function FileTypeValidate(fileControlID, validFileTypes, lblFileTypes, lblFileSelect) {
-          var fileUpload = $('#' + fileControlID).val();
-          var extension = $('#' + fileControlID).val().substring($('#' + fileControlID).val().lastIndexOf('.'));
-          var ValidFileType = validFileTypes;
-          if (fileUpload.length > 0) {
-            if (ValidFileType.toLowerCase().indexOf(extension.toLowerCase()) < 0) {
-              $("#" + lblFileTypes).attr("style", "display:block;color:red;width:250px;");
-              $("#" + lblFileSelect).attr("style", "display:none;");
+      var $VignetteCodeToMarketingName = {
+        INNER: "Product Inner",
+        LINED: "Lined",
+        SMOOTH: "Smooth",
+        OUTER: "Product Outer",
+        RIPPLE: "Ripple",
+        ACCESSORIES: "Accessories",
+        HAND: "Handle",
+        LIDTRV: "Travel Lid",
+        TOPSHK: "Shacker Top Lid",
+        LIDSTW: "Straw Lid",
+        LIDHOT: "Hot Lid",
+        LIDSIP: "Sippy Lid",
+        LIDWB: "Water Bottle Lid",
+        SSLIDTRV: "Slider Lid",
+        SSLIDHMR: "Hammer Lid",
+        LIDWIN: "Wine Lid",
+        SSWBLID: "Stainless Lid"
+      }
+
+      var $VignetteSuffix = $("input[name='thmbRadio']:checked").val();
+      var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
+      var $VignetteObjectsWithColorOption = await Get_TervisAdobeScene7VignetteObjectWithColorOption({
+        ...$ProductSizeAndProductFormType,
+        $VignetteSuffix
+      })
+
+      var $CarouselGroups = []
+      var $CarouFredSelOptions = []
+
+      for (var $VignetteObjectWithColorOption of $VignetteObjectsWithColorOption ){
+        var $Carousels = []
+        for (var $ThingWithAvailableColorCode of $VignetteObjectWithColorOption.Options) {
+          var $CarouselItems = []
+
+          var $CarouselName = $ThingWithAvailableColorCode.Code === "HAND" ?
+            $ThingWithAvailableColorCode.Code :
+            $VignetteObjectWithColorOption.Code
+
+          if (
+            $VignetteObjectWithColorOption.Code !== "INNER" &&
+            $VignetteObjectWithColorOption.Code !== "OUTER"
+          ) {
+            $CarouselItems.push(
+              New_CrouselItem({
+                $CarouselName,
+                $ImageURL: "http://images.tervis.com/is/image/tervis/REMOVE?$SWATCH$",
+                $Title: `None`,
+                $ToolTip: `None`,
+                $OnChange: Recieve_ImageGeneratorThingWithColorCodeOnChange
+              })
+            )
+          }
+
+          for (var $ColorCode of $ThingWithAvailableColorCode.AvailableColorCodes) {
+            var $ColorMetaData = await Get_TervisProductColorMarketingNameUsingIndex({$ColorCode})
+
+            if ($ColorMetaData) {
+              var { MarketingName: $ColorMarketingName } = $ColorMetaData
             } else {
-              return true;
+              continue
             }
-          } else {
-            $("#" + lblFileSelect).attr("style", "display:block;color:red;width:250px;");
-            $("#" + lblFileTypes).attr("style", "display:none;");
-          }
-          return false;
-        }
-      </script>
-      <!-- <script type="module">
-        import {
-          Get_TervisProductMetaDataUsingIndex
-        } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.16/TervisProductMetadata.js?module'
-        
-        import {
-          New_AdobeScene7SizeStanza
-        } from 'https://unpkg.com/@tervis/adobescene7js@0.1.0/AdobeScene7JS.js?module'
 
-        import {
-          New_TervisAdobeScene7URL,
-          New_TervisAdobeScene7VirtualImageURL,
-          New_TervisAdobeScene7DecorationProofImageURL,
-          New_TervisAdobeScene7ArcedImageURL
-        } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.74/TervisAdobeScene7JS.js?module'
+            var $CarouselItemImageURL = Get_TervisAdobeScene7SwatchImageURL({$ColorCode})
 
-        async function Get_URLSFourSides() {
-          var $URLs = []
-          var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
-          var $SizeAndFormTypeMetaData = await Get_TervisProductMetaDataUsingIndex({ ...$ProductSizeAndProductFormType })
-          var $RotateValues = []
+            var $IsChecked = $ThingWithAvailableColorCode.AvailableColorCodes.length === 1 && (
+              $VignetteObjectWithColorOption.Code === "INNER" ||
+              $VignetteObjectWithColorOption.Code === "OUTER"
+            )
 
-          $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfFront)
-          $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfRight)
-          $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfBack)
-          $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfLeft)
-
-          document.querySelector("#poshold").value = 0
-          document.querySelector("#poshold").dispatchEvent(new InputEvent("input"))
-          var $URLWithMangledPosition = document.querySelector("#tumblerimagelink").href
-
-          for (var $RotateValue of $RotateValues) {
-            var $URLWithCorrectPosition = $URLWithMangledPosition.replace(/(?<=&pos=)-?\d+(?=,0)/, $RotateValue)
-            var $URL = $URLWithCorrectPosition
-            $URLs.push($URL)
+            $CarouselItems.push(
+              New_CrouselItem({
+                $CarouselName,
+                $Value: `${$ColorCode}`,
+                $ImageURL: $CarouselItemImageURL,
+                $Title: `${$ColorMarketingName} - ${$ColorCode}`,
+                $ToolTip: `${$ColorMarketingName} - ${$ColorCode}`,
+                $IsChecked,
+                $OnChange: Recieve_ImageGeneratorThingWithColorCodeOnChange
+              })
+            )
           }
 
-          return ($URLs)
-        }
-
-        async function downloadAll(urls) {
-          for (var i = 0; i < urls.length; i++) {
-            var link = document.createElement('a');
-            link.style.display = 'none';
-            link.setAttribute('download', `${i + 1}.png`);
-            link.setAttribute('href', urls[i]);
-            link.setAttribute('class', "FourImageDownload");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          }
-        }
-
-        async function Invoke_DownloadFourSides() {
-          var $URLs = await Get_URLSFourSides()
-          await downloadAll($URLs)
-        }
-
-        async function Invoke_OneSidedVirtualDownload () {
-          var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedDecorationImageSourceType()
-          
-          var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$ProductSize, $ProductFormType})
-          var $ProductVignetteImageURLAsSourceValue = New_ImageGeneratorProductVignetteImageURLAsSourceValue()
-          var $VirtualImageURL = await New_TervisAdobeScene7VirtualImageURL({
-            $ProductSize,
-            $ProductFormType,
-            $DecorationProofImageURLAsSourceValue,
-            $ProductVignetteImageURLAsSourceValue: $ProductVignetteImageURLAsSourceValue
+          var $CarouselID = $ThingWithAvailableColorCode.Code
+          $CarouFredSelOptions.push({
+            CarouselContainerSelector: `.${$VignetteObjectWithColorOption.Code} .${$CarouselID}Container`,
+            CaroFreDeslULSelector: `.${$VignetteObjectWithColorOption.Code} .${$CarouselID}Container .${$CarouselID}`
+          })
+          var $Carousel = New_Carousel({
+            $CarouselTitle: $VignetteCodeToMarketingName[$ThingWithAvailableColorCode.Code],
+            $CarouselID,
+            $CarouselItems,
+            $CarouselItemsContainerStyle: "list_carousel2"
           })
 
-          await downloadAll([$VirtualImageURL])
+          $Carousels.push($Carousel)
         }
 
-        async function New_ImageGeneratorDecorationProofImageURLAsSourceValue ({
+        $CarouselGroups.push(
+          New_MenuGroup({
+            $GroupTitle: $VignetteCodeToMarketingName[$VignetteObjectWithColorOption.Code],
+            $GroupCode: $VignetteObjectWithColorOption.Code,
+            $InnerContent: $Carousels,
+            $DisplayNone: $IsChecked
+          })
+        )
+      }
+
+      var $ThingsWithColorOptionsDiv = document.querySelector('#select-vignette-object-color-options')
+      render($CarouselGroups, $ThingsWithColorOptionsDiv)
+
+      $CarouFredSelOptions.forEach(
+        $CarouFredSelOption =>
+        $($CarouFredSelOption.CaroFreDeslULSelector).carouFredSel({
+          auto: false,
+          circular: false,
+          prev: `${$CarouFredSelOption.CarouselContainerSelector} .prev`,
+          next: `${$CarouFredSelOption.CarouselContainerSelector} .next`,
+          mousewheel: true,
+          swipe: {
+            onMouse: true,
+            onTouch: true
+          }
+        })
+      )
+
+      $ProductVignetteDefaultSettings.filter(
+        ({Size: $ProductSize, FormType: $ProductFormType}) =>
+        $ProductSize === parseInt($ProductSizeAndProductFormType.$ProductSize) && $ProductFormType === $ProductSizeAndProductFormType.$ProductFormType
+      )
+      .forEach(
+        $DefaultSettingEntry => {
+          var $DefaultSettings = Object.entries($DefaultSettingEntry)
+            .filter(
+              $Entry =>
+              ["Size","FormType"].includes($Entry[0]) === false
+            )
+
+          for ( var [$GroupCode, $ThingWithColorCodeObject] of $DefaultSettings) {
+            Object
+            .entries($ThingWithColorCodeObject)
+            .forEach(
+              ([$Code, $ColorCode]) =>
+              document.querySelector(
+                `.${$GroupCode} .${$Code} input[value='${$ColorCode}']`
+              ).checked = true
+            )
+          }
+        }
+      )
+
+      // Update_ImageGeneratorProductVignetteURL()
+    }// End Update_ImageGeneratorThingsWithColorOptionsCarousel
+    // window.Update_ImageGeneratorThingsWithColorOptionsCarousel = Update_ImageGeneratorThingsWithColorOptionsCarousel
+
+    async function Receive_ImageGeneartorDecorationImageSourceTypeOnChnage () {
+      await Update_ImageGeneratorDecorationImageSourceForm()
+      Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
+    }
+
+    async function Receive_ImageGeneartorDecorationImageSourceValueOnChange () {
+      await Update_ImageGeneratorProductVignetteURL()
+    }
+
+    async function Update_ImageGeneratorDecorationImageSourceForm() {
+      var $DecorationSourceOptions = [
+        "Raw Material Item Number",
+        "UGC Upload",
+        "Customyzer Project ID",
+        "Deocoration Image URL",
+        // "Finished Good Item Number"
+      ]
+
+      var $DecorationImageSourceTypeElementID = "DecorationImageSourceType"
+      var $DecorationImageSourceType = Get_ImageGeneratorSelectedDecorationImageSourceType()
+
+      if ($DecorationImageSourceType) {
+        var $ConditionallyAddedInput = [html`
+          <input
+            id="DecorationImageSourceValue"
+            type="text"
+            placeholder="${$DecorationImageSourceType}"
+            disabled="${ifDefined($DecorationImageSourceType === "UGC Upload" ? "" : undefined)}"
+            class="menupad"
+            .value=${forceWrite("")}
+            @change=${Receive_ImageGeneartorDecorationImageSourceValueOnChange}
+          />
+        `]
+
+        if ($DecorationImageSourceType === "UGC Upload") {
+          $ConditionallyAddedInput.push(
+            html`
+              <form name="frmFileUpload" id="frmFileUpload" method="post" enctype="multipart/form-data">
+                <input
+                  name="txtUploadFile"
+                  type="file"
+                  id="txtUploadFile"
+                  accept="image/*"
+                  class="btn btn-default"
+                  style="width: 210px; height:30px; vertical-align:bottom;"
+                  @change=${Add_ImageFromDevice}
+                />
+              </form>
+            `
+          )
+        }
+      }
+
+      var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
+
+      var $MenuGroup = New_MenuGroup({
+        $GroupTitle: "Decoration Image",
+        $InnerContent: html`
+          <select
+            id="${$DecorationImageSourceTypeElementID}"
+            class="menupad"
+            style="${ifDefined($ProductFormType === "TALL" ? "display: none;" : undefined) }"
+            @change=${Receive_ImageGeneartorDecorationImageSourceTypeOnChnage}
+          >
+            <option value= "" selected disabled class="menupad">Source Type</option>
+            ${$DecorationSourceOptions.map(
+              $DecorationSourceOption => html`
+                <option>${$DecorationSourceOption}</option>
+              `
+            )}
+          </select>
+          ${$ConditionallyAddedInput}
+        `
+      })
+
+      var $DecorationSourceMenuGroup = document.querySelector('#DecorationSourceMenuGroup')
+      render($MenuGroup, $DecorationSourceMenuGroup)
+    }
+
+    function New_UGCRelativeURLFromURL ({
+      $URL
+    }) {
+      var $UGCURLObject = new URL($URL)
+      return $UGCURLObject.pathname.split("/").slice(-3).join("/")
+    }
+
+    async function Get_ImageGeneratorDecorationImageSourceURL (
+      $AsScene7SrcValue
+    ) {
+      var $DecorationImageSourceType =
+        document.querySelector("#DecorationImageSourceType") ?
+        document.querySelector("#DecorationImageSourceType").value :
+        undefined
+
+      var $DecorationImageSourceValue =
+        document.querySelector("#DecorationImageSourceValue") ?
+        document.querySelector("#DecorationImageSourceValue").value :
+        undefined
+
+      if ($DecorationImageSourceType === "UGC Upload" ) {
+        return New_TervisAdobeScene7URL({
+          $AsScene7SrcValue,
+          $Type: "ImageServer",
+          $RelativeURL: New_UGCRelativeURLFromURL({$URL: $DecorationImageSourceValue})
+        })
+      } else if ($DecorationImageSourceType === "Deocoration Image URL") {
+        return New_TervisAdobeScene7URL({
+          $AsScene7SrcValue,
+          $Type: "ImageServer",
+          $ExternalURL: $DecorationImageSourceValue
+        })
+      } else if ($DecorationImageSourceType === "Customyzer Project ID") {
+        var $ProjectID = $DecorationImageSourceValue
+        var {
           $ProductSize,
           $ProductFormType
-        }) {
-          var {
-            DecorationProofWidthOnVirtual: $DecorationProofWidthOnVirtual,
-            DecorationProofHeightOnVirtual: $DecorationProofHeightOnVirtual
-          } = await Get_TervisProductMetaDataUsingIndex({$ProductSize, $ProductFormType})
+        } = await Get_TervisCustomyzerProjectProductSizeAndProductFormType({$ProjectID})
 
-          var $DecorationTypeDropDownValue = document.querySelector('#decorationtype').value
-          
-          var $URLOfDecoration = document.querySelector('#itemcode').value
-          var $DecorationProofOnVirtualSizeStanza = New_AdobeScene7SizeStanza({ $Width: $DecorationProofWidthOnVirtual, $Height: $DecorationProofHeightOnVirtual})
-          
-          if ($DecorationTypeDropDownValue === "customyzer") {
-            $URLOfDecoration = await New_TervisAdobeScene7ArcedImageURL({
-              $ProductSize,
-              $ProductFormType,
+        return New_TervisAdobeScene7CustomyzerDecorationImageURL({
+          $ProjectID,
+          $ProductSize,
+          $ProductFormType,
+          $AsScene7SrcValue
+        })
+      } else if ($DecorationImageSourceType === "Raw Material Item Number") {
+        return New_TervisAdobeScene7URL({
+          $AsScene7SrcValue,
+          $Type: "ImageServer",
+          $RelativeURL: `tervis/${$DecorationImageSourceValue}`
+        })
+      }
+    }
+
+    function Get_ImageGeneratorProductVignetteElementPathToShow () {
+      var $SelectedThingsWithColorCodes = document.querySelectorAll("#select-vignette-object-color-options :checked")
+      var $VignettePathOfObjectsToShow = [...$SelectedThingsWithColorCodes].map(
+        $SelectedThingWithColorCode => {
+          var $ParentCode = $SelectedThingWithColorCode.closest("ul").className
+          var $RootCode = $SelectedThingWithColorCode.closest('div.INNER, div.OUTER, div.ACCESSORIES').className
+          return `${$RootCode}/${$ParentCode}/${$SelectedThingWithColorCode.value}`
+        }
+      )
+
+      var $ElementPathsToShow = [
+        "MAIN/GLARE"
+      ]
+      $VignettePathOfObjectsToShow.forEach(
+        $Path =>
+        $ElementPathsToShow.push(`MAIN/${$Path}`)
+      )
+      return $ElementPathsToShow
+    }
+
+    async function Update_ImageGeneratorAllTheThings() {
+      // Update the Product selection Carousel only once on load
+      if (!window.OnlyExecuteThisOnceHasExecutedOnce) {
+        await Update_ImageGeneratorProductCarousel()
+        window.OnlyExecuteThisOnceHasExecutedOnce = true
+      }
+      await Update_ImageGeneratorThingsWithColorOptionsCarousel()
+      Update_ImageGeneratorProductDecorationTypeSelect()
+      await Update_ImageGeneratorDecorationImageSourceForm()
+      Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
+      await Update_ImageGeneratorProductVignetteURL()
+
+      // $("input[name='tumblerRadio']").on("change", Update_ImageGeneratorAllTheThings)
+      // $('input, select').on("input change", Update_ImageGeneratorAllTheThings)
+    }
+    window.Update_ImageGeneratorAllTheThings = Update_ImageGeneratorAllTheThings
+
+    async function Update_ImageGeneratorProductVignetteURL() {
+      var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
+      var $ImageSourceURLAsScene7SrcValue = await Get_ImageGeneratorDecorationImageSourceURL({
+        $AsScene7SrcValue: true
+      })
+      var $VignetteElementPathToShow = Get_ImageGeneratorProductVignetteElementPathToShow()
+      var $DecorationSourceIsArced // = document.querySelector("#DecorationImageSourceArced").checked
+      var $ProductVignetteNameSuffix = document.querySelector("input[name='thmbRadio']:checked").value
+      var $ProductVignetteRotationDegrees = document.querySelector("#ProductVignetteRotationDegrees").value
+      var $ProductDecorationTypeCode = document.querySelector("#ProductDecorationType").value
+
+      var $DecorationPositionXValue = await ConvertTo_TervisAdobeScene7VignettePosition({
+        ...$ProductSizeAndProductFormType,
+        $Degrees: $ProductVignetteRotationDegrees
+      })
+
+      var $URLSearchParameters = new URLSearchParams()
+      let $Parameters = Remove_ObjectKeyWithEmptyOrNullValue({
+        ...$ProductSizeAndProductFormType,
+        $ImageSourceURLAsScene7SrcValue,
+        $VignetteElementPathToShow,
+        $DecorationSourceIsArced,
+        $ProductVignetteNameSuffix,
+        $ProductVignetteRotationDegrees,
+        $ProductDecorationTypeCode
+      })
+
+      for (const [key, value] of Object.entries($Parameters)) {
+        $URLSearchParameters.append(key.substring(1), value)
+      }
+      history.replaceState(null, '', `/imagegenerator.html?${$URLSearchParameters.toString()}`)
+
+      $("#previewImage").prop('src', await Get_ImageGeneratorDecorationImageSourceURL());
+
+      var imageName = "tervis";
+
+      var $SrcValue = $ImageSourceURLAsScene7SrcValue
+
+      var $DecorationSrc
+      if ($ProductDecorationTypeCode && $ImageSourceURLAsScene7SrcValue) {
+        if ($DecorationSourceIsArced) {
+          $ImageSourceURLAsScene7SrcValue = New_TervisAdobeScene7PrintSingleURL({
+              ...$ProductSizeAndProductFormType,
+              $DecorationType: $ProductDecorationTypeCode,
               $AsScene7SrcValue: true,
-              $DecalSourceValue: $URLOfDecoration
-            })
-          }
-          
-          var $DecorationImageURLAsSourceValue = New_TervisAdobeScene7URL({
-            $ExternalURL: `
-              ${$URLOfDecoration}?
-              ${$DecorationProofOnVirtualSizeStanza}
-              &scl=1
-              &fmt=png-alpha
-            `.replace(/\s/g, ""),
-            $AsScene7SrcValue: true
-          })
-
-          var $ArcedDecorationAndIncludeDieCutterCalibrationLine
-          if ($DecorationTypeDropDownValue === "-WRA" || $DecorationTypeDropDownValue === "customyzer") {
-            $ArcedDecorationAndIncludeDieCutterCalibrationLine = true
-          } else if ($DecorationTypeDropDownValue === "-DPT") {
-            $ArcedDecorationAndIncludeDieCutterCalibrationLine = false
-          }
-          
-          var $DecorationProofImageURLAsSourceValue = await New_TervisAdobeScene7DecorationProofImageURL({
-            $DecorationImageURLAsSourceValue,
-            $ArcedDecoration: $ArcedDecorationAndIncludeDieCutterCalibrationLine,
-            $IncludeDiecutterCalibrationLine: $ArcedDecorationAndIncludeDieCutterCalibrationLine,
-            $ProductSize,
-            $ProductFormType,
-            $Width: $DecorationProofWidthOnVirtual,
-            $Height: $DecorationProofHeightOnVirtual,
-            $AsScene7SrcValue: true
-          })
-
-          return $DecorationProofImageURLAsSourceValue
-        }
-
-        function New_ImageGeneratorProductVignetteImageURLAsSourceValue () {
-          // On page refresh the tumblerimagelink value is wrong
-          // detect page refresh by checking the poshold value and refresh the tumblerimagelink
-          var $PosHoldNode = document.querySelector("#poshold")
-          if (!$PosHoldNode.value) {
-            $PosHoldNode.value = 0
-            $PosHoldNode.dispatchEvent(new InputEvent("input"))
-          }
-
-          var $ProductVignetteImageURL = document.querySelector("#tumblerimagelink").href
-          return New_ImageGeneratorProductVignetteImageURLAsSourceValueFromProductVignetteImageURL({$ProductVignetteImageURL})
-        }
-        
-        async function New_ImageGeneratorProductVignetteImageURLAsSourceValuesArrayForFourSides () {
-          var $URLSFourSides = await Get_URLSFourSides()
-          return $URLSFourSides.map (
-            $ProductVignetteImageURL =>
-            New_ImageGeneratorProductVignetteImageURLAsSourceValueFromProductVignetteImageURL({$ProductVignetteImageURL})
-          )
-        }
-
-        function New_ImageGeneratorProductVignetteImageURLAsSourceValueFromProductVignetteImageURL ({
-          $ProductVignetteImageURL
-        }) {
-          var $ProductVignetteImageWidth = 1079
-          var $ProductVignetteImageHeight = 949
-          var $ProductVignetteImageSizeStanza = New_AdobeScene7SizeStanza({ $Width: $ProductVignetteImageWidth, $Height: $ProductVignetteImageHeight})
-          
-          return New_TervisAdobeScene7URL({
-            $ExternalURL: `${$ProductVignetteImageURL}${$ProductVignetteImageSizeStanza}`,
-            $AsScene7SrcValue: true
+              $ImageSrcValue: $SrcValue
           })
         }
 
-        async function Invoke_FourSidedVirtualDownload () {
-          var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedDecorationImageSourceType()
-          
-          var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$ProductSize, $ProductFormType})
+        $DecorationSrc = New_TervisAdobeScene7WrapDecoration3TimesURL({
+          ...$ProductSizeAndProductFormType,
+          $AsScene7SrcValue: true,
+          $DecorationType: $ProductDecorationTypeCode,
+          $RepeatedImageSource: $SrcValue
+        })
+      }
 
-          var $ProductVignetteImageURLAsSourceValuesArrayForFourSides = await New_ImageGeneratorProductVignetteImageURLAsSourceValuesArrayForFourSides()
-          
-          var $VirtualImageURLsPromises = $ProductVignetteImageURLAsSourceValuesArrayForFourSides.map(
-            async $ProductVignetteImageURLAsSourceValue =>
-            await New_TervisAdobeScene7VirtualImageURL({
-              $ProductSize,
-              $ProductFormType,
-              $DecorationProofImageURLAsSourceValue,
-              $ProductVignetteImageURLAsSourceValue
-            })
-          )
-          var $VirtualImageURLs = await Promise.all($VirtualImageURLsPromises)
-          
-          var gif = new GIF({
-            workers: 2,
-            workerScript: './gif.worker.js',
-            width: 1650,
-            height: 1275,
-            globalPalette: true,
-            dither: "Atkinson",
-            quality: 1
-          });
+      var $ProductVignetteImageURL = New_TervisAdobeScene7ProductVignetteImageURL({
+        ...$ProductSizeAndProductFormType,
+        $VignetteSuffix: $ProductVignetteNameSuffix,
+        $DecorationSrc,
+        $DecorationPositionXValue,
+        $ElementPathsToShow: $VignetteElementPathToShow,
+        $AsScene7SrcValue: true
+      })
 
-          function waitForImagesLoaded(imageURLs, callback){
-            var imageElements = [];
-            var remaining = imageURLs.length;
-            var onEachImageLoad = function(){
-                if (--remaining === 0 && callback) {
-                    callback(imageElements);
+      var preset = "$PDP-LG$"
+      var finalURL = `
+        //imagegenerator.tervis.com/is/image/tervis/${imageName}?
+        layer=0
+        &src=${$ProductVignetteImageURL}
+        ${preset}
+      `.replace(/\s/g, "")
+
+      // $("#vignetteUrl").val(finalURL);
+      $('#tumblerimage').css('margin-left', '0px');
+      $("#tumblerimage").prop('src', finalURL);
+
+    } // END FUNCTION (UPDATE)
+
+    function Add_ImageFromDevice(e) {
+      var sharedSecret = '9f91ce08-1501-459f-ab09-3d2ddc103344';
+      var bar = $('.progress-bar');
+      var percent = $('.percent');
+      var status = $('#status');
+      console.log("called AddImageFromDevice");
+
+      var validFileTypes = ".bmp .jpg, .jpeg, .png";
+      if (FileTypeValidate("txtUploadFile", validFileTypes, "lblFileImageType", "lblFileSelect")) {
+        console.log("validated");
+        // ShowLoader();
+
+        var UploadToken = '';
+        var vXMLResponse = '';
+
+        var urlScene7 = `https://s7ugc1.scene7.com/ugc/image?op=get_uploadtoken&shared_secret=${sharedSecret}&expires=1800`;
+        console.log("getting upload token from: " + urlScene7);
+
+        $.ajax({
+          url: urlScene7,
+          timeout: 50000,
+          async: true,
+          dataType: "xml",
+          success: function (s7TokenXml) {
+            console.log(s7TokenXml)
+
+            UploadToken = $(s7TokenXml).find('user_generated_content').find('response').find('message').find('uploadtoken').text();
+            console.log(UploadToken);
+
+            var urlUpload = 'https://s7ugc1.scene7.com/ugc/image?op=upload&upload_token=' + UploadToken + '&company_name=tervisRender&preserve_colorprofile=true';
+            console.log("calling upload URL: " + urlUpload);
+
+            var options = {
+              url: urlUpload,
+              async: false,
+              error: function (err) {
+                console.log(err);
+              },
+              beforeSend: function () {
+                console.log("beforeSend");
+                status.empty();
+                var percentVal = '0%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+              },
+              uploadProgress: function (event, position, total, percentComplete) {
+                console.log("uploadProgress");
+                var percentVal = percentComplete + '%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+              },
+              success: function (uploadImageXml) {
+                console.log("uploadImageXml success");
+
+                var xmlstr = uploadImageXml.xml ? uploadImageXml.xml : (new XMLSerializer()).serializeToString(uploadImageXml);
+
+                var $xml = $(uploadImageXml);
+                var $ugcStatus = $xml.find('serviceStatus');
+                var $ugcStatusDetail = $xml.find('title');
+
+                if ($ugcStatus.text() != "SUCCESS") {
+                  alert("ERROR UPLOADING IMAGE: " + $ugcStatusDetail.text());
+                } else {
+                  // var $ugcUrl = $xml.find('url');
+                  // var $ugcPath = $xml.find('path');
+                  var $ugcFullUrl = $xml.find('fullurl');
+
+                  document.querySelector("#DecorationImageSourceValue").value = $ugcFullUrl.text()
+                  Update_ImageGeneratorProductVignetteURL()
                 }
+
+                var percentVal = '100%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+              },
+              complete: function (xhr) {
+                console.log("complete");
+
+                // HideLoader();
+
+              },
+              cache: false
             };
 
-            // first create the images and apply the onload method
-            for (var i = 0, len = imageURLs.length; i < len; i++){
-                var img = new Image();
-                imageElements.push(img);
-                img.onload = onEachImageLoad;
-                img.setAttribute('crossOrigin', '')
-                img.src = imageURLs[i];
-            }
+            console.log("Calling ajaxSubmit");
+            $("#frmFileUpload").ajaxSubmit(options);
+          },
+          error: function (err) {
+            // HideLoader();
+            console.log(err);
           }
+        });
+      } else {
+        alert("Please upload valid image file");
+      }
+    }
 
-          waitForImagesLoaded(
-            $VirtualImageURLs,
-            function(images) {
-              for (var i = 0; i < images.length; i++) {
-                  gif.addFrame(images[i], {delay: 1000});
-              }
-              gif.addFrame(images[0], {delay: 1000})
-              gif.on('finished', function(blob) {
-                saveAs(blob, "FourSidedVirtual.gif")
-              });
-
-              gif.render();
-            }
-          )
+    function FileTypeValidate(fileControlID, validFileTypes, lblFileTypes, lblFileSelect) {
+      var fileUpload = $('#' + fileControlID).val();
+      var extension = $('#' + fileControlID).val().substring($('#' + fileControlID).val().lastIndexOf('.'));
+      var ValidFileType = validFileTypes;
+      if (fileUpload.length > 0) {
+        if (ValidFileType.toLowerCase().indexOf(extension.toLowerCase()) < 0) {
+          $("#" + lblFileTypes).attr("style", "display:block;color:red;width:250px;");
+          $("#" + lblFileSelect).attr("style", "display:none;");
+        } else {
+          return true;
         }
+      } else {
+        $("#" + lblFileSelect).attr("style", "display:block;color:red;width:250px;");
+        $("#" + lblFileTypes).attr("style", "display:none;");
+      }
+      return false;
+    }
 
-      </script> -->
-    </div>
+    $(window).on("load", async function () {
+      Update_ImageGeneratorDownloadButtonForm()
+      await Update_ImageGeneratorAllTheThings()
+    })
+  </script>
+  <!-- <script type="module">
+    import {
+      Get_TervisProductMetaDataUsingIndex
+    } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.16/TervisProductMetadata.js?module'
+
+    import {
+      New_AdobeScene7SizeStanza
+    } from 'https://unpkg.com/@tervis/adobescene7js@0.1.0/AdobeScene7JS.js?module'
+
+    import {
+      New_TervisAdobeScene7URL,
+      New_TervisAdobeScene7VirtualImageURL,
+      New_TervisAdobeScene7DecorationProofImageURL,
+      New_TervisAdobeScene7ArcedImageURL
+    } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.74/TervisAdobeScene7JS.js?module'
+
+    async function Get_URLSFourSides() {
+      var $URLs = []
+      var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
+      var $SizeAndFormTypeMetaData = await Get_TervisProductMetaDataUsingIndex({ ...$ProductSizeAndProductFormType })
+      var $RotateValues = []
+
+      $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfFront)
+      $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfRight)
+      $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfBack)
+      $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfLeft)
+
+      document.querySelector("#poshold").value = 0
+      document.querySelector("#poshold").dispatchEvent(new InputEvent("input"))
+      var $URLWithMangledPosition = document.querySelector("#tumblerimagelink").href
+
+      for (var $RotateValue of $RotateValues) {
+        var $URLWithCorrectPosition = $URLWithMangledPosition.replace(/(?<=&pos=)-?\d+(?=,0)/, $RotateValue)
+        var $URL = $URLWithCorrectPosition
+        $URLs.push($URL)
+      }
+
+      return ($URLs)
+    }
+
+    async function downloadAll(urls) {
+      for (var i = 0; i < urls.length; i++) {
+        var link = document.createElement('a');
+        link.style.display = 'none';
+        link.setAttribute('download', `${i + 1}.png`);
+        link.setAttribute('href', urls[i]);
+        link.setAttribute('class', "FourImageDownload");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+
+    async function Invoke_DownloadFourSides() {
+      var $URLs = await Get_URLSFourSides()
+      await downloadAll($URLs)
+    }
+
+    async function Invoke_OneSidedVirtualDownload () {
+      var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedDecorationImageSourceType()
+
+      var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$ProductSize, $ProductFormType})
+      var $ProductVignetteImageURLAsSourceValue = New_ImageGeneratorProductVignetteImageURLAsSourceValue()
+      var $VirtualImageURL = await New_TervisAdobeScene7VirtualImageURL({
+        $ProductSize,
+        $ProductFormType,
+        $DecorationProofImageURLAsSourceValue,
+        $ProductVignetteImageURLAsSourceValue: $ProductVignetteImageURLAsSourceValue
+      })
+
+      await downloadAll([$VirtualImageURL])
+    }
+
+    async function New_ImageGeneratorDecorationProofImageURLAsSourceValue ({
+      $ProductSize,
+      $ProductFormType
+    }) {
+      var {
+        DecorationProofWidthOnVirtual: $DecorationProofWidthOnVirtual,
+        DecorationProofHeightOnVirtual: $DecorationProofHeightOnVirtual
+      } = await Get_TervisProductMetaDataUsingIndex({$ProductSize, $ProductFormType})
+
+      var $DecorationTypeDropDownValue = document.querySelector('#decorationtype').value
+
+      var $URLOfDecoration = document.querySelector('#itemcode').value
+      var $DecorationProofOnVirtualSizeStanza = New_AdobeScene7SizeStanza({ $Width: $DecorationProofWidthOnVirtual, $Height: $DecorationProofHeightOnVirtual})
+
+      if ($DecorationTypeDropDownValue === "customyzer") {
+        $URLOfDecoration = await New_TervisAdobeScene7ArcedImageURL({
+          $ProductSize,
+          $ProductFormType,
+          $AsScene7SrcValue: true,
+          $DecalSourceValue: $URLOfDecoration
+        })
+      }
+
+      var $DecorationImageURLAsSourceValue = New_TervisAdobeScene7URL({
+        $ExternalURL: `
+          ${$URLOfDecoration}?
+          ${$DecorationProofOnVirtualSizeStanza}
+          &scl=1
+          &fmt=png-alpha
+        `.replace(/\s/g, ""),
+        $AsScene7SrcValue: true
+      })
+
+      var $ArcedDecorationAndIncludeDieCutterCalibrationLine
+      if ($DecorationTypeDropDownValue === "-WRA" || $DecorationTypeDropDownValue === "customyzer") {
+        $ArcedDecorationAndIncludeDieCutterCalibrationLine = true
+      } else if ($DecorationTypeDropDownValue === "-DPT") {
+        $ArcedDecorationAndIncludeDieCutterCalibrationLine = false
+      }
+
+      var $DecorationProofImageURLAsSourceValue = await New_TervisAdobeScene7DecorationProofImageURL({
+        $DecorationImageURLAsSourceValue,
+        $ArcedDecoration: $ArcedDecorationAndIncludeDieCutterCalibrationLine,
+        $IncludeDiecutterCalibrationLine: $ArcedDecorationAndIncludeDieCutterCalibrationLine,
+        $ProductSize,
+        $ProductFormType,
+        $Width: $DecorationProofWidthOnVirtual,
+        $Height: $DecorationProofHeightOnVirtual,
+        $AsScene7SrcValue: true
+      })
+
+      return $DecorationProofImageURLAsSourceValue
+    }
+
+    function New_ImageGeneratorProductVignetteImageURLAsSourceValue () {
+      // On page refresh the tumblerimagelink value is wrong
+      // detect page refresh by checking the poshold value and refresh the tumblerimagelink
+      var $PosHoldNode = document.querySelector("#poshold")
+      if (!$PosHoldNode.value) {
+        $PosHoldNode.value = 0
+        $PosHoldNode.dispatchEvent(new InputEvent("input"))
+      }
+
+      var $ProductVignetteImageURL = document.querySelector("#tumblerimagelink").href
+      return New_ImageGeneratorProductVignetteImageURLAsSourceValueFromProductVignetteImageURL({$ProductVignetteImageURL})
+    }
+
+    async function New_ImageGeneratorProductVignetteImageURLAsSourceValuesArrayForFourSides () {
+      var $URLSFourSides = await Get_URLSFourSides()
+      return $URLSFourSides.map (
+        $ProductVignetteImageURL =>
+        New_ImageGeneratorProductVignetteImageURLAsSourceValueFromProductVignetteImageURL({$ProductVignetteImageURL})
+      )
+    }
+
+    function New_ImageGeneratorProductVignetteImageURLAsSourceValueFromProductVignetteImageURL ({
+      $ProductVignetteImageURL
+    }) {
+      var $ProductVignetteImageWidth = 1079
+      var $ProductVignetteImageHeight = 949
+      var $ProductVignetteImageSizeStanza = New_AdobeScene7SizeStanza({ $Width: $ProductVignetteImageWidth, $Height: $ProductVignetteImageHeight})
+
+      return New_TervisAdobeScene7URL({
+        $ExternalURL: `${$ProductVignetteImageURL}${$ProductVignetteImageSizeStanza}`,
+        $AsScene7SrcValue: true
+      })
+    }
+
+    async function Invoke_FourSidedVirtualDownload () {
+      var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedDecorationImageSourceType()
+
+      var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$ProductSize, $ProductFormType})
+
+      var $ProductVignetteImageURLAsSourceValuesArrayForFourSides = await New_ImageGeneratorProductVignetteImageURLAsSourceValuesArrayForFourSides()
+
+      var $VirtualImageURLsPromises = $ProductVignetteImageURLAsSourceValuesArrayForFourSides.map(
+        async $ProductVignetteImageURLAsSourceValue =>
+        await New_TervisAdobeScene7VirtualImageURL({
+          $ProductSize,
+          $ProductFormType,
+          $DecorationProofImageURLAsSourceValue,
+          $ProductVignetteImageURLAsSourceValue
+        })
+      )
+      var $VirtualImageURLs = await Promise.all($VirtualImageURLsPromises)
+
+      var gif = new GIF({
+        workers: 2,
+        workerScript: './gif.worker.js',
+        width: 1650,
+        height: 1275,
+        globalPalette: true,
+        dither: "Atkinson",
+        quality: 1
+      });
+
+      function waitForImagesLoaded(imageURLs, callback){
+        var imageElements = [];
+        var remaining = imageURLs.length;
+        var onEachImageLoad = function(){
+            if (--remaining === 0 && callback) {
+                callback(imageElements);
+            }
+        };
+
+        // first create the images and apply the onload method
+        for (var i = 0, len = imageURLs.length; i < len; i++){
+            var img = new Image();
+            imageElements.push(img);
+            img.onload = onEachImageLoad;
+            img.setAttribute('crossOrigin', '')
+            img.src = imageURLs[i];
+        }
+      }
+
+      waitForImagesLoaded(
+        $VirtualImageURLs,
+        function(images) {
+          for (var i = 0; i < images.length; i++) {
+              gif.addFrame(images[i], {delay: 1000});
+          }
+          gif.addFrame(images[0], {delay: 1000})
+          gif.on('finished', function(blob) {
+            saveAs(blob, "FourSidedVirtual.gif")
+          });
+
+          gif.render();
+        }
+      )
+    }
+
+  </script> -->
