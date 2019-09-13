@@ -1269,6 +1269,7 @@
                 $CarouselName,
                 $ImageURL: "http://images.tervis.com/is/image/tervis/REMOVE?$SWATCH$",
                 $Title: `None`,
+                $Value: `None`,
                 $ToolTip: `None`,
                 $OnChange: Recieve_ImageGeneratorThingWithColorCodeOnChange
               })
@@ -1507,7 +1508,8 @@
     }
 
     function Get_ImageGeneratorProductVignetteElementPathToShow () {
-      var $SelectedThingsWithColorCodes = document.querySelectorAll("#select-vignette-object-color-options :checked")
+      var $SelectedThingsWithColorCodes = 
+        document.querySelectorAll("#select-vignette-object-color-options :checked:not([value='None'])")
       var $VignettePathOfObjectsToShow = [...$SelectedThingsWithColorCodes].map(
         $SelectedThingWithColorCode => {
           var $ParentCode = $SelectedThingWithColorCode.closest("ul").className
