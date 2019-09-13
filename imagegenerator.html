@@ -495,7 +495,10 @@
       ConvertTo_TervisAdobeScene7VignettePosition,
       Get_TervisAdobeScene7Silhouette,
       Get_TervisAdobeScene7VignetteObjectWithColorOption,
-      Get_TervisAdobeScene7SwatchImageURL
+      Get_TervisAdobeScene7SwatchImageURL,
+      New_TervisAdobeScene7VirtualImageURL,
+      New_TervisAdobeScene7DecorationProofImageURL,
+      New_TervisAdobeScene7ArcedImageURL
     } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.77/TervisAdobeScene7JS.js?module'
 
     import {
@@ -511,24 +514,9 @@
     } from 'https://unpkg.com/@tervis/terviscustomyzerjs?module'
 
     import {
-      Out_AdobeScene7URLPrettyPrint
-    } from "https://unpkg.com/@tervis/adobescene7js?module"
-
-    
-    import {
-      Get_TervisProductMetaDataUsingIndex
-    } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.16/TervisProductMetadata.js?module'
-
-    import {
+      Out_AdobeScene7URLPrettyPrint,
       New_AdobeScene7SizeStanza
-    } from 'https://unpkg.com/@tervis/adobescene7js@0.1.0/AdobeScene7JS.js?module'
-
-    import {
-      New_TervisAdobeScene7URL,
-      New_TervisAdobeScene7VirtualImageURL,
-      New_TervisAdobeScene7DecorationProofImageURL,
-      New_TervisAdobeScene7ArcedImageURL
-    } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.74/TervisAdobeScene7JS.js?module'
+    } from "https://unpkg.com/@tervis/adobescene7js?module"
 
     async function Get_URLSFourSides() {
       var $URLs = []
@@ -554,18 +542,18 @@
       return ($URLs)
     }
 
-    async function downloadAll(urls) {
-      for (var i = 0; i < urls.length; i++) {
-        var link = document.createElement('a');
-        link.style.display = 'none';
-        link.setAttribute('download', `${i + 1}.png`);
-        link.setAttribute('href', urls[i]);
-        link.setAttribute('class', "FourImageDownload");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    }
+    // async function downloadAll(urls) {
+    //   for (var i = 0; i < urls.length; i++) {
+    //     var link = document.createElement('a');
+    //     link.style.display = 'none';
+    //     link.setAttribute('download', `${i + 1}.png`);
+    //     link.setAttribute('href', urls[i]);
+    //     link.setAttribute('class', "FourImageDownload");
+    //     document.body.appendChild(link);
+    //     link.click();
+    //     document.body.removeChild(link);
+    //   }
+    // }
 
     async function Invoke_DownloadFourSides() {
       var $URLs = await Get_URLSFourSides()
@@ -598,7 +586,8 @@
 
       var $DecorationTypeDropDownValue = document.querySelector('#decorationtype').value
 
-      var $URLOfDecoration = document.querySelector('#itemcode').value
+      // var $URLOfDecoration = document.querySelector('#itemcode').value
+      var $URLOfDecoration = await Get_ImageGeneratorDecorationImageSourceURL()
       var $DecorationProofOnVirtualSizeStanza = New_AdobeScene7SizeStanza({ $Width: $DecorationProofWidthOnVirtual, $Height: $DecorationProofHeightOnVirtual})
 
       if ($DecorationTypeDropDownValue === "customyzer") {
@@ -756,7 +745,7 @@
       {
         Name: "png",
         Function: () => {
-          var $ProductVignetteURL = Get_ImageGeneratorProductVignetteURL().replace(/\s/g, "")
+          var $ProductVignetteURL = Get_ImageGeneratorProductVignetteURL()
           saveAs(`${$ProductVignetteURL}$PDP-ZM-ALPHA$`, "ImageGenerator.png")
         }
       },
@@ -942,7 +931,7 @@
           part.setValue(value);
         });
 
-        const New_CrouselItem = ({
+        const New_CarouselItem = ({
           $CarouselName,
           $Value,
           $ImageURL,
@@ -989,7 +978,7 @@
         var $ImageURL = await Get_TervisAdobeScene7Silhouette({$ProductSize, $ProductFormType})
         $ImageURL += "&$ICO-SIL-BA$"
         $CarouselItems.push(
-          New_CrouselItem({
+          New_CarouselItem({
             $CarouselName: "tumblerRadio",
             $Value: `${$ProductSize}${$ProductFormType}`,
             $ImageURL,
@@ -1276,7 +1265,7 @@
             $VignetteObjectWithColorOption.Code !== "OUTER"
           ) {
             $CarouselItems.push(
-              New_CrouselItem({
+              New_CarouselItem({
                 $CarouselName,
                 $ImageURL: "http://images.tervis.com/is/image/tervis/REMOVE?$SWATCH$",
                 $Title: `None`,
@@ -1303,7 +1292,7 @@
             )
 
             $CarouselItems.push(
-              New_CrouselItem({
+              New_CarouselItem({
                 $CarouselName,
                 $Value: `${$ColorCode}`,
                 $ImageURL: $CarouselItemImageURL,
@@ -1615,7 +1604,6 @@
         $AsScene7SrcValue: true
       })
 
-      
       var $ProductVignetteURL = `
         //imagegenerator.tervis.com/is/image/tervis/${imageName}?
         layer=0
@@ -1626,14 +1614,20 @@
       document.querySelector("#tumblerimage").src = `${$ProductVignetteURL}${$ProductVignetteImagePreset}`
 
       var $URLPrettyPrint = Out_AdobeScene7URLPrettyPrint({$URL: $ProductVignetteURL})
-      document.querySelector("#ProductVignetteURL").value = $URLPrettyPrint
+      Set_ImageGeneratorProductVignetteURL({$URL: $URLPrettyPrint})
     } // END FUNCTION (UPDATE)
     
     //Needed for degrees form element events, to eliminate this refacto slider into lit-html template
     window.Update_ImageGeneratorProductVignetteURL = Update_ImageGeneratorProductVignetteURL
 
     function Get_ImageGeneratorProductVignetteURL () {
-      return document.querySelector("#ProductVignetteURL").value
+      return document.querySelector("#ProductVignetteURL").value.replace(/\s/g, "")
+    }
+
+    function Set_ImageGeneratorProductVignetteURL ({
+      $URL
+    }) {
+      document.querySelector("#ProductVignetteURL").value = $URL
     }
 
     function Add_ImageFromDevice(e) {
