@@ -442,6 +442,8 @@
   <div style="grid-column: 4 / 4">
     <textarea
       id="ProductVignetteURL"
+      spellcheck="false"
+      readonly
       style="width: 100%; height: 100%;"
     ></textarea>
   </div>
@@ -507,6 +509,10 @@
     import {
       Get_TervisCustomyzerProjectProductSizeAndProductFormType
     } from 'https://unpkg.com/@tervis/terviscustomyzerjs?module'
+
+    import {
+      Out_AdobeScene7URLPrettyPrint
+    } from "https://unpkg.com/@tervis/adobescene7js?module"
 
     var $DownloadOptions = [
       {
@@ -1382,6 +1388,9 @@
       // $("#vignetteUrl").val(finalURL);
       $('#tumblerimage').css('margin-left', '0px');
       $("#tumblerimage").prop('src', finalURL);
+
+      var $URLPrettyPrint = Out_AdobeScene7URLPrettyPrint({$URL: finalURL})
+      document.querySelector("#ProductVignetteURL").value = $URLPrettyPrint
 
     } // END FUNCTION (UPDATE)
 
