@@ -514,24 +514,251 @@
       Out_AdobeScene7URLPrettyPrint
     } from "https://unpkg.com/@tervis/adobescene7js?module"
 
-    var $DownloadOptions = [
-      {
-        Name: "Hi-Res tif",
-        Function: () => {
-          var finalURL = ($('#vignetteUrl').val());
-          var replacePreset = ($('#preset').val());
-          var printURL = (finalURL).replace(replacePreset, "PRINT")
+    
+    import {
+      Get_TervisProductMetaDataUsingIndex
+    } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.16/TervisProductMetadata.js?module'
 
-          if ($('#vignetteUrl').val() == "") {
-            alert("Please Update Tumbler First!");
-          } else {
-            alert("Preparing to Download");
-            open(printURL, "_blank");
-          }
+    import {
+      New_AdobeScene7SizeStanza
+    } from 'https://unpkg.com/@tervis/adobescene7js@0.1.0/AdobeScene7JS.js?module'
+
+    import {
+      New_TervisAdobeScene7URL,
+      New_TervisAdobeScene7VirtualImageURL,
+      New_TervisAdobeScene7DecorationProofImageURL,
+      New_TervisAdobeScene7ArcedImageURL
+    } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.74/TervisAdobeScene7JS.js?module'
+
+    async function Get_URLSFourSides() {
+      var $URLs = []
+      var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
+      var $SizeAndFormTypeMetaData = await Get_TervisProductMetaDataUsingIndex({ ...$ProductSizeAndProductFormType })
+      var $RotateValues = []
+
+      $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfFront)
+      $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfRight)
+      $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfBack)
+      $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfLeft)
+
+      document.querySelector("#poshold").value = 0
+      document.querySelector("#poshold").dispatchEvent(new InputEvent("input"))
+      var $URLWithMangledPosition = document.querySelector("#tumblerimagelink").href
+
+      for (var $RotateValue of $RotateValues) {
+        var $URLWithCorrectPosition = $URLWithMangledPosition.replace(/(?<=&pos=)-?\d+(?=,0)/, $RotateValue)
+        var $URL = $URLWithCorrectPosition
+        $URLs.push($URL)
+      }
+
+      return ($URLs)
+    }
+
+    async function downloadAll(urls) {
+      for (var i = 0; i < urls.length; i++) {
+        var link = document.createElement('a');
+        link.style.display = 'none';
+        link.setAttribute('download', `${i + 1}.png`);
+        link.setAttribute('href', urls[i]);
+        link.setAttribute('class', "FourImageDownload");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+
+    async function Invoke_DownloadFourSides() {
+      var $URLs = await Get_URLSFourSides()
+      await downloadAll($URLs)
+    }
+
+    async function Invoke_OneSidedVirtualDownload () {
+      var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedDecorationImageSourceType()
+
+      var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$ProductSize, $ProductFormType})
+      var $ProductVignetteImageURLAsSourceValue = New_ImageGeneratorProductVignetteImageURLAsSourceValue()
+      var $VirtualImageURL = await New_TervisAdobeScene7VirtualImageURL({
+        $ProductSize,
+        $ProductFormType,
+        $DecorationProofImageURLAsSourceValue,
+        $ProductVignetteImageURLAsSourceValue: $ProductVignetteImageURLAsSourceValue
+      })
+
+      await downloadAll([$VirtualImageURL])
+    }
+
+    async function New_ImageGeneratorDecorationProofImageURLAsSourceValue ({
+      $ProductSize,
+      $ProductFormType
+    }) {
+      var {
+        DecorationProofWidthOnVirtual: $DecorationProofWidthOnVirtual,
+        DecorationProofHeightOnVirtual: $DecorationProofHeightOnVirtual
+      } = await Get_TervisProductMetaDataUsingIndex({$ProductSize, $ProductFormType})
+
+      var $DecorationTypeDropDownValue = document.querySelector('#decorationtype').value
+
+      var $URLOfDecoration = document.querySelector('#itemcode').value
+      var $DecorationProofOnVirtualSizeStanza = New_AdobeScene7SizeStanza({ $Width: $DecorationProofWidthOnVirtual, $Height: $DecorationProofHeightOnVirtual})
+
+      if ($DecorationTypeDropDownValue === "customyzer") {
+        $URLOfDecoration = await New_TervisAdobeScene7ArcedImageURL({
+          $ProductSize,
+          $ProductFormType,
+          $AsScene7SrcValue: true,
+          $DecalSourceValue: $URLOfDecoration
+        })
+      }
+
+      var $DecorationImageURLAsSourceValue = New_TervisAdobeScene7URL({
+        $ExternalURL: `
+          ${$URLOfDecoration}?
+          ${$DecorationProofOnVirtualSizeStanza}
+          &scl=1
+          &fmt=png-alpha
+        `.replace(/\s/g, ""),
+        $AsScene7SrcValue: true
+      })
+
+      var $ArcedDecorationAndIncludeDieCutterCalibrationLine
+      if ($DecorationTypeDropDownValue === "-WRA" || $DecorationTypeDropDownValue === "customyzer") {
+        $ArcedDecorationAndIncludeDieCutterCalibrationLine = true
+      } else if ($DecorationTypeDropDownValue === "-DPT") {
+        $ArcedDecorationAndIncludeDieCutterCalibrationLine = false
+      }
+
+      var $DecorationProofImageURLAsSourceValue = await New_TervisAdobeScene7DecorationProofImageURL({
+        $DecorationImageURLAsSourceValue,
+        $ArcedDecoration: $ArcedDecorationAndIncludeDieCutterCalibrationLine,
+        $IncludeDiecutterCalibrationLine: $ArcedDecorationAndIncludeDieCutterCalibrationLine,
+        $ProductSize,
+        $ProductFormType,
+        $Width: $DecorationProofWidthOnVirtual,
+        $Height: $DecorationProofHeightOnVirtual,
+        $AsScene7SrcValue: true
+      })
+
+      return $DecorationProofImageURLAsSourceValue
+    }
+
+    function New_ImageGeneratorProductVignetteImageURLAsSourceValue () {
+      // On page refresh the tumblerimagelink value is wrong
+      // detect page refresh by checking the poshold value and refresh the tumblerimagelink
+      var $PosHoldNode = document.querySelector("#poshold")
+      if (!$PosHoldNode.value) {
+        $PosHoldNode.value = 0
+        $PosHoldNode.dispatchEvent(new InputEvent("input"))
+      }
+
+      var $ProductVignetteImageURL = document.querySelector("#tumblerimagelink").href
+      return New_ImageGeneratorProductVignetteImageURLAsSourceValueFromProductVignetteImageURL({$ProductVignetteImageURL})
+    }
+
+    async function New_ImageGeneratorProductVignetteImageURLAsSourceValuesArrayForFourSides () {
+      var $URLSFourSides = await Get_URLSFourSides()
+      return $URLSFourSides.map (
+        $ProductVignetteImageURL =>
+        New_ImageGeneratorProductVignetteImageURLAsSourceValueFromProductVignetteImageURL({$ProductVignetteImageURL})
+      )
+    }
+
+    function New_ImageGeneratorProductVignetteImageURLAsSourceValueFromProductVignetteImageURL ({
+      $ProductVignetteImageURL
+    }) {
+      var $ProductVignetteImageWidth = 1079
+      var $ProductVignetteImageHeight = 949
+      var $ProductVignetteImageSizeStanza = New_AdobeScene7SizeStanza({ $Width: $ProductVignetteImageWidth, $Height: $ProductVignetteImageHeight})
+
+      return New_TervisAdobeScene7URL({
+        $ExternalURL: `${$ProductVignetteImageURL}${$ProductVignetteImageSizeStanza}`,
+        $AsScene7SrcValue: true
+      })
+    }
+
+    async function Invoke_FourSidedVirtualDownload () {
+      var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedDecorationImageSourceType()
+
+      var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$ProductSize, $ProductFormType})
+
+      var $ProductVignetteImageURLAsSourceValuesArrayForFourSides = await New_ImageGeneratorProductVignetteImageURLAsSourceValuesArrayForFourSides()
+
+      var $VirtualImageURLsPromises = $ProductVignetteImageURLAsSourceValuesArrayForFourSides.map(
+        async $ProductVignetteImageURLAsSourceValue =>
+        await New_TervisAdobeScene7VirtualImageURL({
+          $ProductSize,
+          $ProductFormType,
+          $DecorationProofImageURLAsSourceValue,
+          $ProductVignetteImageURLAsSourceValue
+        })
+      )
+      var $VirtualImageURLs = await Promise.all($VirtualImageURLsPromises)
+
+      var gif = new GIF({
+        workers: 2,
+        workerScript: './gif.worker.js',
+        width: 1650,
+        height: 1275,
+        globalPalette: true,
+        dither: "Atkinson",
+        quality: 1
+      });
+
+      function waitForImagesLoaded(imageURLs, callback){
+        var imageElements = [];
+        var remaining = imageURLs.length;
+        var onEachImageLoad = function(){
+            if (--remaining === 0 && callback) {
+                callback(imageElements);
+            }
+        };
+
+        // first create the images and apply the onload method
+        for (var i = 0, len = imageURLs.length; i < len; i++){
+            var img = new Image();
+            imageElements.push(img);
+            img.onload = onEachImageLoad;
+            img.setAttribute('crossOrigin', '')
+            img.src = imageURLs[i];
         }
-      },
+      }
+
+      waitForImagesLoaded(
+        $VirtualImageURLs,
+        function(images) {
+          for (var i = 0; i < images.length; i++) {
+              gif.addFrame(images[i], {delay: 1000});
+          }
+          gif.addFrame(images[0], {delay: 1000})
+          gif.on('finished', function(blob) {
+            saveAs(blob, "FourSidedVirtual.gif")
+          });
+
+          gif.render();
+        }
+      )
+    }
+
+    var $DownloadOptions = [
+      // {
+      //   Name: "Hi-Res tif",
+      //   Function: () => {
+      //     var finalURL = ($('#vignetteUrl').val());
+      //     var printURL = (finalURL).replace("PDP-LG", "PRINT")
+
+      //     if ($('#vignetteUrl').val() == "") {
+      //       alert("Please Update Tumbler First!");
+      //     } else {
+      //       alert("Preparing to Download");
+      //       open(printURL, "_blank");
+      //     }
+      //   }
+      // },
       {
-        Name: "Hi-Res jpg"
+        Name: "png",
+        Function: () => {
+          var $ProductVignetteURL = Get_ImageGeneratorProductVignetteURL().replace(/\s/g, "")
+          saveAs(`${$ProductVignetteURL}$PDP-ZM-ALPHA$`, "ImageGenerator.png")
+        }
       },
       {
         Name: "1 Sided Virtual",
@@ -548,14 +775,33 @@
       },
     ]
 
+    function Invoke_ImageGeneratorDownload () {
+      var $DownloadButtonActionName = 
+        document.querySelector("#DownloadButtonActionName") ?
+        document.querySelector("#DownloadButtonActionName").value :
+        undefined
+
+      var $SelectedDownloadOption = $DownloadOptions
+      .filter(
+        $DownloadOption =>
+        $DownloadOption.Name === $DownloadButtonActionName
+      )[0]
+
+      if ($SelectedDownloadOption) {
+        $SelectedDownloadOption.Function()
+      }
+    }
+
     function Update_ImageGeneratorDownloadButtonForm () {
       var $DownloadButtonForm = html`
         <button
           type="button"
           class="buttonblue"
-        >Download
-        </button>
-        <select>
+          @click=${Invoke_ImageGeneratorDownload}
+        >Download</button>
+        <select 
+          id="DownloadButtonActionName"
+        >
           ${$DownloadOptions.map(
             $DownloadOption => html`<option>${$DownloadOption.Name}</option>`
           )}
@@ -1136,10 +1382,7 @@
           }
         }
       )
-
-      // Update_ImageGeneratorProductVignetteURL()
     }// End Update_ImageGeneratorThingsWithColorOptionsCarousel
-    // window.Update_ImageGeneratorThingsWithColorOptionsCarousel = Update_ImageGeneratorThingsWithColorOptionsCarousel
 
     async function Receive_ImageGeneartorDecorationImageSourceTypeOnChnage () {
       await Update_ImageGeneratorDecorationImageSourceForm()
@@ -1295,7 +1538,6 @@
     }
 
     async function Update_ImageGeneratorAllTheThings() {
-      // Update the Product selection Carousel only once on load
       if (!window.OnlyExecuteThisOnceHasExecutedOnce) {
         await Update_ImageGeneratorProductCarousel()
         window.OnlyExecuteThisOnceHasExecutedOnce = true
@@ -1305,11 +1547,7 @@
       await Update_ImageGeneratorDecorationImageSourceForm()
       Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
       await Update_ImageGeneratorProductVignetteURL()
-
-      // $("input[name='tumblerRadio']").on("change", Update_ImageGeneratorAllTheThings)
-      // $('input, select').on("input change", Update_ImageGeneratorAllTheThings)
     }
-    window.Update_ImageGeneratorAllTheThings = Update_ImageGeneratorAllTheThings
 
     async function Update_ImageGeneratorProductVignetteURL() {
       var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
@@ -1377,22 +1615,26 @@
         $AsScene7SrcValue: true
       })
 
-      var preset = "$PDP-LG$"
-      var finalURL = `
+      
+      var $ProductVignetteURL = `
         //imagegenerator.tervis.com/is/image/tervis/${imageName}?
         layer=0
         &src=${$ProductVignetteImageURL}
-        ${preset}
       `.replace(/\s/g, "")
 
-      // $("#vignetteUrl").val(finalURL);
-      $('#tumblerimage').css('margin-left', '0px');
-      $("#tumblerimage").prop('src', finalURL);
+      var $ProductVignetteImagePreset = "$PDP-LG$"
+      document.querySelector("#tumblerimage").src = `${$ProductVignetteURL}${$ProductVignetteImagePreset}`
 
-      var $URLPrettyPrint = Out_AdobeScene7URLPrettyPrint({$URL: finalURL})
+      var $URLPrettyPrint = Out_AdobeScene7URLPrettyPrint({$URL: $ProductVignetteURL})
       document.querySelector("#ProductVignetteURL").value = $URLPrettyPrint
-
     } // END FUNCTION (UPDATE)
+    
+    //Needed for degrees form element events, to eliminate this refacto slider into lit-html template
+    window.Update_ImageGeneratorProductVignetteURL = Update_ImageGeneratorProductVignetteURL
+
+    function Get_ImageGeneratorProductVignetteURL () {
+      return document.querySelector("#ProductVignetteURL").value
+    }
 
     function Add_ImageFromDevice(e) {
       var sharedSecret = '9f91ce08-1501-459f-ab09-3d2ddc103344';
@@ -1515,227 +1757,5 @@
     })
   </script>
   <!-- <script type="module">
-    import {
-      Get_TervisProductMetaDataUsingIndex
-    } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.16/TervisProductMetadata.js?module'
-
-    import {
-      New_AdobeScene7SizeStanza
-    } from 'https://unpkg.com/@tervis/adobescene7js@0.1.0/AdobeScene7JS.js?module'
-
-    import {
-      New_TervisAdobeScene7URL,
-      New_TervisAdobeScene7VirtualImageURL,
-      New_TervisAdobeScene7DecorationProofImageURL,
-      New_TervisAdobeScene7ArcedImageURL
-    } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.74/TervisAdobeScene7JS.js?module'
-
-    async function Get_URLSFourSides() {
-      var $URLs = []
-      var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
-      var $SizeAndFormTypeMetaData = await Get_TervisProductMetaDataUsingIndex({ ...$ProductSizeAndProductFormType })
-      var $RotateValues = []
-
-      $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfFront)
-      $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfRight)
-      $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfBack)
-      $RotateValues.push($SizeAndFormTypeMetaData.VignettePositionValueForImageOfLeft)
-
-      document.querySelector("#poshold").value = 0
-      document.querySelector("#poshold").dispatchEvent(new InputEvent("input"))
-      var $URLWithMangledPosition = document.querySelector("#tumblerimagelink").href
-
-      for (var $RotateValue of $RotateValues) {
-        var $URLWithCorrectPosition = $URLWithMangledPosition.replace(/(?<=&pos=)-?\d+(?=,0)/, $RotateValue)
-        var $URL = $URLWithCorrectPosition
-        $URLs.push($URL)
-      }
-
-      return ($URLs)
-    }
-
-    async function downloadAll(urls) {
-      for (var i = 0; i < urls.length; i++) {
-        var link = document.createElement('a');
-        link.style.display = 'none';
-        link.setAttribute('download', `${i + 1}.png`);
-        link.setAttribute('href', urls[i]);
-        link.setAttribute('class', "FourImageDownload");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    }
-
-    async function Invoke_DownloadFourSides() {
-      var $URLs = await Get_URLSFourSides()
-      await downloadAll($URLs)
-    }
-
-    async function Invoke_OneSidedVirtualDownload () {
-      var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedDecorationImageSourceType()
-
-      var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$ProductSize, $ProductFormType})
-      var $ProductVignetteImageURLAsSourceValue = New_ImageGeneratorProductVignetteImageURLAsSourceValue()
-      var $VirtualImageURL = await New_TervisAdobeScene7VirtualImageURL({
-        $ProductSize,
-        $ProductFormType,
-        $DecorationProofImageURLAsSourceValue,
-        $ProductVignetteImageURLAsSourceValue: $ProductVignetteImageURLAsSourceValue
-      })
-
-      await downloadAll([$VirtualImageURL])
-    }
-
-    async function New_ImageGeneratorDecorationProofImageURLAsSourceValue ({
-      $ProductSize,
-      $ProductFormType
-    }) {
-      var {
-        DecorationProofWidthOnVirtual: $DecorationProofWidthOnVirtual,
-        DecorationProofHeightOnVirtual: $DecorationProofHeightOnVirtual
-      } = await Get_TervisProductMetaDataUsingIndex({$ProductSize, $ProductFormType})
-
-      var $DecorationTypeDropDownValue = document.querySelector('#decorationtype').value
-
-      var $URLOfDecoration = document.querySelector('#itemcode').value
-      var $DecorationProofOnVirtualSizeStanza = New_AdobeScene7SizeStanza({ $Width: $DecorationProofWidthOnVirtual, $Height: $DecorationProofHeightOnVirtual})
-
-      if ($DecorationTypeDropDownValue === "customyzer") {
-        $URLOfDecoration = await New_TervisAdobeScene7ArcedImageURL({
-          $ProductSize,
-          $ProductFormType,
-          $AsScene7SrcValue: true,
-          $DecalSourceValue: $URLOfDecoration
-        })
-      }
-
-      var $DecorationImageURLAsSourceValue = New_TervisAdobeScene7URL({
-        $ExternalURL: `
-          ${$URLOfDecoration}?
-          ${$DecorationProofOnVirtualSizeStanza}
-          &scl=1
-          &fmt=png-alpha
-        `.replace(/\s/g, ""),
-        $AsScene7SrcValue: true
-      })
-
-      var $ArcedDecorationAndIncludeDieCutterCalibrationLine
-      if ($DecorationTypeDropDownValue === "-WRA" || $DecorationTypeDropDownValue === "customyzer") {
-        $ArcedDecorationAndIncludeDieCutterCalibrationLine = true
-      } else if ($DecorationTypeDropDownValue === "-DPT") {
-        $ArcedDecorationAndIncludeDieCutterCalibrationLine = false
-      }
-
-      var $DecorationProofImageURLAsSourceValue = await New_TervisAdobeScene7DecorationProofImageURL({
-        $DecorationImageURLAsSourceValue,
-        $ArcedDecoration: $ArcedDecorationAndIncludeDieCutterCalibrationLine,
-        $IncludeDiecutterCalibrationLine: $ArcedDecorationAndIncludeDieCutterCalibrationLine,
-        $ProductSize,
-        $ProductFormType,
-        $Width: $DecorationProofWidthOnVirtual,
-        $Height: $DecorationProofHeightOnVirtual,
-        $AsScene7SrcValue: true
-      })
-
-      return $DecorationProofImageURLAsSourceValue
-    }
-
-    function New_ImageGeneratorProductVignetteImageURLAsSourceValue () {
-      // On page refresh the tumblerimagelink value is wrong
-      // detect page refresh by checking the poshold value and refresh the tumblerimagelink
-      var $PosHoldNode = document.querySelector("#poshold")
-      if (!$PosHoldNode.value) {
-        $PosHoldNode.value = 0
-        $PosHoldNode.dispatchEvent(new InputEvent("input"))
-      }
-
-      var $ProductVignetteImageURL = document.querySelector("#tumblerimagelink").href
-      return New_ImageGeneratorProductVignetteImageURLAsSourceValueFromProductVignetteImageURL({$ProductVignetteImageURL})
-    }
-
-    async function New_ImageGeneratorProductVignetteImageURLAsSourceValuesArrayForFourSides () {
-      var $URLSFourSides = await Get_URLSFourSides()
-      return $URLSFourSides.map (
-        $ProductVignetteImageURL =>
-        New_ImageGeneratorProductVignetteImageURLAsSourceValueFromProductVignetteImageURL({$ProductVignetteImageURL})
-      )
-    }
-
-    function New_ImageGeneratorProductVignetteImageURLAsSourceValueFromProductVignetteImageURL ({
-      $ProductVignetteImageURL
-    }) {
-      var $ProductVignetteImageWidth = 1079
-      var $ProductVignetteImageHeight = 949
-      var $ProductVignetteImageSizeStanza = New_AdobeScene7SizeStanza({ $Width: $ProductVignetteImageWidth, $Height: $ProductVignetteImageHeight})
-
-      return New_TervisAdobeScene7URL({
-        $ExternalURL: `${$ProductVignetteImageURL}${$ProductVignetteImageSizeStanza}`,
-        $AsScene7SrcValue: true
-      })
-    }
-
-    async function Invoke_FourSidedVirtualDownload () {
-      var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedDecorationImageSourceType()
-
-      var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$ProductSize, $ProductFormType})
-
-      var $ProductVignetteImageURLAsSourceValuesArrayForFourSides = await New_ImageGeneratorProductVignetteImageURLAsSourceValuesArrayForFourSides()
-
-      var $VirtualImageURLsPromises = $ProductVignetteImageURLAsSourceValuesArrayForFourSides.map(
-        async $ProductVignetteImageURLAsSourceValue =>
-        await New_TervisAdobeScene7VirtualImageURL({
-          $ProductSize,
-          $ProductFormType,
-          $DecorationProofImageURLAsSourceValue,
-          $ProductVignetteImageURLAsSourceValue
-        })
-      )
-      var $VirtualImageURLs = await Promise.all($VirtualImageURLsPromises)
-
-      var gif = new GIF({
-        workers: 2,
-        workerScript: './gif.worker.js',
-        width: 1650,
-        height: 1275,
-        globalPalette: true,
-        dither: "Atkinson",
-        quality: 1
-      });
-
-      function waitForImagesLoaded(imageURLs, callback){
-        var imageElements = [];
-        var remaining = imageURLs.length;
-        var onEachImageLoad = function(){
-            if (--remaining === 0 && callback) {
-                callback(imageElements);
-            }
-        };
-
-        // first create the images and apply the onload method
-        for (var i = 0, len = imageURLs.length; i < len; i++){
-            var img = new Image();
-            imageElements.push(img);
-            img.onload = onEachImageLoad;
-            img.setAttribute('crossOrigin', '')
-            img.src = imageURLs[i];
-        }
-      }
-
-      waitForImagesLoaded(
-        $VirtualImageURLs,
-        function(images) {
-          for (var i = 0; i < images.length; i++) {
-              gif.addFrame(images[i], {delay: 1000});
-          }
-          gif.addFrame(images[0], {delay: 1000})
-          gif.on('finished', function(blob) {
-            saveAs(blob, "FourSidedVirtual.gif")
-          });
-
-          gif.render();
-        }
-      )
-    }
-
+    
   </script> -->
