@@ -475,7 +475,7 @@
       Get_TervisProductMetaDataUsingIndex,
       Get_TervisProductSizeAndFormTypeFromString,
       Get_TervisProductColorMarketingNameUsingIndex
-    } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.16?module'
+    } from 'https://unpkg.com/@tervis/tervisproductmetadata?module'
 
     import {
       html,
@@ -499,7 +499,7 @@
       New_TervisAdobeScene7VirtualImageURL,
       New_TervisAdobeScene7DecorationProofImageURL,
       New_TervisAdobeScene7ArcedImageURL
-    } from 'https://unpkg.com/@tervis/tervisadobescene7js@0.1.77/TervisAdobeScene7JS.js?module'
+    } from 'https://unpkg.com/@tervis/tervisadobescene7js?module'
 
     import {
       New_TervisAdobeScene7CustomyzerDecorationImageURL
@@ -542,18 +542,18 @@
       return ($URLs)
     }
 
-    // async function downloadAll(urls) {
-    //   for (var i = 0; i < urls.length; i++) {
-    //     var link = document.createElement('a');
-    //     link.style.display = 'none';
-    //     link.setAttribute('download', `${i + 1}.png`);
-    //     link.setAttribute('href', urls[i]);
-    //     link.setAttribute('class', "FourImageDownload");
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     document.body.removeChild(link);
-    //   }
-    // }
+    async function downloadAll(urls) {
+      for (var i = 0; i < urls.length; i++) {
+        var link = document.createElement('a');
+        link.style.display = 'none';
+        link.setAttribute('download', `${i + 1}.png`);
+        link.setAttribute('href', urls[i]);
+        link.setAttribute('class', "FourImageDownload");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
 
     async function Invoke_DownloadFourSides() {
       var $URLs = await Get_URLSFourSides()
@@ -561,10 +561,15 @@
     }
 
     async function Invoke_OneSidedVirtualDownload () {
-      var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedDecorationImageSourceType()
+      var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
 
       var $DecorationProofImageURLAsSourceValue = await New_ImageGeneratorDecorationProofImageURLAsSourceValue({$ProductSize, $ProductFormType})
-      var $ProductVignetteImageURLAsSourceValue = New_ImageGeneratorProductVignetteImageURLAsSourceValue()
+      var $ProductVignetteImageURLAsSourceValue = await Get_ImageGeneratorProductVignetteImageURL({
+        $Width: 1079,
+        $Height: 949,
+        $AsScene7SrcValue: true
+      })
+      // New_ImageGeneratorProductVignetteImageURLAsSourceValue()
       var $VirtualImageURL = await New_TervisAdobeScene7VirtualImageURL({
         $ProductSize,
         $ProductFormType,
@@ -573,6 +578,16 @@
       })
 
       await downloadAll([$VirtualImageURL])
+    }
+
+    function Get_ImageGeneratorProductDecorationType () {
+      return document.querySelector('#ProductDecorationType').value
+    }
+
+    function Get_ImageGeneratorDecorationImageSourceType () {
+      return document.querySelector("#DecorationImageSourceType") ?
+        document.querySelector("#DecorationImageSourceType").value :
+        undefined
     }
 
     async function New_ImageGeneratorDecorationProofImageURLAsSourceValue ({
@@ -584,35 +599,46 @@
         DecorationProofHeightOnVirtual: $DecorationProofHeightOnVirtual
       } = await Get_TervisProductMetaDataUsingIndex({$ProductSize, $ProductFormType})
 
-      var $DecorationTypeDropDownValue = document.querySelector('#decorationtype').value
+      var $DecorationTypeDropDownValue = Get_ImageGeneratorProductDecorationType()
+      var $DecorationImageSourceType = Get_ImageGeneratorDecorationImageSourceType()
 
       // var $URLOfDecoration = document.querySelector('#itemcode').value
-      var $URLOfDecoration = await Get_ImageGeneratorDecorationImageSourceURL()
-      var $DecorationProofOnVirtualSizeStanza = New_AdobeScene7SizeStanza({ $Width: $DecorationProofWidthOnVirtual, $Height: $DecorationProofHeightOnVirtual})
-
-      if ($DecorationTypeDropDownValue === "customyzer") {
-        $URLOfDecoration = await New_TervisAdobeScene7ArcedImageURL({
-          $ProductSize,
-          $ProductFormType,
-          $AsScene7SrcValue: true,
-          $DecalSourceValue: $URLOfDecoration
-        })
-      }
-
-      var $DecorationImageURLAsSourceValue = New_TervisAdobeScene7URL({
-        $ExternalURL: `
-          ${$URLOfDecoration}?
-          ${$DecorationProofOnVirtualSizeStanza}
-          &scl=1
-          &fmt=png-alpha
-        `.replace(/\s/g, ""),
+      var $URLOfDecorationAsSrcValue = await Get_ImageGeneratorDecorationImageSourceURL({
+        $Width: $DecorationProofWidthOnVirtual,
+        $Height: $DecorationProofHeightOnVirtual,
         $AsScene7SrcValue: true
       })
 
+      if ($DecorationImageSourceType === "Customyzer Project ID") {
+        $URLOfDecorationAsSrcValue = await New_TervisAdobeScene7ArcedImageURL({
+          $ProductSize,
+          $ProductFormType,
+          $AsScene7SrcValue: true,
+          $DecalSourceValue: $URLOfDecorationAsSrcValue
+        })
+      }
+
+      // var $DecorationProofOnVirtualSizeStanza = New_AdobeScene7SizeStanza({
+      //   $Width: $DecorationProofWidthOnVirtual,
+      //   $Height: $DecorationProofHeightOnVirtual
+      // })
+
+      // var $DecorationImageURLAsSourceValue = New_TervisAdobeScene7URL({
+      //   $ExternalURL: `
+      //     ${$URLOfDecoration}?
+      //     ${$DecorationProofOnVirtualSizeStanza}
+      //     &scl=1
+      //     &fmt=png-alpha
+      //   `.replace(/\s/g, ""),
+      //   $AsScene7SrcValue: true
+      // })
+
+      var $DecorationImageURLAsSourceValue = $URLOfDecorationAsSrcValue
+
       var $ArcedDecorationAndIncludeDieCutterCalibrationLine
-      if ($DecorationTypeDropDownValue === "-WRA" || $DecorationTypeDropDownValue === "customyzer") {
+      if ($DecorationTypeDropDownValue === "WRA" || $DecorationImageSourceType === "Customyzer Project ID") {
         $ArcedDecorationAndIncludeDieCutterCalibrationLine = true
-      } else if ($DecorationTypeDropDownValue === "-DPT") {
+      } else if ($DecorationTypeDropDownValue === "DPT") {
         $ArcedDecorationAndIncludeDieCutterCalibrationLine = false
       }
 
@@ -631,15 +657,7 @@
     }
 
     function New_ImageGeneratorProductVignetteImageURLAsSourceValue () {
-      // On page refresh the tumblerimagelink value is wrong
-      // detect page refresh by checking the poshold value and refresh the tumblerimagelink
-      var $PosHoldNode = document.querySelector("#poshold")
-      if (!$PosHoldNode.value) {
-        $PosHoldNode.value = 0
-        $PosHoldNode.dispatchEvent(new InputEvent("input"))
-      }
-
-      var $ProductVignetteImageURL = document.querySelector("#tumblerimagelink").href
+      var $ProductVignetteImageURL = Get_ImageGeneratorProductVignetteURLFromTextArea()
       return New_ImageGeneratorProductVignetteImageURLAsSourceValueFromProductVignetteImageURL({$ProductVignetteImageURL})
     }
 
@@ -745,22 +763,22 @@
       {
         Name: "png",
         Function: () => {
-          var $ProductVignetteURL = Get_ImageGeneratorProductVignetteURL()
+          var $ProductVignetteURL = Get_ImageGeneratorProductVignetteURLFromTextArea()
           saveAs(`${$ProductVignetteURL}$PDP-ZM-ALPHA$`, "ImageGenerator.png")
         }
       },
       {
         Name: "1 Sided Virtual",
-        // Function: Invoke_OneSidedVirtualDownload
+        Function: Invoke_OneSidedVirtualDownload
       },
       {
         Name: "4 Sided Virtual",
-        // Function: Invoke_FourSidedVirtualDownload
+        Function: Invoke_FourSidedVirtualDownload
 
       },
       {
         Name: "4 Sides",
-        // Function: Invoke_DownloadFourSides
+        Function: Invoke_DownloadFourSides
       },
     ]
 
@@ -1438,7 +1456,7 @@
             style="${ifDefined($ProductFormType === "TALL" ? "display: none;" : undefined) }"
             @change=${Receive_ImageGeneartorDecorationImageSourceTypeOnChnage}
           >
-            <option value= "" selected disabled class="menupad">Source Type</option>
+            <option selected disabled class="menupad">Source Type</option>
             ${$DecorationSourceOptions.map(
               $DecorationSourceOption => html`
                 <option>${$DecorationSourceOption}</option>
@@ -1460,13 +1478,12 @@
       return $UGCURLObject.pathname.split("/").slice(-3).join("/")
     }
 
-    async function Get_ImageGeneratorDecorationImageSourceURL (
+    async function Get_ImageGeneratorDecorationImageSourceURL ({
+      $Width,
+      $Height,
       $AsScene7SrcValue
-    ) {
-      var $DecorationImageSourceType =
-        document.querySelector("#DecorationImageSourceType") ?
-        document.querySelector("#DecorationImageSourceType").value :
-        undefined
+    }) {
+      var $DecorationImageSourceType = Get_ImageGeneratorDecorationImageSourceType()
 
       var $DecorationImageSourceValue =
         document.querySelector("#DecorationImageSourceValue") ?
@@ -1477,13 +1494,17 @@
         return New_TervisAdobeScene7URL({
           $AsScene7SrcValue,
           $Type: "ImageServer",
-          $RelativeURL: New_UGCRelativeURLFromURL({$URL: $DecorationImageSourceValue})
+          $RelativeURL: New_UGCRelativeURLFromURL({$URL: $DecorationImageSourceValue}),
+          $Width,
+          $Height
         })
       } else if ($DecorationImageSourceType === "Deocoration Image URL") {
         return New_TervisAdobeScene7URL({
           $AsScene7SrcValue,
           $Type: "ImageServer",
-          $ExternalURL: $DecorationImageSourceValue
+          $ExternalURL: $DecorationImageSourceValue,
+          $Width,
+          $Height
         })
       } else if ($DecorationImageSourceType === "Customyzer Project ID") {
         var $ProjectID = $DecorationImageSourceValue
@@ -1496,13 +1517,17 @@
           $ProjectID,
           $ProductSize,
           $ProductFormType,
-          $AsScene7SrcValue
+          $AsScene7SrcValue,
+          $Width,
+          $Height
         })
       } else if ($DecorationImageSourceType === "Raw Material Item Number") {
         return New_TervisAdobeScene7URL({
           $AsScene7SrcValue,
           $Type: "ImageServer",
-          $RelativeURL: `tervis/${$DecorationImageSourceValue}`
+          $RelativeURL: `tervis/${$DecorationImageSourceValue}`,
+          $Width,
+          $Height
         })
       }
     }
@@ -1540,7 +1565,11 @@
       await Update_ImageGeneratorProductVignetteURL()
     }
 
-    async function Update_ImageGeneratorProductVignetteURL() {
+    async function Get_ImageGeneratorProductVignetteImageURL({
+      $Width,
+      $Height,
+      $AsScene7SrcValue
+    }) {
       var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
       var $ImageSourceURLAsScene7SrcValue = await Get_ImageGeneratorDecorationImageSourceURL({
         $AsScene7SrcValue: true
@@ -1549,30 +1578,12 @@
       var $DecorationSourceIsArced // = document.querySelector("#DecorationImageSourceArced").checked
       var $ProductVignetteNameSuffix = document.querySelector("input[name='thmbRadio']:checked").value
       var $ProductVignetteRotationDegrees = document.querySelector("#ProductVignetteRotationDegrees").value
-      var $ProductDecorationTypeCode = document.querySelector("#ProductDecorationType").value
+      var $ProductDecorationTypeCode = Get_ImageGeneratorProductDecorationType()
 
       var $DecorationPositionXValue = await ConvertTo_TervisAdobeScene7VignettePosition({
         ...$ProductSizeAndProductFormType,
         $Degrees: $ProductVignetteRotationDegrees
       })
-
-      var $URLSearchParameters = new URLSearchParams()
-      let $Parameters = Remove_ObjectKeyWithEmptyOrNullValue({
-        ...$ProductSizeAndProductFormType,
-        $ImageSourceURLAsScene7SrcValue,
-        $VignetteElementPathToShow,
-        $DecorationSourceIsArced,
-        $ProductVignetteNameSuffix,
-        $ProductVignetteRotationDegrees,
-        $ProductDecorationTypeCode
-      })
-
-      for (const [key, value] of Object.entries($Parameters)) {
-        $URLSearchParameters.append(key.substring(1), value)
-      }
-      history.replaceState(null, '', `/imagegenerator.html?${$URLSearchParameters.toString()}`)
-
-      $("#previewImage").prop('src', await Get_ImageGeneratorDecorationImageSourceURL());
 
       var imageName = "tervis";
 
@@ -1597,32 +1608,46 @@
         })
       }
 
-      var $ProductVignetteImageURL = New_TervisAdobeScene7ProductVignetteImageURL({
+      return New_TervisAdobeScene7ProductVignetteImageURL({
         ...$ProductSizeAndProductFormType,
         $VignetteSuffix: $ProductVignetteNameSuffix,
         $DecorationSrc,
         $DecorationPositionXValue,
         $ElementPathsToShow: $VignetteElementPathToShow,
-        $AsScene7SrcValue: true
+        $AsScene7SrcValue,
+        $Width,
+        $Height
       })
 
-      var $ProductVignetteURL = `
-        //imagegenerator.tervis.com/is/image/tervis/${imageName}?
-        layer=0
-        &src=${$ProductVignetteImageURL}
-      `.replace(/\s/g, "")
+      // var $ProductVignetteURL = `
+      //   //imagegenerator.tervis.com/is/image/tervis/${imageName}?
+      //   layer=0
+      //   &src=${$ProductVignetteImageURL}
+      // `.replace(/\s/g, "")
 
-      var $ProductVignetteImagePreset = "$PDP-LG$"
-      document.querySelector("#tumblerimage").src = `${$ProductVignetteURL}${$ProductVignetteImagePreset}`
+      // return $ProductVignetteURL
+    }
+
+    async function Update_ImageGeneratorProductVignetteURL() {
+      var $ProductVignetteURL = await Get_ImageGeneratorProductVignetteImageURL({
+        $Width: 545,
+        $Height: 480
+      })
+
+      $("#previewImage").prop('src', await Get_ImageGeneratorDecorationImageSourceURL({}));
+
+      // var $ProductVignetteImagePreset = "$PDP-LG$"
+      // document.querySelector("#tumblerimage").src = `${$ProductVignetteURL}${$ProductVignejtteImagePreset}`
+      document.querySelector("#tumblerimage").src = `${$ProductVignetteURL}`
 
       var $URLPrettyPrint = Out_AdobeScene7URLPrettyPrint({$URL: $ProductVignetteURL})
       Set_ImageGeneratorProductVignetteURL({$URL: $URLPrettyPrint})
-    } // END FUNCTION (UPDATE)
+    }
     
     //Needed for degrees form element events, to eliminate this refacto slider into lit-html template
     window.Update_ImageGeneratorProductVignetteURL = Update_ImageGeneratorProductVignetteURL
 
-    function Get_ImageGeneratorProductVignetteURL () {
+    function Get_ImageGeneratorProductVignetteURLFromTextArea () {
       return document.querySelector("#ProductVignetteURL").value.replace(/\s/g, "")
     }
 
