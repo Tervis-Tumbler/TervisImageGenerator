@@ -530,11 +530,19 @@
     $Height
   }) {
     var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
-    var $NumberOfPositionsToShow = $NumberOfSides
+    
+    var $DegreesStartOffset = document.querySelector("#ProductDecorationDegreesStartOffset").value
+    var $StartPosition = await ConvertTo_TervisAdobeScene7VignettePosition({
+      $ProductSize,
+      $ProductFormType,
+      $Degrees: $DegreesStartOffset
+    })
+
     var $VignettePositions = await Get_TervisAdobeScene7VignettePosition({
         $ProductSize,
         $ProductFormType,
-        $NumberOfPositions: $NumberOfPositionsToShow
+        $NumberOfPositions: $NumberOfSides,
+        $StartPosition
     })
 
     var $ProductVignetteImageURLAsSourceValuePromises = $VignettePositions.map(
@@ -552,14 +560,18 @@
 
   async function downloadAll(urls) {
     for (var i = 0; i < urls.length; i++) {
-      var link = document.createElement('a');
-      link.style.display = 'none';
-      link.setAttribute('download', `${i + 1}.png`);
-      link.setAttribute('href', urls[i]);
-      link.setAttribute('class', "FourImageDownload");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // const res = await fetch(`${urls[i]}&.a=*`)
+      // const blob = await res.blob()
+      // saveAs(blob, `${i + 1}.png`)
+      saveAs(urls[i], `${i + 1}.png`)
+      // var link = document.createElement('a');
+      // link.style.display = 'none';
+      // link.setAttribute('download', `${i + 1}.png`);
+      // link.setAttribute('href', urls[i]);
+      // link.setAttribute('class', "FourImageDownload");
+      // document.body.appendChild(link);
+      // link.click();
+      // document.body.removeChild(link);
     }
   }
 
@@ -733,7 +745,7 @@
               $GifJS.addFrame($Images[i], {delay: $DelayPerFrame})
           }
           $GifJS.on('finished', function(blob) {
-              saveAs(blob, "FourSidedVirtual.gif")
+              saveAs(blob, `${$NumberOfPositionsToShow}SidedVirtual.gif`)
           })
 
           $GifJS.render();
@@ -1604,8 +1616,8 @@
     var $ProductVignetteNameSuffix = document.querySelector("input[name='thmbRadio']:checked").value
     var $ProductDecorationTypeCode = Get_ImageGeneratorProductDecorationType()
 
-    if (!$DecorationPositionXValue) {
-      if (!$RotationDegrees) {
+    if ($DecorationPositionXValue === undefined) {
+      if ($RotationDegrees === undefined) {
         $RotationDegrees = document.querySelector("#ProductVignetteRotationDegrees").value
       }
 
