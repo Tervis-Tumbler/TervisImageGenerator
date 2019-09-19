@@ -13,7 +13,7 @@
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
   }
 
-  .content-asset {
+  .MainContainer {
     display: grid;
     grid-template-columns: 150px 550px 480px 1fr;
   }
@@ -40,7 +40,7 @@
     display: none;
   }
 
-  .buttonblue {
+  .Button {
     background-color: #e9aa12;
     color: #fff;
     border: none;
@@ -51,7 +51,7 @@
     font-size: 18px;
   }
 
-  .buttonblue:hover {
+  .Button:hover {
     background-color: #edbb41;
     color: #fff;
     border: none;
@@ -62,7 +62,7 @@
     font-size: 18px;
   }
 
-  #content {
+  #ProductPreviewContainer {
     width: 550px;
     margin: 0px 0px 0px 0px;
     float: left;
@@ -78,12 +78,12 @@
     margin: 0px auto;
   }
 
-  #tumblerimage {
+  #ProductImagePreview {
     width: 100%;
     float: left;
   }
 
-  #togglediv {
+  #ImageOptions {
     padding: 5px 10px 5px;
     min-width: 445px;
     max-width: 70%;
@@ -333,10 +333,7 @@
   }
 </style>
 
-<div class="content-asset">
-  <link rel='stylesheet prefetch' href='https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css'>
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/tooltipster.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/themes/tooltipster-light.min.css"> -->
+<div class="MainContainer">
   <div class="thumbnailPreview">
     <label>
       <input type="radio" name="thmbRadio" value="1" checked />
@@ -377,21 +374,15 @@
     </label>
   </div>
 
-  <div id="content">
+  <div id="ProductPreviewContainer">
     <div class="tumblerPreview">
       <div class="tumblerPreviewZoom">
-        <a
-          id="tumblerimagelink"
-          href="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ZM-ALPHA$"
-          download
-        >
-          <img
-            id="tumblerimage"
-            src="https://imagegenerator.tervis.com/is/image/tervis/tervis?layer=0&src=ir{tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/INNER/LINED/CL1&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN&req=object}"
-            class="tip-trigger"
-            title="Click image to download larger file"
-          />
-        </a>
+        <img
+          id="ProductImagePreview"
+          src="https://imagegenerator.tervis.com/is/image/tervis/tervis?layer=0&src=ir{tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/INNER/LINED/CL1&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN&req=object}"
+          class="tip-trigger"
+          title="Click image to download larger file"
+        />
       </div>
       <div>
         Degrees:
@@ -433,14 +424,12 @@
       />
 
       <div class="menupad" id="DownloadButtonFormContainer"></div>
-
-      <!-- <button type="button" class="buttonblue" id="print">Download Hi-Res</button> -->
     </div>
   </div>
 
 
-  <div id="togglediv">
-
+  <div id="ImageOptions">
+    <div id="PreviewImageTypeContainer"></div>
     <div id="DecorationSourceMenuGroup"></div>
     <div id="DecorationImageSourceIsArcedContainer"></div>
 
@@ -754,25 +743,14 @@
   }
 
   var $DownloadOptions = [
-    // {
-    //   Name: "Hi-Res tif",
-    //   Function: () => {
-    //     var finalURL = ($('#vignetteUrl').val());
-    //     var printURL = (finalURL).replace("PDP-LG", "PRINT")
-
-    //     if ($('#vignetteUrl').val() == "") {
-    //       alert("Please Update Tumbler First!");
-    //     } else {
-    //       alert("Preparing to Download");
-    //       open(printURL, "_blank");
-    //     }
-    //   }
-    // },
     {
       Name: "png",
-      Function: () => {
-        var $ProductVignetteURL = Get_ImageGeneratorProductVignetteURLFromTextArea()
-        saveAs(`${$ProductVignetteURL}$PDP-ZM-ALPHA$`, "ImageGenerator.png")
+      Function: async () => {
+        var $ProductVignetteImageURL = await Get_ImageGeneratorProductVignetteImageURL({
+          $Width: 1401,
+          $Height: 1232
+        })
+        saveAs($ProductVignetteImageURL, "ImageGenerator.png")
       }
     },
     {
@@ -799,6 +777,25 @@
       Name: "4 Sides",
       Function: Invoke_DownloadFourSides
     },
+    // {
+    //   Name: "tif",
+    //   Function: async () => {
+
+    //     var $ProductVignetteImageURL = await Get_ImageGeneratorProductVignetteImageURL({
+    //     })
+
+    //     "&printRes=300&scale=1&fmt=tif-alpha,cmyk,lz"
+    //     var finalURL = ($('#vignetteUrl').val());
+    //     var printURL = (finalURL).replace("PDP-LG", "PRINT")
+
+    //     if ($('#vignetteUrl').val() == "") {
+    //       alert("Please Update Tumbler First!");
+    //     } else {
+    //       alert("Preparing to Download");
+    //       open(printURL, "_blank");
+    //     }
+    //   }
+    // },
   ]
 
   function Invoke_ImageGeneratorDownload () {
@@ -822,7 +819,7 @@
     var $DownloadButtonForm = html`
       <button
         type="button"
-        class="buttonblue"
+        class="Button"
         @click=${Invoke_ImageGeneratorDownload}
       >Download</button>
       <select 
@@ -1677,8 +1674,8 @@
     $("#previewImage").prop('src', await Get_ImageGeneratorDecorationImageSourceURL({}));
 
     // var $ProductVignetteImagePreset = "$PDP-LG$"
-    // document.querySelector("#tumblerimage").src = `${$ProductVignetteURL}${$ProductVignejtteImagePreset}`
-    document.querySelector("#tumblerimage").src = `${$ProductVignetteURL}`
+    // document.querySelector("#ProductImagePreview").src = `${$ProductVignetteURL}${$ProductVignejtteImagePreset}`
+    document.querySelector("#ProductImagePreview").src = `${$ProductVignetteURL}`
 
     var $URLPrettyPrint = Out_AdobeScene7URLPrettyPrint({$URL: $ProductVignetteURL})
     Set_ImageGeneratorProductVignetteURL({$URL: $URLPrettyPrint})
