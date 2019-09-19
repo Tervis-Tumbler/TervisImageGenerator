@@ -15,14 +15,14 @@
 
   .MainContainer {
     display: grid;
-    grid-template-columns: 150px 550px 480px 1fr;
+    grid-template-columns: 480px 550px 1fr;
   }
 
   .product_carousel img {
     width: 58px;
     height: 58px;
   }
-
+  
   ::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 4px;
@@ -34,7 +34,6 @@
     background-color: rgba(0, 0, 0, .5);
     -webkit-box-shadow: 0 0 0px rgba(255, 255, 255, .5);
   }
-
 
   .tooltip_templates {
     display: none;
@@ -66,7 +65,7 @@
     width: 550px;
     margin: 0px 0px 0px 0px;
     float: left;
-    grid-column: 2 / 2;
+    grid-column: 2;
   }
 
   #ProductVignetteRotationDegrees {
@@ -79,8 +78,8 @@
   }
 
   #ProductImagePreview {
-    width: 100%;
-    float: left;
+    width: 545;
+    height: 480;
   }
 
   #ImageOptions {
@@ -90,7 +89,7 @@
     margin: 0px 0px 0px 10px;
     float: left;
     vertical-align: middle;
-    grid-column: 3 / 3;
+    grid-column: 1;
   }
 
   .menupad {
@@ -154,14 +153,6 @@
 
   select {
     height: 25px;
-    /* color: #58585b; */
-    /* background: white; */
-    /* border: 1px solid #a7a9ab;
-    border-radius: 2px; */
-    /* padding: 0 20px; */
-    /* outline: 0; */
-    /* text-indent: 0; */
-    /* vertical-align: top; */
   }
 
   .selected-type {
@@ -184,19 +175,11 @@
   }
 
   .tumblerPreviewZoom {
-    box-sizing: border-box;
-    width: 100%;
-    overflow: hidden;
-    margin: 50px auto;
-    position: relative;
-    /*cursor: zoom-in;*/
+    margin: 5px auto;
   }
 
   .tumblerPreview {
-    margin: 0px auto;
     text-align: center;
-    display: block;
-    padding-left: 5px;
   }
 
   /* START Carousel CSS */
@@ -334,46 +317,18 @@
 </style>
 
 <div class="MainContainer">
-  <div class="thumbnailPreview">
-    <label>
-      <input type="radio" name="thmbRadio" value="1" checked />
-      <img
-        id="thumbnailVirtual"
-        src="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$"
-        class="tip-trigger"
-        title="Virtual View"
-      />
-    </label>
-    <label>
-      <input type="radio" name="thmbRadio" value="1-HERO2" />
-      <img
-        id="thumbnailHero"
-        src="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1-HERO2?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$"
-        class="tip-trigger"
-        title="Hero View"
-      />
-    </label>
-    <label>
-      <input type="radio" name="thmbRadio" value="RM" />
-      <div class="loader" id="loader" style="display: none;">
-        <img
-          src="//imagegenerator.tervis.com/is/content/tervis/loading93x93.gif"
-          style="max-height: 93px; max-width:93px; margin:0px auto; display:block;"
-        />
-      </div>
-      <div id="thumbnailDecoration">
-        <img
-          id="previewImage"
-          style="max-height: 93px; max-width:93px; margin:0px auto;"
-          src="//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$"
-          onerror="this.src='//imagegenerator.tervis.com/is/content/tervis/loading93x93.gif';"
-          class="tip-trigger"
-          title="Decoration View"
-        />
-      </div>
-    </label>
-  </div>
+  <div id="ImageOptions">
+    <div id="PreviewImageTypeContainer"></div>
+    <div id="DecorationSourceMenuGroup"></div>
+    <div id="DecorationImageSourceIsArcedContainer"></div>
 
+    <div class="selected-type">Product</div>
+    <div class="carousel1" id="select-product"></div>
+    <div id="ProductDecorationTypePickerContainer"></div>
+
+    <div id="select-vignette-object-color-options"></div>
+  </div>
+  
   <div id="ProductPreviewContainer">
     <div class="tumblerPreview">
       <div class="tumblerPreviewZoom">
@@ -427,20 +382,7 @@
     </div>
   </div>
 
-
-  <div id="ImageOptions">
-    <div id="PreviewImageTypeContainer"></div>
-    <div id="DecorationSourceMenuGroup"></div>
-    <div id="DecorationImageSourceIsArcedContainer"></div>
-
-    <div class="selected-type">Product</div>
-    <div class="carousel1" id="select-product"></div>
-    <div id="ProductDecorationTypePickerContainer"></div>
-
-    <div id="select-vignette-object-color-options"></div>
-  </div>
-
-  <div style="grid-column: 4 / 4">
+  <div style="grid-column: 3">
     <textarea
       id="ProductVignetteURL"
       spellcheck="false"
@@ -511,6 +453,57 @@
     Out_AdobeScene7URLPrettyPrint,
     New_AdobeScene7SizeStanza
   } from "https://unpkg.com/@tervis/adobescene7js?module"
+
+  async function Receive_ImageGeneratorPreviewImageTypeContainerOnChange() {
+    await Update_ImageGeneratorThingsWithColorOptionsCarousel()
+    await Update_ImageGeneratorProductVignetteURL()
+  }
+
+  function Update_ImageGeneratorProductImageTypeContainer () {
+    var $MenuGroup = New_MenuGroup({
+      $GroupTitle: "Product Image Type",
+      $InnerContent: New_Carousel({
+        $CarouselID: "ProductImageType",
+        $CarouselItemsContainerStyle: "list_carousel",
+        $ShiftArrowsDown: true,
+        $CarouselItems: [
+          New_CarouselItem({
+            $CarouselName: "ProductImageType",
+            $ImageURL: "//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$",
+            $Title: "High angle",
+            $Value: "1",
+            $IsChecked: true,
+            $OnChange: Receive_ImageGeneratorPreviewImageTypeContainerOnChange
+          }),
+          New_CarouselItem({
+            $CarouselName: "ProductImageType",
+            $ImageURL: "//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1-HERO2?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$",
+            $Title: "Low angle",
+            $Value: "1-HERO2",
+            $OnChange: Receive_ImageGeneratorPreviewImageTypeContainerOnChange
+          })
+        ]
+      })
+    })
+
+    render($MenuGroup, document.querySelector("#PreviewImageTypeContainer"))
+
+    $('.ProductImageType').carouFredSel({
+      auto: false,
+      circular: false,
+      prev: '.ProductImageTypeContainer .prev2',
+      next: '.ProductImageTypeContainer .next2',
+      mousewheel: true,
+      swipe: {
+        onMouse: true,
+        onTouch: true
+      }
+    })
+  }
+
+  function Get_ImageGeneratorProductImageTypeValue () {
+    return document.querySelector("input[name='ProductImageType']:checked").value
+  }
 
   async function Get_ImageGeneratorProductVignetteImageURLNSides({
     $NumberOfSides,
@@ -948,7 +941,7 @@
             ` :
             ""
           }
-          <div class="${$CarouselID}Container" style="display:block">
+          <div class="${$CarouselID}Container">
             <br>
             <a class="prev prev${$ArrowClassSuffix}" href="#"></a>
             <div class="${$CarouselItemsContainerStyle}">
@@ -1042,8 +1035,8 @@
     $('.product_carousel').carouFredSel({
       auto: false,
       circular: false,
-      prev: '.prev2',
-      next: '.next2',
+      prev: '.product_carouselContainer .prev2',
+      next: '.product_carouselContainer .next2',
       mousewheel: true,
       swipe: {
         onMouse: true,
@@ -1279,7 +1272,7 @@
       SSWBLID: "Stainless Lid"
     }
 
-    var $VignetteSuffix = $("input[name='thmbRadio']:checked").val();
+    var $VignetteSuffix = Get_ImageGeneratorProductImageTypeValue()
     var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
     var $VignetteObjectsWithColorOption = await Get_TervisAdobeScene7VignetteObjectWithColorOption({
       ...$ProductSizeAndProductFormType,
@@ -1610,7 +1603,7 @@
 
     var $VignetteElementPathToShow = Get_ImageGeneratorProductVignetteElementPathToShow()
     var $DecorationSourceIsArced = Get_ImageGeneratorDecorationImageSourceArced()
-    var $ProductVignetteNameSuffix = document.querySelector("input[name='thmbRadio']:checked").value
+    var $ProductVignetteNameSuffix = Get_ImageGeneratorProductImageTypeValue()
     var $ProductDecorationTypeCode = Get_ImageGeneratorProductDecorationType()
 
     if ($DecorationPositionXValue === undefined) {
@@ -1623,8 +1616,6 @@
         $Degrees: $RotationDegrees
       })
     }
-
-    var imageName = "tervis";
 
     var $DecorationSrc
     if ($ProductDecorationTypeCode && $ImageSourceURLAsScene7SrcValue) {
@@ -1655,14 +1646,6 @@
       $Width,
       $Height
     })
-
-    // var $ProductVignetteURL = `
-    //   //imagegenerator.tervis.com/is/image/tervis/${imageName}?
-    //   layer=0
-    //   &src=${$ProductVignetteImageURL}
-    // `.replace(/\s/g, "")
-
-    // return $ProductVignetteURL
   }
 
   async function Update_ImageGeneratorProductVignetteURL() {
@@ -1672,11 +1655,7 @@
     })
 
     $("#previewImage").prop('src', await Get_ImageGeneratorDecorationImageSourceURL({}));
-
-    // var $ProductVignetteImagePreset = "$PDP-LG$"
-    // document.querySelector("#ProductImagePreview").src = `${$ProductVignetteURL}${$ProductVignejtteImagePreset}`
     document.querySelector("#ProductImagePreview").src = `${$ProductVignetteURL}`
-
     var $URLPrettyPrint = Out_AdobeScene7URLPrettyPrint({$URL: $ProductVignetteURL})
     Set_ImageGeneratorProductVignetteURL({$URL: $URLPrettyPrint})
   }
@@ -1811,6 +1790,7 @@
 
   $(window).on("load", async function () {
     Update_ImageGeneratorDownloadButtonForm()
+    Update_ImageGeneratorProductImageTypeContainer()
     await Update_ImageGeneratorAllTheThings()
   })
 </script>
