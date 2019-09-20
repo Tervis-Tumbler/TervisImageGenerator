@@ -955,7 +955,7 @@
           />
           <img
             src="${$ImageURL}"
-            title="${$ToolTip}"
+            title="${ifDefined($ToolTip)}"
             class="tip-trigger"
           >
           ${$ShowTitleAsSpan ? html`<span class="swatch-label">${$Title}</span>` : ""}
@@ -1276,9 +1276,7 @@
             New_CarouselItem({
               $CarouselName,
               $ImageURL: "http://images.tervis.com/is/image/tervis/REMOVE?$SWATCH$",
-              $Title: `None`,
               $Value: `None`,
-              $ToolTip: `None`,
               $OnChange: Recieve_ImageGeneratorThingWithColorCodeOnChange
             })
           )
@@ -1633,7 +1631,6 @@
       $Height: 480
     })
 
-    $("#previewImage").prop('src', await Get_ImageGeneratorDecorationImageSourceURL({}));
     document.querySelector("#ProductImagePreview").src = `${$ProductVignetteURL}`
     var $URLPrettyPrint = Out_AdobeScene7URLPrettyPrint({$URL: $ProductVignetteURL})
     Set_ImageGeneratorProductVignetteURL({$URL: $URLPrettyPrint})
