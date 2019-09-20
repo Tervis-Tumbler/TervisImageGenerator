@@ -191,6 +191,7 @@
 
   .list_carousel li img {
     width: 58px;
+    height: 66px;
     padding-bottom: 8px;
   }
 
@@ -1252,7 +1253,8 @@
       SSLIDTRV: "Slider Lid",
       SSLIDHMR: "Hammer Lid",
       LIDWIN: "Wine Lid",
-      SSWBLID: "Stainless Lid"
+      SSWBLID: "Stainless Lid",
+      "REG LINED": "Regrind lined"
     }
 
     var $VignetteSuffix = Get_ImageGeneratorProductImageTypeValue()
@@ -1290,6 +1292,13 @@
           )
         }
 
+        var $IsChecked = (
+          $VignetteObjectWithColorOption.Code === "INNER" ||
+          $VignetteObjectWithColorOption.Code === "OUTER"
+        ) &&
+        $VignetteObjectWithColorOption.Options.length === 1 &&
+        $ThingWithAvailableColorCode.AvailableColorCodes.length === 1
+        
         for (var $ColorCode of $ThingWithAvailableColorCode.AvailableColorCodes) {
           var $ColorMetaData = await Get_TervisProductColorMarketingNameUsingIndex({$ColorCode})
 
@@ -1300,11 +1309,6 @@
           }
 
           var $CarouselItemImageURL = Get_TervisAdobeScene7SwatchImageURL({$ColorCode})
-
-          var $IsChecked = $ThingWithAvailableColorCode.AvailableColorCodes.length === 1 && (
-            $VignetteObjectWithColorOption.Code === "INNER" ||
-            $VignetteObjectWithColorOption.Code === "OUTER"
-          )
 
           $CarouselItems.push(
             New_CarouselItem({
@@ -1319,7 +1323,7 @@
           )
         }
 
-        var $CarouselID = $ThingWithAvailableColorCode.Code
+        var $CarouselID = $ThingWithAvailableColorCode.Code.replace(/\s/g, "")
         $CarouFredSelOptions.push({
           CarouselContainerSelector: `.${$VignetteObjectWithColorOption.Code} .${$CarouselID}Container`,
           CaroFreDeslULSelector: `.${$VignetteObjectWithColorOption.Code} .${$CarouselID}Container .${$CarouselID}`
