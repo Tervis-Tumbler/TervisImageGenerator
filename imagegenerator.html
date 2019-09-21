@@ -574,9 +574,11 @@
   }
 
   function Get_ImageGeneratorDecorationImageSourceType () {
-    return document.querySelector("#DecorationImageSourceType") ?
+    if (document.querySelector("#DecorationImageSourceType")) {
+      return document.querySelector("#DecorationImageSourceType").value !== "Source Type" ?
       document.querySelector("#DecorationImageSourceType").value :
       undefined
+  }
   }
 
   async function New_ImageGeneratorDecorationProofImageURLAsSourceValue () {
@@ -653,6 +655,43 @@
       img.src = $ImageURLs[i];
     }
   }
+
+  function Invoke_ImageGeneratorStateToJson () {
+    var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
+    var $DecorationImageSourceType = Get_ImageGeneratorDecorationImageSourceType()
+    var $DecorationImageSourceValue =
+      document.querySelector("#DecorationImageSourceValue") ?
+      document.querySelector("#DecorationImageSourceValue").value :
+      undefined
+    var $DecorationSourceIsArced = Get_ImageGeneratorDecorationImageSourceArced()    
+    var $RotationDegrees = document.querySelector("#ProductVignetteRotationDegrees").value
+    var $DegreesStartOffset = document.querySelector("#ProductDecorationDegreesStartOffset").value
+    
+    // var $CheckedElements = document.querySelectorAll("input:checked")
+    var $VignetteElementPathToShow = Get_ImageGeneratorProductVignetteElementPathToShow()
+    var $ProductVignetteNameSuffix = Get_ImageGeneratorProductImageTypeValue()
+    var $ProductDecorationTypeCode = Get_ImageGeneratorProductDecorationType()
+    var $RotationDegrees = document.querySelector("#ProductVignetteRotationDegrees").value
+    
+    return JSON.stringify(
+      {
+        ...$ProductSizeAndProductFormType,
+        $DecorationImageSourceType,
+        $DecorationImageSourceValue,
+        $DecorationSourceIsArced,
+        $RotationDegrees,
+        $DegreesStartOffset,
+        $VignetteElementPathToShow,
+        $ProductVignetteNameSuffix,
+        $ProductDecorationTypeCode,
+        $RotationDegrees
+      },
+      undefined,
+      2
+    )
+  }
+
+  window.Invoke_ImageGeneratorStateToJson = Invoke_ImageGeneratorStateToJson
 
   async function Invoke_ImageGeneratorMultiSidedVirtualDownload ({
     $NumberOfSides
@@ -753,6 +792,12 @@
     {
       Name: "4 Sides",
       Function: Invoke_DownloadFourSides
+    },
+    {
+      Name: "Printable file",
+      Function: () => {
+        
+      }
     },
     // {
     //   Name: "tif",
@@ -1503,20 +1548,6 @@
         $ProjectID,
         $AsScene7SrcValue
       })
-
-      // var {
-      //   $ProductSize,
-      //   $ProductFormType
-      // } = await Get_TervisCustomyzerProjectProductSizeAndProductFormType({$ProjectID})
-
-      // return New_TervisAdobeScene7CustomyzerDecorationImageURL({
-      //   $ProjectID,
-      //   $ProductSize,
-      //   $ProductFormType,
-      //   $AsScene7SrcValue,
-      //   $Width,
-      //   $Height
-      // })
     } else if ($DecorationImageSourceType === "Raw Material Item Number") {
       return New_TervisAdobeScene7URL({
         $AsScene7SrcValue,
@@ -1563,7 +1594,9 @@
 
   function Get_ImageGeneratorDecorationImageSourceArced () {
     var $DecorationSourceImageArced = document.querySelector("#DecorationImageSourceArced").value
-    return $DecorationSourceImageArced === "Arced"
+    return $DecorationSourceImageArced === "Arced" ?
+    $DecorationSourceImageArced === "Arced" :
+    undefined
   }
 
   async function Get_ImageGeneratorProductVignetteImageURL({
@@ -1636,12 +1669,8 @@
     Set_ImageGeneratorProductVignetteURL({$URL: $URLPrettyPrint})
   }
   
-  //Needed for degrees form element events, to eliminate this refacto slider into lit-html template
+  //Needed for degrees form element events, to eliminate this refactor slider into lit-html template
   window.Update_ImageGeneratorProductVignetteURL = Update_ImageGeneratorProductVignetteURL
-
-  function Get_ImageGeneratorProductVignetteURLFromTextArea () {
-    return document.querySelector("#ProductVignetteURL").value.replace(/\s/g, "")
-  }
 
   function Set_ImageGeneratorProductVignetteURL ({
     $URL
