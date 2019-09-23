@@ -562,8 +562,22 @@
   }
 
   async function Invoke_PrintableFileDownload () {
+    var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
+    var $DecorationImageSourceType = Get_ImageGeneratorDecorationImageSourceType()
     
-    New_TervisPrintableFileURL({})
+    if ($DecorationImageSourceType === "Customyzer Project ID") {
+      var $CustomyzerProjectID = document.querySelector("#DecorationImageSourceValue").value
+      var $PrintableFileURL = New_TervisPrintableFileURL({
+        $ProductSize,
+        $ProductFormType,
+        $CustomyzerProjectID
+      })
+      saveAs($PrintableFileURL, "PrintableFile.pdf")
+    } else {
+      var $DecorationImageSourceURL = await Get_ImageGeneratorDecorationImageSourceURL({})
+      //Unfinished, need to create arbitrary white ink url process starting from any color image
+      //url
+    }
   }
 
   function Get_ImageGeneratorProductDecorationType () {
@@ -611,9 +625,9 @@
     var $DecorationImageURLAsSourceValue = $URLOfDecorationAsSrcValue
 
     var $ArcedDecorationAndIncludeDieCutterCalibrationLine
-    if ($DecorationTypeDropDownValue === "WRA" || $DecorationImageSourceType === "Customyzer Project ID") {
+    if ($DecorationTypeDropDownValue === "WRA") {
       $ArcedDecorationAndIncludeDieCutterCalibrationLine = true
-    } else if ($DecorationTypeDropDownValue === "DPT") {
+    } else {
       $ArcedDecorationAndIncludeDieCutterCalibrationLine = false
     }
 
@@ -878,7 +892,7 @@
       Function: Invoke_DownloadFourSides
     },
     {
-      Name: "Printable file",
+      Name: "Decoration printable file",
       Function: Invoke_PrintableFileDownload
     },
     {
@@ -889,7 +903,7 @@
           $Height: 2000
         })
         saveAs(
-          `${$ProductVignetteImageURL}&fmt=tif-alpha,rgb,none&qlt=85,1&op_sharpen=0&resMode=sharp2&op_usm=1,1,6,0&iccEmbed=0&printRes=300`,
+          `${$ProductVignetteImageURL}&fmt=tif-alpha,rgb,lzw&qlt=85,1&op_sharpen=0&resMode=sharp2&op_usm=1,1,6,0&iccEmbed=0&printRes=300`,
           "ImageGenerator.tif"
         )
       }
@@ -1164,8 +1178,8 @@
           @change=${Receive_ImageGeneratorDecorationImageSourceArcedOnChange}
         >
           <option disabled selected>Is source image arced?</option>
-          <option>Arced</option>
-          <option ?selected=${$DisplayNoneAndNotArced}>Not arced</option>
+          <option value="true">Arced</option>
+          <option ?selected=${$DisplayNoneAndNotArced}>Not Arced</option>
         </select>
       `,
       document.querySelector("#DecorationImageSourceIsArcedContainer")
@@ -1626,6 +1640,8 @@
 
       return New_TervisAdobeScene7CustomyzerArtboardImageURL({
         $ProjectID,
+        $Width,
+        $Height,
         $AsScene7SrcValue
       })
     } else if ($DecorationImageSourceType === "Raw Material Item Number") {
@@ -1672,9 +1688,14 @@
 
   function Get_ImageGeneratorDecorationImageSourceArced () {
     var $DecorationSourceImageArced = document.querySelector("#DecorationImageSourceArced").value
-    return $DecorationSourceImageArced === "Arced" ?
-    $DecorationSourceImageArced === "Arced" :
-    undefined
+
+    if ($DecorationSourceImageArced === "Arced") {
+      return true
+    } else if ($DecorationSourceImageArced === "Not Arced" ) {
+      return false
+    } else {
+      return undefined
+    }
   }
 
   async function Get_ImageGeneratorProductVignetteImageURL({
