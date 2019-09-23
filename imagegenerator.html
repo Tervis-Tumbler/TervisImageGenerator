@@ -319,8 +319,6 @@
         <img
           id="ProductImagePreview"
           src="https://imagegenerator.tervis.com/is/image/tervis/tervis?layer=0&src=ir{tervisRender/16DWT1?&obj=MAIN/GLARE&show&obj=MAIN/INNER/LINED/CL1&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN&req=object}"
-          class="tip-trigger"
-          title="Click image to download larger file"
         />
       </div>
       <div>
@@ -330,7 +328,7 @@
           id="ProductVignetteRotationDegrees"
           maxlength="5"
           value="0"
-          onchange="document.querySelector('#ProductVignetteRotationDegreesSlider').value = this.value; Update_ImageGeneratorProductVignetteURL()"
+          onchange="document.querySelector('#ProductVignetteRotationDegreesSlider').value = this.value; Update_ImageGeneratorProductVignetteURL(); Set_ImageGeneratorPersistedState();"
         >
 
         Snap to:
@@ -345,8 +343,8 @@
 
         Start Offset
         <select
-          id="ProductDecorationDegreesStartOffset"
-          onchange="document.querySelector('#ProductVignetteRotationDegrees').value = this.value; document.querySelector('#ProductVignetteRotationDegreesSlider').value = this.value; Update_ImageGeneratorProductVignetteURL()"
+          id="ProductVignetteDegreesStartOffset"
+          onchange="document.querySelector('#ProductVignetteRotationDegrees').value = this.value; document.querySelector('#ProductVignetteRotationDegreesSlider').value = this.value; Update_ImageGeneratorProductVignetteURL(); Set_ImageGeneratorPersistedState()"
         >
           <option>0</option>
           <option>90</option>
@@ -359,7 +357,7 @@
         min="-180"
         max="180"
         step="90"
-        onchange="document.querySelector('#ProductVignetteRotationDegrees').value = this.value; Update_ImageGeneratorProductVignetteURL()"
+        onchange="document.querySelector('#ProductVignetteRotationDegrees').value = this.value; Update_ImageGeneratorProductVignetteURL(); Set_ImageGeneratorPersistedState()"
       />
 
       <div class="menupad" id="DownloadButtonFormContainer"></div>
@@ -441,6 +439,7 @@
   async function Receive_ImageGeneratorPreviewImageTypeContainerOnChange() {
     await Update_ImageGeneratorThingsWithColorOptionsCarousel()
     await Update_ImageGeneratorProductVignetteURL()
+    Set_ImageGeneratorPersistedState()
   }
 
   function Update_ImageGeneratorProductImageTypeContainer () {
@@ -497,7 +496,7 @@
   }) {
     var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
     
-    var $DegreesStartOffset = document.querySelector("#ProductDecorationDegreesStartOffset").value
+    var $DegreesStartOffset = document.querySelector("#ProductVignetteDegreesStartOffset").value
     var $StartPosition = await ConvertTo_TervisAdobeScene7VignettePosition({
       $ProductSize,
       $ProductFormType,
@@ -526,18 +525,7 @@
 
   async function downloadAll(urls) {
     for (var i = 0; i < urls.length; i++) {
-      // const res = await fetch(`${urls[i]}&.a=*`)
-      // const blob = await res.blob()
-      // saveAs(blob, `${i + 1}.png`)
       saveAs(urls[i], `${i + 1}.png`)
-      // var link = document.createElement('a');
-      // link.style.display = 'none';
-      // link.setAttribute('download', `${i + 1}.png`);
-      // link.setAttribute('href', urls[i]);
-      // link.setAttribute('class', "FourImageDownload");
-      // document.body.appendChild(link);
-      // link.click();
-      // document.body.removeChild(link);
     }
   }
 
@@ -591,10 +579,10 @@
 
     var $DecorationTypeDropDownValue = Get_ImageGeneratorProductDecorationType()
     var $DecorationImageSourceType = Get_ImageGeneratorDecorationImageSourceType()
-    var $DecorationSourceIsArced = Get_ImageGeneratorDecorationImageSourceArced()
+    var $DecorationImageSourceIsArced = Get_ImageGeneratorDecorationImageSourceArced()
 
     var $URLOfDecorationAsSrcValue
-    if ($DecorationSourceIsArced || $ProductFormType === "SS") {
+    if ($DecorationImageSourceIsArced || $ProductFormType === "SS") {
       $URLOfDecorationAsSrcValue = await Get_ImageGeneratorDecorationImageSourceURL({
         $Width: $DecorationProofWidthOnVirtual,
         $Height: $DecorationProofHeightOnVirtual,
@@ -656,42 +644,129 @@
     }
   }
 
-  function Invoke_ImageGeneratorStateToJson () {
+  function ConvertFrom_ImageGeneratorStateToJson () {
     var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
     var $DecorationImageSourceType = Get_ImageGeneratorDecorationImageSourceType()
     var $DecorationImageSourceValue =
       document.querySelector("#DecorationImageSourceValue") ?
       document.querySelector("#DecorationImageSourceValue").value :
       undefined
-    var $DecorationSourceIsArced = Get_ImageGeneratorDecorationImageSourceArced()    
-    var $RotationDegrees = document.querySelector("#ProductVignetteRotationDegrees").value
-    var $DegreesStartOffset = document.querySelector("#ProductDecorationDegreesStartOffset").value
-    
-    // var $CheckedElements = document.querySelectorAll("input:checked")
-    var $VignetteElementPathToShow = Get_ImageGeneratorProductVignetteElementPathToShow()
+    var $DecorationImageSourceArcedValue = document.querySelector("#DecorationImageSourceArced").value
+    var $ProductVignetteRotationDegrees = document.querySelector("#ProductVignetteRotationDegrees").value
+    var $ProductVignetteDegreesStartOffset = document.querySelector("#ProductVignetteDegreesStartOffset").value
+    var $ProductVignetteSelectedThingsWithColorCodeRelativePath = Get_ImageGeneratorSelectedThingsWithColorCodeRelativePath()
     var $ProductVignetteNameSuffix = Get_ImageGeneratorProductImageTypeValue()
     var $ProductDecorationTypeCode = Get_ImageGeneratorProductDecorationType()
-    var $RotationDegrees = document.querySelector("#ProductVignetteRotationDegrees").value
     
     return JSON.stringify(
       {
         ...$ProductSizeAndProductFormType,
         $DecorationImageSourceType,
         $DecorationImageSourceValue,
-        $DecorationSourceIsArced,
-        $RotationDegrees,
-        $DegreesStartOffset,
-        $VignetteElementPathToShow,
+        $DecorationImageSourceArcedValue,
+        $ProductVignetteRotationDegrees,
+        $ProductVignetteDegreesStartOffset,
+        $ProductVignetteSelectedThingsWithColorCodeRelativePath,
         $ProductVignetteNameSuffix,
-        $ProductDecorationTypeCode,
-        $RotationDegrees
+        $ProductDecorationTypeCode
       },
       undefined,
       2
     )
   }
 
-  window.Invoke_ImageGeneratorStateToJson = Invoke_ImageGeneratorStateToJson
+  window.ConvertFrom_ImageGeneratorStateToJson = ConvertFrom_ImageGeneratorStateToJson
+
+  function Set_ImageGeneratorPersistedState () {
+    var $StateJson = ConvertFrom_ImageGeneratorStateToJson()
+    localStorage.setItem('ImageGeneratorPersistedState', $StateJson)
+  }
+  //Needed for degrees form element events, to eliminate this refactor slider into lit-html template
+  window.Set_ImageGeneratorPersistedState = Set_ImageGeneratorPersistedState
+
+  async function Get_ImageGeneratorPersistedState () {
+    var $StateJson = localStorage.getItem('ImageGeneratorPersistedState')
+    if ($StateJson) {
+      await ConvertFrom_ImageGeneratorJsonToState({$StateJson})
+    }
+  }
+
+  async function ConvertFrom_ImageGeneratorJsonToState ({
+    $StateJson
+  }) {
+    var {
+      $ProductSize,
+      $ProductFormType,
+      $DecorationImageSourceType,
+      $DecorationImageSourceValue,
+      $DecorationImageSourceArcedValue,
+      $ProductVignetteRotationDegrees,
+      $ProductVignetteDegreesStartOffset,
+      $ProductVignetteSelectedThingsWithColorCodeRelativePath,
+      $ProductVignetteNameSuffix,
+      $ProductDecorationTypeCode
+    } = JSON.parse($StateJson)
+
+    await Set_ImageGeneratorSelectedProductSizeAndProductFormType({ $ProductSize, $ProductFormType })
+    Set_ImageGeneratorDecorationImageSource({
+      $Type: $DecorationImageSourceType,
+      $Value: $DecorationImageSourceValue,
+      $ArcedValue: $DecorationImageSourceArcedValue
+    })
+    Set_NodeValueAndFireOnChange({$ID: "ProductVignetteDegreesStartOffset", $Value: $ProductVignetteDegreesStartOffset})
+    Set_NodeValueAndFireOnChange({$ID: "ProductVignetteRotationDegrees", $Value: $ProductVignetteRotationDegrees})
+    if($ProductVignetteNameSuffix) {
+      document
+      .querySelector(
+        `input[name='ProductImageType'][value='${$ProductVignetteNameSuffix}']`
+      ).checked = true
+    }
+    Set_NodeValueAndFireOnChange({$ID: "ProductDecorationType", $Value: $ProductDecorationTypeCode})
+
+    $ProductVignetteSelectedThingsWithColorCodeRelativePath.forEach(
+      $Path => {
+        var $Parts = $Path.split("/")
+        var $Element = document.querySelector(`.${$Parts[0]} .${$Parts[1]} input[value='${$Parts[2]}']`)
+        $Element.checked = true
+        $Element.dispatchEvent(new Event('change', { bubbles: true }))
+      }
+    )
+  }
+
+  function Set_NodeValueAndFireOnChange ({
+    $ID,
+    $Value
+  }) {
+    if ($Value !== undefined) {
+      var $Element = document.querySelector(`#${$ID}`)
+      $Element.value = $Value
+      $Element.dispatchEvent(new Event('change', { bubbles: true }))
+    }
+  }
+
+  function Set_ImageGeneratorDecorationImageSource({
+    $Type,
+    $Value,
+    $ArcedValue
+  }) {
+    Set_NodeValueAndFireOnChange({$ID: "DecorationImageSourceType", $Value: $Type})
+    Set_NodeValueAndFireOnChange({$ID: "DecorationImageSourceValue", $Value})
+    Set_NodeValueAndFireOnChange({$ID: "DecorationImageSourceArced", $Value: $ArcedValue})
+  }
+
+  async function Set_ImageGeneratorSelectedProductSizeAndProductFormType ({
+    $ProductSize,
+    $ProductFormType
+  }) {
+    var $Element = document.querySelector(`input[value='${$ProductSize}${$ProductFormType}']`)
+    $Element.checked = true
+
+    // Weird race conditions when firing dispatchEvent where the function called by the event
+    // doesn't complete execution before dispatchEvent returns which isn't supposed to be possible
+    // Calling the same function that the event triggers directly works reliably
+    await Receive_ImageGeneratorProductCarouselChange ()
+    // var $Response = $Element.dispatchEvent(new Event('change', { bubbles: true }))
+  }
 
   async function Invoke_ImageGeneratorMultiSidedVirtualDownload ({
     $NumberOfSides
@@ -932,7 +1007,7 @@
       return html`
         <div class="${ifDefined($GroupCode)}" style="${ifDefined($DisplayNone ? "display: none;" : undefined) }">
           <div
-            class="selected-type tip-trigger"
+            class="selected-type"
             title="${ifDefined($GroupCode)}"
           >${$GroupTitle}</div>
           ${$InnerContent}
@@ -956,7 +1031,7 @@
             $CarouselTitle ?
             html`
               <div
-                class="selected-type-sub tip-trigger"
+                class="selected-type-sub"
                 title="${$CarouselID}"
               >${$CarouselTitle}</div>
             ` :
@@ -1001,7 +1076,6 @@
           <img
             src="${$ImageURL}"
             title="${ifDefined($ToolTip)}"
-            class="tip-trigger"
           >
           ${$ShowTitleAsSpan ? html`<span class="swatch-label">${$Title}</span>` : ""}
         </label>
@@ -1013,6 +1087,7 @@
     Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
     Update_ImageGeneratorProductDecorationTypeSelect()
     await Update_ImageGeneratorProductVignetteURL()
+    Set_ImageGeneratorPersistedState()
   }
 
   async function Update_ImageGeneratorProductCarousel () {
@@ -1068,6 +1143,7 @@
 
   async function Receive_ImageGeneratorDecorationImageSourceArcedOnChange () {
     await Update_ImageGeneratorProductVignetteURL()
+    Set_ImageGeneratorPersistedState()
   }
 
   function Update_ImageGeneratorDecorationImageSourceFormArcedSelect () {
@@ -1111,6 +1187,7 @@
 
   async function Recieve_ImageGeneratorProductDecorationTypeOnChange() {
     await Update_ImageGeneratorProductVignetteURL()
+    Set_ImageGeneratorPersistedState()
   }
 
   function Update_ImageGeneratorProductDecorationTypeSelect () {
@@ -1160,12 +1237,13 @@
     )
   }
 
-  function Get_ImageGeneratorProductDecorationDegreesStartOffset () {
-    return Number(document.querySelector("#ProductDecorationDegreesStartOffset").value)
+  function Get_ImageGeneratorProductVignetteDegreesStartOffset () {
+    return Number(document.querySelector("#ProductVignettDegreesStartOffset").value)
   }
 
   async function Recieve_ImageGeneratorThingWithColorCodeOnChange () {
     await Update_ImageGeneratorProductVignetteURL()
+    Set_ImageGeneratorPersistedState()
   }
 
   async function Update_ImageGeneratorThingsWithColorOptionsCarousel() {
@@ -1434,6 +1512,7 @@
 
   async function Receive_ImageGeneartorDecorationImageSourceValueOnChange () {
     await Update_ImageGeneratorProductVignetteURL()
+    Set_ImageGeneratorPersistedState()
   }
 
   async function Update_ImageGeneratorDecorationImageSourceForm() {
@@ -1559,21 +1638,27 @@
     }
   }
 
-  function Get_ImageGeneratorProductVignetteElementPathToShow () {
+  function Get_ImageGeneratorSelectedThingsWithColorCodeRelativePath () {
     var $SelectedThingsWithColorCodes = 
       document.querySelectorAll("#select-vignette-object-color-options :checked:not([value='None'])")
-    var $VignettePathOfObjectsToShow = [...$SelectedThingsWithColorCodes].map(
+      
+    return [...$SelectedThingsWithColorCodes].map(
       $SelectedThingWithColorCode => {
         var $ParentCode = $SelectedThingWithColorCode.closest("ul").className
         var $RootCode = $SelectedThingWithColorCode.closest('div.INNER, div.OUTER, div.ACCESSORIES').className
         return `${$RootCode}/${$ParentCode}/${$SelectedThingWithColorCode.value}`
       }
     )
+  }
+
+  function Get_ImageGeneratorProductVignetteElementPathToShow () {
+    var $SelectedThingsWithColorCodeRelativePaths = Get_ImageGeneratorSelectedThingsWithColorCodeRelativePath()
 
     var $ElementPathsToShow = [
       "MAIN/GLARE"
     ]
-    $VignettePathOfObjectsToShow.forEach(
+
+    $SelectedThingsWithColorCodeRelativePaths.forEach(
       $Path =>
       $ElementPathsToShow.push(`MAIN/${$Path}`)
     )
@@ -1581,15 +1666,7 @@
   }
 
   async function Update_ImageGeneratorAllTheThings() {
-    if (!window.OnlyExecuteThisOnceHasExecutedOnce) {
-      await Update_ImageGeneratorProductCarousel()
-      window.OnlyExecuteThisOnceHasExecutedOnce = true
-    }
-    await Update_ImageGeneratorThingsWithColorOptionsCarousel()
-    Update_ImageGeneratorProductDecorationTypeSelect()
-    await Update_ImageGeneratorDecorationImageSourceForm()
-    Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
-    await Update_ImageGeneratorProductVignetteURL()
+    
   }
 
   function Get_ImageGeneratorDecorationImageSourceArced () {
@@ -1612,7 +1689,7 @@
     })
 
     var $VignetteElementPathToShow = Get_ImageGeneratorProductVignetteElementPathToShow()
-    var $DecorationSourceIsArced = Get_ImageGeneratorDecorationImageSourceArced()
+    var $DecorationImageSourceIsArced = Get_ImageGeneratorDecorationImageSourceArced()
     var $ProductVignetteNameSuffix = Get_ImageGeneratorProductImageTypeValue()
     var $ProductDecorationTypeCode = Get_ImageGeneratorProductDecorationType()
 
@@ -1629,7 +1706,7 @@
 
     var $DecorationSrc
     if ($ProductDecorationTypeCode && $ImageSourceURLAsScene7SrcValue) {
-      if ($DecorationSourceIsArced) {
+      if ($DecorationImageSourceIsArced) {
         $ImageSourceURLAsScene7SrcValue = New_TervisAdobeScene7PrintSingleURL({
             ...$ProductSizeAndProductFormType,
             $DecorationType: $ProductDecorationTypeCode,
@@ -1747,6 +1824,7 @@
 
                 document.querySelector("#DecorationImageSourceValue").value = $ugcFullUrl.text()
                 Update_ImageGeneratorProductVignetteURL()
+                Set_ImageGeneratorPersistedState()
               }
 
               var percentVal = '100%';
@@ -1793,9 +1871,19 @@
     return false;
   }
 
-  $(window).on("load", async function () {
+  async function Initialize_ImageGenerator () {
     Update_ImageGeneratorDownloadButtonForm()
     Update_ImageGeneratorProductImageTypeContainer()
-    await Update_ImageGeneratorAllTheThings()
+    await Update_ImageGeneratorProductCarousel()
+    await Update_ImageGeneratorThingsWithColorOptionsCarousel()
+    Update_ImageGeneratorProductDecorationTypeSelect()
+    await Update_ImageGeneratorDecorationImageSourceForm()
+    Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
+    await Update_ImageGeneratorProductVignetteURL()
+    await Get_ImageGeneratorPersistedState()
+  }
+
+  window.addEventListener('load', async (event) => {
+    await Initialize_ImageGenerator()
   })
 </script>

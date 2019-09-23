@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<title>Test</title>
+<button onclick="Start_AsyncThing(); console.log('after')">Can't use await Click</button>
+<button id="SingleFunctionOnClick" onclick="Receive_ButtonOnClick()">Click</button>
+<button onclick="Invoke_DispatchedClick()">Dispatch click</button>
+<script type="module">
+    async function Receive_ButtonOnClick () {
+        await Start_AsyncThing()
+        console.log('after')
+    }
+    async function Start_AsyncThing () {
+        await sleep(1000)
+        console.log('before')
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function Invoke_DispatchedClick () {
+        var $Element = document.querySelector(`#SingleFunctionOnClick`)
+        $Element.dispatchEvent(new Event('click', { bubbles: true }))
+    }
+
+    window.Receive_ButtonOnClick = Receive_ButtonOnClick
+    window.Start_AsyncThing = Start_AsyncThing
+    window.Invoke_DispatchedClick = Invoke_DispatchedClick
+</script>
