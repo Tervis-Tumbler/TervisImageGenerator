@@ -436,6 +436,10 @@
     New_AdobeScene7SizeStanza
   } from "https://unpkg.com/@tervis/adobescene7js?module"
 
+  import {
+    New_TervisPrintableFileURL
+  } from "https://unpkg.com/@tervis/tervisprintablefilejs?module"
+
   async function Receive_ImageGeneratorPreviewImageTypeContainerOnChange() {
     await Update_ImageGeneratorThingsWithColorOptionsCarousel()
     await Update_ImageGeneratorProductVignetteURL()
@@ -555,6 +559,11 @@
     })
 
     await downloadAll([$VirtualImageURL])
+  }
+
+  async function Invoke_PrintableFileDownload () {
+    
+    New_TervisPrintableFileURL({})
   }
 
   function Get_ImageGeneratorProductDecorationType () {
@@ -870,29 +879,21 @@
     },
     {
       Name: "Printable file",
-      Function: () => {
-        
-      }
+      Function: Invoke_PrintableFileDownload
     },
-    // {
-    //   Name: "tif",
-    //   Function: async () => {
-
-    //     var $ProductVignetteImageURL = await Get_ImageGeneratorProductVignetteImageURL({
-    //     })
-
-    //     "&printRes=300&scale=1&fmt=tif-alpha,cmyk,lz"
-    //     var finalURL = ($('#vignetteUrl').val());
-    //     var printURL = (finalURL).replace("PDP-LG", "PRINT")
-
-    //     if ($('#vignetteUrl').val() == "") {
-    //       alert("Please Update Tumbler First!");
-    //     } else {
-    //       alert("Preparing to Download");
-    //       open(printURL, "_blank");
-    //     }
-    //   }
-    // },
+    {
+      Name: "tif cmyk",
+      Function: async () => {
+        var $ProductVignetteImageURL = await Get_ImageGeneratorProductVignetteImageURL({
+          $Width: 2000,
+          $Height: 2000
+        })
+        saveAs(
+          `${$ProductVignetteImageURL}&fmt=tif-alpha,rgb,none&qlt=85,1&op_sharpen=0&resMode=sharp2&op_usm=1,1,6,0&iccEmbed=0&printRes=300`,
+          "ImageGenerator.tif"
+        )
+      }
+    }
   ]
 
   function Invoke_ImageGeneratorDownload () {
