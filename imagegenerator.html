@@ -1897,6 +1897,35 @@
     return false;
   }
 
+  async function Receive_ImageGeneratorQueryStringParameter() {
+    var {
+      $ProductSize,
+      $ProductFormType,
+      $CustomyzerProjectID,
+      $EnvironmentName,
+      $DownloadOptionName,
+      $HideUI
+    } = Object.fromEntries(
+      [...(new URLSearchParams(window.location.search)).entries()]
+      .map(
+        ([$Name, $Value]) =>
+        [`$${$Name}`, $Value]
+      )
+    )
+
+    if ($ProductSize && $ProductFormType) {
+      await Set_ImageGeneratorSelectedProductSizeAndProductFormType({ $ProductSize, $ProductFormType })
+    }
+
+    if ($CustomyzerProjectID) {
+      Set_ImageGeneratorDecorationImageSource({
+        $Type: "Customyzer Project ID",
+        $Value: $CustomyzerProjectID,
+        $ArcedValue: false
+      })
+    }
+  }
+
   async function Initialize_ImageGenerator () {
     Update_ImageGeneratorDownloadButtonForm()
     Update_ImageGeneratorProductImageTypeContainer()
@@ -1907,6 +1936,7 @@
     Update_ImageGeneratorDecorationImageSourceFormArcedSelect()
     await Update_ImageGeneratorProductVignetteURL()
     await Get_ImageGeneratorPersistedState()
+    await Receive_ImageGeneratorQueryStringParameter()
   }
 
   window.addEventListener('load', async (event) => {
