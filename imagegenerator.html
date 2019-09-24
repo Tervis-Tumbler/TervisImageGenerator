@@ -1212,15 +1212,26 @@
     var $ProductDecorationTypes = {
       WRA: "Wrap",
       EMB: "Emblem",
-      DPT: "Direct Print Outer"
+      DPT: "Direct Print Outer",
+      DPC: "Direct Print Inner",
+      LET: "Engraved"
+    }
+
+    var $SelectValue
+    if ($ProductFormType === "SS") {
+      $SelectValue = "DPT"
+    } else if (["ICE","TALL"].includes($ProductFormType)) {
+      $SelectValue = "EMB"
+    } else if (!["ICE","SS"].includes($ProductFormType)) {
+      $SelectValue = "WRA"
     }
 
     var $ProductDecorationTypePicker = html`
       <select
         id="ProductDecorationType"
         class="menupad"
-        style="${ifDefined($ProductFormType === "SS" ? "display: none;" : undefined) }"
         @change=${Recieve_ImageGeneratorProductDecorationTypeOnChange}
+        .value=${$SelectValue}
       >
         <option value= "" selected disabled class="menupad">Decoration Type</option>
         ${
@@ -1231,14 +1242,7 @@
             html`
               <option
                 value="${$ProductDecorationTypeCode}"
-                ?selected=${
-                    $ProductFormType === "SS" && $ProductDecorationTypeCode === "DPT" ||
-                    ["ICE","TALL"].includes($ProductFormType) && $ProductDecorationTypeCode === "EMB" ||
-                    !["ICE","SS"].includes($ProductFormType) && $ProductDecorationTypeCode === "WRA"
-                }
-              >
-                ${$ProductDecorationTypeName}
-              </option>`
+              >${$ProductDecorationTypeName}</option>`
           )
         }
         <option value= "" class="menupad">None</option>
