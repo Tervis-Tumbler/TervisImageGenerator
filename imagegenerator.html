@@ -888,6 +888,8 @@
     });
 
     var $NumberOfPositionsToShow = $NumberOfSides
+
+    document.querySelector("#DownloadButtonFormLoader").style.display = "inline"
     Wait_ForImagesLoaded({
       $ImageURLs: $VirtualImageURLs,
       $Callback: $Images => {
@@ -900,10 +902,6 @@
           for (var i = 0; i < $Images.length; i++) {
               $GifJS.addFrame($Images[i], {delay: $DelayPerFrame})
           }
-
-          $GifJS.on('start', function(blob) {
-            document.querySelector("#DownloadButtonFormLoader").style.display = "inline"
-          })
 
           $GifJS.on('finished', function(blob) {
               saveAs(blob, `${$NumberOfPositionsToShow}SidedVirtual.gif`)
