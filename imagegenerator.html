@@ -966,6 +966,23 @@
           "ImageGenerator.tif"
         )
       }
+    },
+    {
+      Name: "jpg 2000x2000",
+      Function: async () => {
+        var $VignetteImageURLAsSrcValue = await Get_ImageGeneratorProductVignetteImageURL({
+          $Width: 2000,
+          $Height: 2000,
+          $AsScene7SrcValue: true
+        })
+        var $URL = `${New_TervisAdobeScene7URL({
+          $Type: "ImageServer",
+          $RelativeURL: `tervis?src=${$VignetteImageURLAsSrcValue}`,
+          $Width: 2000,
+          $Height: 2000,
+        })}&fmt=jpg`
+        saveAs($URL, "ImageGenerator.jpg")
+      }
     }
   ]
 
