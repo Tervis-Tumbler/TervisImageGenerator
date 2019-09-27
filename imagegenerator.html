@@ -348,7 +348,10 @@
     float: right;
   }
 </style>
-<div id="WholePageLoader" class="loader" style="display:none;">Loading...</div>
+<div id="HiddenUIMessage" style="display:none;">
+  <h1>Download starting, once finished please close this window</h1>
+  <div id="WholePageLoader" class="loader">Loading...</div>
+</div>
 <div id="MainContainer">
   <div id="ImageOptions">
     <div id="PreviewImageTypeContainer"></div>
@@ -1999,7 +2002,7 @@
 
     if ($HideUI === "true") {
       document.querySelector("#MainContainer").style.display = "none"
-      document.querySelector(".loader").style.display = "block"
+      document.querySelector("#HiddenUIMessage").style.display = "inline"
     }
 
     if ($ProductSize && $ProductFormType) {
