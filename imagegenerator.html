@@ -617,7 +617,7 @@
     var $DecorationImageSourceType = Get_ImageGeneratorDecorationImageSourceType()
     
     if ($DecorationImageSourceType === "Customyzer Project ID") {
-      var $CustomyzerProjectID = document.querySelector("#DecorationImageSourceValue").value
+      var $CustomyzerProjectID = Get_ImageGeneratorDecorationImageSourceValue()
       var $PrintableFileURL = New_TervisPrintableFileURL({
         $ProductSize,
         $ProductFormType,
@@ -718,13 +718,16 @@
     }
   }
 
+  function Get_ImageGeneratorDecorationImageSourceValue () {
+    return document.querySelector("#DecorationImageSourceValue") ?
+      document.querySelector("#DecorationImageSourceValue").value :
+      undefined
+  }
+
   function ConvertFrom_ImageGeneratorStateToJson () {
     var $ProductSizeAndProductFormType = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
     var $DecorationImageSourceType = Get_ImageGeneratorDecorationImageSourceType()
-    var $DecorationImageSourceValue =
-      document.querySelector("#DecorationImageSourceValue") ?
-      document.querySelector("#DecorationImageSourceValue").value :
-      undefined
+    var $DecorationImageSourceValue = Get_ImageGeneratorDecorationImageSourceValue()
     var $DecorationImageSourceArcedValue = Get_ImageGeneratorDecorationImageSourceArced()
     var $ProductVignetteRotationDegrees = document.querySelector("#ProductVignetteRotationDegrees").value
     var $ProductVignetteDegreesStartOffset = document.querySelector("#ProductVignetteDegreesStartOffset").value
@@ -1704,11 +1707,7 @@
     $AsScene7SrcValue
   }) {
     var $DecorationImageSourceType = Get_ImageGeneratorDecorationImageSourceType()
-
-    var $DecorationImageSourceValue =
-      document.querySelector("#DecorationImageSourceValue") ?
-      document.querySelector("#DecorationImageSourceValue").value :
-      undefined
+    var $DecorationImageSourceValue = Get_ImageGeneratorDecorationImageSourceValue()
 
     if ($DecorationImageSourceType === "UGC Upload" ) {
       return New_TervisAdobeScene7URL({
