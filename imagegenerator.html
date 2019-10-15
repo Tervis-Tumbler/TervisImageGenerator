@@ -1629,7 +1629,7 @@
       "UGC Upload",
       "Customyzer Project ID",
       "Deocoration Image URL",
-      // "Finished Good Item Number"
+      "Finished Good Item Number"
     ]
 
     var $DecorationImageSourceTypeElementID = "DecorationImageSourceType"
@@ -1739,6 +1739,15 @@
         $AsScene7SrcValue,
         $Type: "ImageServer",
         $RelativeURL: `tervis/${$DecorationImageSourceValue}`,
+        $Width,
+        $Height
+      })
+    } else if ($DecorationImageSourceType === "Finished Good Item Number") {
+      var $RawMaterialItemNumber = await Get_TervisDecorationItemNumberFromFinishedGoodItemNumber({$FinishedGoodItemNumber: $DecorationImageSourceValue})
+      return New_TervisAdobeScene7URL({
+        $AsScene7SrcValue,
+        $Type: "ImageServer",
+        $RelativeURL: `tervis/${$RawMaterialItemNumber}`,
         $Width,
         $Height
       })
@@ -2021,6 +2030,17 @@
       Invoke_ImageGeneratorDownload()
     }
   }
+
+  async function Get_TervisDecorationItemNumberFromFinishedGoodItemNumber ({
+    $FinishedGoodItemNumber
+  }) {
+    var $FinishedGoodItemNumberToDecorationItemNumberMapping = await fetch(
+        `https://tervislrstorage.blob.core.windows.net/imagegenerator/ProductItemNumberToDecorationRawMaterialItemNumber.json`
+    ).then($Response => $Response.json())
+    return $FinishedGoodItemNumberToDecorationItemNumberMapping[$FinishedGoodItemNumber]
+  }
+
+  window.Get_TervisDecorationItemNumberFromFinishedGoodItemNumber = Get_TervisDecorationItemNumberFromFinishedGoodItemNumber
 
   async function Initialize_ImageGenerator () {
     Update_ImageGeneratorDownloadButtonForm()
