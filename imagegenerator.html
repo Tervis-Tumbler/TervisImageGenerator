@@ -1289,7 +1289,7 @@
     }
   }
 
-  async function Recieve_ImageGeneratorProductDecorationTypeOnChange() {
+  async function Receive_ImageGeneratorProductDecorationTypeOnChange() {
     await Update_ImageGeneratorProductVignetteURL()
     Set_ImageGeneratorPersistedState()
   }
@@ -1319,7 +1319,7 @@
       <select
         id="ProductDecorationType"
         class="menupad"
-        @change=${Recieve_ImageGeneratorProductDecorationTypeOnChange}
+        @change=${Receive_ImageGeneratorProductDecorationTypeOnChange}
         .value=${$SelectValue}
       >
         <option value= "" selected disabled class="menupad">Decoration Type</option>
@@ -1349,7 +1349,7 @@
     return Number(document.querySelector("#ProductVignettDegreesStartOffset").value)
   }
 
-  async function Recieve_ImageGeneratorThingWithColorCodeOnChange () {
+  async function Receive_ImageGeneratorThingWithColorCodeOnChange () {
     await Update_ImageGeneratorProductVignetteURL()
     Set_ImageGeneratorPersistedState()
   }
@@ -1508,7 +1508,7 @@
               $CarouselName,
               $ImageURL: "https://images.tervis.com/is/image/tervis/REMOVE?$SWATCH$",
               $Value: `None`,
-              $OnChange: Recieve_ImageGeneratorThingWithColorCodeOnChange
+              $OnChange: Receive_ImageGeneratorThingWithColorCodeOnChange
             })
           )
         }
@@ -1539,7 +1539,7 @@
               $Title: `${$ColorMarketingName} - ${$ColorCode}`,
               $ToolTip: `${$ColorMarketingName} - ${$ColorCode}`,
               $IsChecked,
-              $OnChange: Recieve_ImageGeneratorThingWithColorCodeOnChange
+              $OnChange: Receive_ImageGeneratorThingWithColorCodeOnChange
             })
           )
         }
