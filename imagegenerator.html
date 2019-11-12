@@ -354,7 +354,7 @@
 </div>
 <div id="MainContainer">
   <div id="ImageOptions">
-    <div id="PreviewImageTypeContainer"></div>
+    <div id="ProductImageTypeContainer"></div>
     <div id="DecorationSourceMenuGroup"></div>
     <div id="DecorationImageSourceIsArcedContainer"></div>
 
@@ -491,7 +491,7 @@
     New_TervisPrintableFileURL
   } from "https://unpkg.com/@tervis/tervisprintablefilejs?module"
 
-  async function Receive_ImageGeneratorPreviewImageTypeContainerOnChange() {
+  async function Receive_ImageGeneratorProductImageTypeContainerOnChange() {
     await Update_ImageGeneratorThingsWithColorOptionsCarousel()
     await Update_ImageGeneratorProductVignetteURL()
     Set_ImageGeneratorPersistedState()
@@ -511,20 +511,20 @@
             $Title: "High angle",
             $Value: "1",
             $IsChecked: true,
-            $OnChange: Receive_ImageGeneratorPreviewImageTypeContainerOnChange
+            $OnChange: Receive_ImageGeneratorProductImageTypeContainerOnChange
           }),
           New_CarouselItem({
             $CarouselName: "ProductImageType",
             $ImageURL: "//imagegenerator.tervis.com/is/image/tervis?layer=0&src=ir(tervisRender/16DWT1-HERO2?&obj=MAIN/GLARE&show&obj=MAIN/OUTER/SMOOTH/CL1&show&obj=MAIN/INNER/LINED/CL1&show&.ACCESSORY&obj=MAIN&req=object&sharpen=1)$PDP-ALT-THMB$",
             $Title: "Low angle",
             $Value: "1-HERO2",
-            $OnChange: Receive_ImageGeneratorPreviewImageTypeContainerOnChange
+            $OnChange: Receive_ImageGeneratorProductImageTypeContainerOnChange
           })
         ]
       })
     })
 
-    render($MenuGroup, document.querySelector("#PreviewImageTypeContainer"))
+    render($MenuGroup, document.querySelector("#ProductImageTypeContainer"))
 
     $('.ProductImageType').carouFredSel({
       auto: false,
