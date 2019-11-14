@@ -754,8 +754,6 @@
     )
   }
 
-  window.ConvertFrom_ImageGeneratorStateToJson = ConvertFrom_ImageGeneratorStateToJson
-
   function Set_ImageGeneratorPersistedState () {
     var $StateJson = ConvertFrom_ImageGeneratorStateToJson()
     localStorage.setItem('ImageGeneratorPersistedState', $StateJson)
@@ -1416,13 +1414,6 @@
         }
       },
       {
-        Size: 16,
-        FormType: "TALL",
-        INNER: {
-          SMOOTH: "CL1"
-        }
-      },
-      {
         Size: 20,
         FormType: "SS",
         OUTER: {
@@ -1779,10 +1770,6 @@
       $ElementPathsToShow.push(`MAIN/${$Path}`)
     )
     return $ElementPathsToShow
-  }
-
-  async function Update_ImageGeneratorAllTheThings() {
-    
   }
 
   function Get_ImageGeneratorDecorationImageSourceArced () {
