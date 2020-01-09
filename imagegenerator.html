@@ -350,7 +350,7 @@
 </style>
 <div id="HiddenUIMessage" style="display:none;">
   <h1>Download starting, once finished please close this window</h1>
-  <div id="WholePageLoader" class="loader">Loading...</div>
+  <!-- <div id="WholePageLoader" class="loader">Loading...</div> -->
 </div>
 <div id="MainContainer">
   <div id="ImageOptions">
@@ -882,7 +882,7 @@
     )
 
     var $GifJS = new GIF({
-      workers: navigator.hardwareConcurrency || 2,
+      workers: $NumberOfSides,
       workerScript: URL.createObjectURL($WorkerJavascriptBlob),
       width: 1650,
       height: 1275,
