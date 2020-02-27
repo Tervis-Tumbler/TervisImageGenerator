@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <title>Image Generator</title>
 <style>
   @import url(https://fonts.googleapis.com/css?family=Roboto);
@@ -854,6 +854,7 @@
   }) {
     var $Element = document.querySelector(`ul.${$AccessoryType} > li > label > input[value='${$AccessoryColor}']`)
     $Element.checked = true
+    // await Receive_ImageGeneratorProductCarouselChange()
     await Receive_ImageGeneratorThingWithColorCodeOnChange()
   }
 
