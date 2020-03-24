@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <title>Image Generator</title>
 <style>
   @import url(https://fonts.googleapis.com/css?family=Roboto);
@@ -442,13 +442,13 @@
     Get_TervisProductMetaDataUsingIndex,
     Get_TervisProductSizeAndFormTypeFromString,
     Get_TervisProductColorMarketingNameUsingIndex
-  } from 'https://unpkg.com/@tervis/tervisproductmetadata?module'
+  } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.32?module'
 
   import {
     html,
     render,
     directive
-  } from 'https://unpkg.com/lit-html?module'
+  } from 'https://unpkg.com/lit-html@1.1.2?module'
 
   import {
     ifDefined
@@ -854,7 +854,6 @@
   }) {
     var $Element = document.querySelector(`ul.${$AccessoryType} > li > label > input[value='${$AccessoryColor}']`)
     $Element.checked = true
-    // await Receive_ImageGeneratorProductCarouselChange()
     await Receive_ImageGeneratorThingWithColorCodeOnChange()
   }
 
