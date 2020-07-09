@@ -442,7 +442,7 @@
     Get_TervisProductMetaDataUsingIndex,
     Get_TervisProductSizeAndFormTypeFromString,
     Get_TervisProductColorMarketingNameUsingIndex
-  } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.34?module'
+  } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.39?module'
 
   import {
     html,
@@ -656,7 +656,7 @@
     var $DecorationImageSourceIsArced = Get_ImageGeneratorDecorationImageSourceArced()
 
     var $URLOfDecorationAsSrcValue
-    if ($DecorationImageSourceIsArced || $ProductFormType === "SS") {
+    if ($DecorationImageSourceIsArced || $ProductFormType === "SS" || $ProductFormType === "WMB") {
       $URLOfDecorationAsSrcValue = await Get_ImageGeneratorDecorationImageSourceURL({
         $Width: $DecorationProofWidthOnVirtual,
         $Height: $DecorationProofHeightOnVirtual,
@@ -1110,6 +1110,14 @@
     {
       $ProductSize: 24,
       $ProductFormType: "WMB"
+    },
+    {
+      $ProductSize: 32,
+      $ProductFormType: "WMB"
+    },
+    {
+      $ProductSize: 40,
+      $ProductFormType: "WMB"
     }
   ]
 
@@ -1463,6 +1471,19 @@
       },
       {
         Size: 24,
+        FormType: "WMB",
+        OUTER: {
+          SMOOTH: "SS1"
+        }
+      },
+      {
+        Size: 32,
+        FormType: "WMB",
+        OUTER: {
+          SMOOTH: "SS1"
+        }
+      },      {
+        Size: 40,
         FormType: "WMB",
         OUTER: {
           SMOOTH: "SS1"
