@@ -442,7 +442,7 @@
     Get_TervisProductMetaDataUsingIndex,
     Get_TervisProductSizeAndFormTypeFromString,
     Get_TervisProductColorMarketingNameUsingIndex
-  } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.39?module'
+  } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.45?module'
 
   import {
     html,
@@ -1118,6 +1118,10 @@
     {
       $ProductSize: 40,
       $ProductFormType: "WMB"
+    },
+    {
+      $ProductSize: 25,
+      $ProductFormType: "SMB"
     }
   ]
 
@@ -1326,7 +1330,7 @@
     }
 
     var $SelectValue
-    if ($ProductFormType === "SS" || $ProductFormType === "WMB") {
+    if (["SS","WMB","SMB"].includes($ProductFormType)) {
       $SelectValue = "DPT"
     } else if (["ICE","TALL"].includes($ProductFormType)) {
       $SelectValue = "EMB"
@@ -1485,6 +1489,13 @@
       },      {
         Size: 40,
         FormType: "WMB",
+        OUTER: {
+          SMOOTH: "SS1"
+        }
+      },
+      {
+        Size: 25,
+        FormType: "SMB",
         OUTER: {
           SMOOTH: "SS1"
         }
