@@ -442,7 +442,7 @@
     Get_TervisProductMetaDataUsingIndex,
     Get_TervisProductSizeAndFormTypeFromString,
     Get_TervisProductColorMarketingNameUsingIndex
-  } from 'https://unpkg.com/@tervis/tervisproductmetadata@1.0.45?module'
+  } from 'https://unpkg.com/@tervis/tervisproductmetadata?module'
 
   import {
     html,
@@ -490,6 +490,13 @@
   import {
     New_TervisPrintableFileURL
   } from "https://unpkg.com/@tervis/tervisprintablefilejs?module"
+
+  const $StainlessFormFactors = [
+    "SS",
+    "SMB",
+    "WMB",
+    "VIT",
+  ]
 
   async function Receive_ImageGeneratorProductImageTypeContainerOnChange() {
     await Update_ImageGeneratorThingsWithColorOptionsCarousel()
@@ -656,7 +663,7 @@
     var $DecorationImageSourceIsArced = Get_ImageGeneratorDecorationImageSourceArced()
 
     var $URLOfDecorationAsSrcValue
-    if ($DecorationImageSourceIsArced || $ProductFormType === "SS" || $ProductFormType === "WMB") {
+    if ($DecorationImageSourceIsArced || $StainlessFormFactors.includes($ProductFormType)) {
       $URLOfDecorationAsSrcValue = await Get_ImageGeneratorDecorationImageSourceURL({
         $Width: $DecorationProofWidthOnVirtual,
         $Height: $DecorationProofHeightOnVirtual,
@@ -1122,6 +1129,14 @@
     {
       $ProductSize: 25,
       $ProductFormType: "SMB"
+    },
+    {
+      $ProductSize: 20,
+      $ProductFormType: "VIT"
+    },
+    {
+      $ProductSize: 30,
+      $ProductFormType: "VIT"
     }
   ]
 
@@ -1277,7 +1292,7 @@
     var {$ProductSize, $ProductFormType} = Get_ImageGeneratorSelectedProductSizeAndProductFormType()
     var $DecorationImageSourceType = Get_ImageGeneratorSelectedDecorationImageSourceType()
     var $DisplayNoneAndNotArced =
-      $ProductFormType === "SS" ||
+      $StainlessFormFactors.includes($ProductFormType) ||
       $DecorationImageSourceType === "Customyzer Project ID" ||
       $DecorationImageSourceType === "Raw Material Item Number"
 
@@ -1330,7 +1345,7 @@
     }
 
     var $SelectValue
-    if (["SS","WMB","SMB"].includes($ProductFormType)) {
+    if ($StainlessFormFactors.includes($ProductFormType)) {
       $SelectValue = "DPT"
     } else if (["ICE","TALL"].includes($ProductFormType)) {
       $SelectValue = "EMB"
@@ -1496,6 +1511,20 @@
       {
         Size: 25,
         FormType: "SMB",
+        OUTER: {
+          SMOOTH: "SS1"
+        }
+      },
+      {
+        Size: 20,
+        FormType: "VIT",
+        OUTER: {
+          SMOOTH: "SS1"
+        }
+      },
+      {
+        Size: 30,
+        FormType: "VIT",
         OUTER: {
           SMOOTH: "SS1"
         }
